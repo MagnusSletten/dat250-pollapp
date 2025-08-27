@@ -9,12 +9,19 @@ import com.example.demo.Model.Poll.PollOption;
 
 public class Poll {
     private Integer pollID; 
-    private List<PollOption> options;
-    private HashMap<PollOption, Integer> votes; 
+    private String title; 
+    private List<PollQuestion> questions;
+
     
     public Poll(){
-        this.options = new ArrayList<>();
-        this.votes = new HashMap<>();
+        this.questions = new ArrayList<>(); 
+    }
+
+    public String getTitle(){
+        return title;
+    }
+    public void setTitle(String title){
+        this.title = title; 
     }
 
     public Integer getID(){
@@ -25,50 +32,26 @@ public class Poll {
         this.pollID = id; 
     }
 
-    public List<PollOption> getoptions(){
-        return options; 
+    public List<PollQuestion> getQuestions(){
+        return questions; 
     }
 
-    public void setOptions(List<PollOption> options){
-        this.options = options;
-        for(int i = 0; i < options.size(); i++){
-            votes.put(options.get(i), 0); 
-
-        } 
+    public void addQuestion(PollQuestion question){
+        questions.add(question);
+        
     }
 
-    public List<String> getOptionsNames(){
-        List<String> names = new ArrayList<>(); 
-        for (int i = 0; i < options.size(); i++){
-            names.add(options.get(i).getOptionName()); 
-
-        }
-        return names; 
-}
-
-    public void Vote(PollOption option){
-        if(votes.containsKey(option)    ){
-            votes.put(option, votes.get(option) + 1);
-        } 
+    public void setQuestions(List<PollQuestion> questions){
+        this.questions = questions; 
     }
-    public PollOption getWinner(){
-        PollOption winner = null;
-        int maxVotes = 0;
 
-        for (PollOption option : votes.keySet()) {
-            int voteCount = votes.get(option);
-            if (voteCount > maxVotes) {
-                maxVotes = voteCount;
-                winner = option;
-            }
-        }
-        if(!(winner == null)){
-            return winner; 
+    public void removeQuestion(int questionNumber){
+        questions.remove((int) questionNumber);
+        
+        
+    }
 
-        }
-        else {
-            throw new IllegalStateException("No votes have been cast");}
-        }
+
 
     
 }

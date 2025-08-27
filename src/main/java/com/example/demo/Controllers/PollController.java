@@ -1,6 +1,6 @@
 package com.example.demo.Controllers;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,62 +11,62 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Model.Poll.Poll;
-import com.example.demo.Model.Poll.PollOption;
 import com.example.demo.Model.Poll.PollQuestion;
 
 @RestController
 @RequestMapping("/polls")
 public class PollController {
-    	List<Poll> polls; 
+    	HashMap<Integer,Poll> polls;
+        Integer max_Id = 1;  
 
 
-        public PollController {
-            this.polls = new ArrayList();
+        public PollController() {
+            this.polls = new HashMap<>(); 
 
         }
 
-        @PostMapping("/{questions")
-        public void vote(@RequestBody PollQuestion question){ 
-            questions.add(question); 
-        }
-
-        @PostMapping("/questions/{question_number}")
-        public String addQuestionOption(@RequestBody PollOption option, @PathVariable Integer question_number ){ 
+        @PostMapping("/")
+        public String addPoll(@RequestBody Poll poll){ 
             try {
-            questions.get(question_number).addOption(option);
-            return "Succesfully added option"+ option.getOptionName();
+            polls.put(max_Id, poll);
+            poll.setID(max_Id);
+            max_Id ++; 
+            return "Succesfully added poll with ID:"+ (max_Id -1);
             }
             catch(Exception e) {
-                return "Error adding optionumber";
+                return "Error adding question";
 
             } 
             
         }
 
-        @PostMapping("/remove-question-option")
-        public void vote(@RequestBody PollOption option, @RequestBody Integer question_number){ 
-            questions.get(question_number).addOption(option);; 
-        }
-
-
-        @PostMapping("/vote")
-        public String vote(@RequestBody PollOption vote){
-            poll.Vote(vote);
-            return "You voted for "+vote.getOptionName();
-        }
-        @GetMapping("/poll-options")
-        public List<String> getPollOptionNames() {
-            return poll.getOptionsNames(); 
-        }
-        @GetMapping("/winner")
-        public String getWinner() {
+        @GetMapping("/{pollID}")
+        public Poll getPoll(@PathVariable("pollID") Integer pollID) throws Exception{
             try {
-                return poll.getWinner().getOptionName(); 
+            return polls.get(pollID);
             }
-            catch (IllegalStateException e) {
-                return "No votes have been cast";
+            catch(Exception e){
+                throw e; 
+            }
+ 
+        }
 
+        @PostMapping("/{poll-id}/questions/")
+        public String addQuestion( @PathVariable Integer pollID, @RequestBody PollQuestion question){ 
+            try {
+            polls.get(pollID).addQuestion(question);
+            return "Succesfully added question"+ question.getQuestion();
             }
+            catch(Exception e) {
+                return "Error adding question";
+
+            } 
             
         }
+
+        @GetMapping("/{poll-id}/questions/")
+        public List<PollQuestion> getQuestionList(@PathVariable Integer pollID) {
+            return polls.get(pollID).getQuestions(); 
+        }
+
 }

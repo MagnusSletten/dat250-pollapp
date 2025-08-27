@@ -1,7 +1,0 @@
-POST http://localhost:8080/poll/vote
-Content-Type: application/json
-
-{
-    "optionName":"yes"
-} 
-
