@@ -1,6 +1,6 @@
 export class Poll {
     curr_question_id = 0;  
-    pollName: string
+    title: string
     questions: Question[]
 
     constructor(questions: Question[] = []){
@@ -10,11 +10,11 @@ export class Poll {
         }
     }
 
-    setName(name: string){
-        this.pollName = name; 
+    setTitle(name: string){
+        this.title = name; 
     }
-    getName(){
-        return this.pollName;
+    getTitle(){
+        return this.title;
     }
     getNextID(){
         this.curr_question_id ++
@@ -39,11 +39,11 @@ export class Poll {
         const list = this.questions.map( question => (
             question.toJSON
         ))
-        const questionJSON = Object.fromEntries(list.map( (item, index) => [index,item])
+        const questionJSON = Object.fromEntries(list.map( (item, index) => [item])
         )
         const pollJson = {
-            "name": this.pollName,
-            "questions": questionJSON
+            "title": this.title,
+            "questions": list
         }
         return pollJson; 
     }
@@ -54,12 +54,12 @@ export class Poll {
 export class Question{
     id: number 
     question: string
-    options: string[]
+    pollOptions: string[]
     choice: number | null = null; 
 
-    constructor(question = "", options: string[] = []) {
+    constructor(question = "", pollOptions: string[] = []) {
     this.question = question;
-    this.options = options; 
+    this.pollOptions = pollOptions; 
     
     }
     setID(id:number){
@@ -69,7 +69,7 @@ export class Question{
     get toJSON(){ 
         const json = {
         "question": this.question,
-        "options": this.options  }
+        "pollOptions": this.pollOptions  }
         return json 
     }
     setChoice(number:number){
@@ -77,10 +77,10 @@ export class Question{
     }
 
     getOptions(){
-        return this.options;
+        return this.pollOptions;
     }
     addOption(option: string){
-       this.options = [...this.options,option]
+       this.pollOptions = [...this.pollOptions,option]
     }
     setQuestion(question:string){
         this.question = question; 
@@ -90,7 +90,7 @@ export class Question{
     }
 
     removeOption(option_number: number){
-        return [...this.options.slice(0,option_number),...this.options.slice(option_number+1)]
+        return [...this.pollOptions.slice(0,option_number),...this.pollOptions.slice(option_number+1)]
 
     }
     getId(){

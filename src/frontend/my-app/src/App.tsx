@@ -6,18 +6,40 @@ import PollView from './Components/PollView'
 function CustomPoll():Poll  {
   const poll = new Poll();
   const question = new Question();
-  poll.setName("This is a bad poll")
+  poll.setTitle("This is a bad poll")
   return poll;
 }
 
+
+
 function App() {
-  const poll = CustomPoll(); 
+  const poll = CustomPoll();
+
+  const sendPoll = () => {
+  fetch('http://localhost:8080/polls/', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify(poll.toJSON()),
+});
+
+
+  } 
   
   
 
 
   return (
+    <>
     <PollView poll={poll} />
+    <button
+
+    onClick={sendPoll}>
+    Send Poll</button>
+    </>
+
   )
 
 }

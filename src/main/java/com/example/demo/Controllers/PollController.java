@@ -3,6 +3,7 @@ package com.example.demo.Controllers;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,6 +15,7 @@ import com.example.demo.Model.Poll.Poll;
 import com.example.demo.Model.Poll.PollQuestion;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/polls")
 public class PollController {
     	HashMap<Integer,Poll> polls;
@@ -68,5 +70,7 @@ public class PollController {
         public List<PollQuestion> getQuestionList(@PathVariable Integer pollID) {
             return polls.get(pollID).getQuestions(); 
         }
+
+
 
 }

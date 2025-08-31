@@ -25,16 +25,21 @@ export default function PollView({ poll }: { poll: Poll }) {
       </div>
       {!showJSON && (
         <>
-      <h1>{poll.getName()}</h1>
+      <h1>{poll.getTitle()}</h1>
         <div>
           {questions.map((question: Question) => (
             <div key={question.id}>
-            <button 
-             onClick={()=> deleteQuestion(question.id)}
-            >Delete</button>
-            <QuestionView 
-            key = {question.id}
-            question={question}/>
+              <div className="question-box">
+              <div className="delete-button-box">
+              <button 
+                className="button-delete"
+                onClick={()=> deleteQuestion(question.id)}
+                >Delete</button>
+              </div>
+              <QuestionView 
+                key = {question.id}
+                question={question}/>
+              </div>
            </div>
           ))}
         </div>

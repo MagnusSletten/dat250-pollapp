@@ -26,14 +26,14 @@ export default function QuestionView({ question }: { question: Question }){
         <input
           value={name}
           placeholder="Question to ask"
-          className="Question_box"
+          className="Question-field"
           onChange={(e) => ( changeName(e.target.value)
 
           )}
           >
         </input>
         <div>
-            {question.options.map((option,o_i) => (
+            {question.pollOptions.map((option,o_i) => (
                 <button 
                 onClick={ e => setChosenOption(o_i)}
                 style = {{backgroundColor: choice === o_i ? "blue" : "green"}    

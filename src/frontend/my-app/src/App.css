@@ -47,13 +47,15 @@ html, body {
   color: #888;
 }
 
-.Question {
-  border: 1px solid rgb(0, 119, 255);
 
-}
-.Question_box{
+.Question-field{
   padding: 10px;
   width: 60%;
+
+}
+.question-box{
+  padding: 10px;
+  border: 1px solid rgb(0, 119, 255);
 
 }
 .Poll{
@@ -69,3 +71,10 @@ html, body {
   justify-content: flex-start;
 
 }
+
+.delete-button-box{
+  display: flex;
+  justify-content: flex-end;  
+
+}
+
