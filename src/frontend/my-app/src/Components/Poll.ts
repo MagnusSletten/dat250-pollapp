@@ -54,13 +54,25 @@ export class Poll {
 export class Question{
     id: number 
     question: string
-    pollOptions: string[]
+    pollOptions: pollOption[]
+    currPollId = 0; 
     choice: number | null = null; 
 
-    constructor(question = "", pollOptions: string[] = []) {
+    constructor(question = "", pollOptions: pollOption[] = []) {
     this.question = question;
     this.pollOptions = pollOptions; 
+    this.setPollIDs; 
     
+    }
+    setPollIDs(){
+        for(const option of this.pollOptions){
+            option.setId(this.getNextPollOptionID())
+        }
+    }
+
+    getNextPollOptionID(){
+        this.currPollId++
+        return this.currPollId
     }
     setID(id:number){
         this.id = id;  
@@ -69,17 +81,21 @@ export class Question{
     get toJSON(){ 
         const json = {
         "question": this.question,
-        "pollOptions": this.pollOptions  }
+        "pollOptions": this.getOptions()  }
         return json 
     }
     setChoice(number:number){
         this.choice = number
     }
 
-    getOptions(){
+    getPollOptions(){
         return this.pollOptions;
     }
-    addOption(option: string){
+    getOptions(){
+        return this.pollOptions.map(option => option.getOption())
+    }
+    addOption(option: pollOption){
+       option.setId(this.getNextPollOptionID());
        this.pollOptions = [...this.pollOptions,option]
     }
     setQuestion(question:string){
@@ -100,3 +116,21 @@ export class Question{
     
 }
 
+export class pollOption{
+    id:number
+    option: string 
+
+    constructor(option:string){
+        this.option = option; 
+    }
+
+    setId(id:number){
+        this.id = id
+    }
+    getOption(){
+        return this.option; 
+    }
+
+    
+
+}

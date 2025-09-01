@@ -1,5 +1,6 @@
 import { use, useState } from "react";
-import { Question } from "./Poll";
+import { pollOption, Question } from "./Poll";
+import { useId } from 'react';
 
 export default function QuestionView({ question }: { question: Question }){
     const [choice, setChoice] = useState(-1);
@@ -11,8 +12,8 @@ export default function QuestionView({ question }: { question: Question }){
 
     }
     const [options,setOptions] = useState(question.getOptions())
-    const addOption = (option:string) => {
-        setOptions([...question.getOptions(), option])
+    const addOption = (option:pollOption) => {
+        setOptions([...question.getOptions(), option.getOption()])
         question.addOption(option)
     }
    
@@ -32,21 +33,26 @@ export default function QuestionView({ question }: { question: Question }){
           )}
           >
         </input>
-        <div>
+        <div></div>
+        <div className="option-box">
             {question.pollOptions.map((option,o_i) => (
-                <button 
+                <div className="pollButtonBox">
+                <button
+                key={option.id} 
                 onClick={ e => setChosenOption(o_i)}
                 style = {{backgroundColor: choice === o_i ? "blue" : "green"}    
-                }>{option}</button>
+                }>{option.getOption()}</button>
+                </div>
             ))}
             <div>
                 <input
                 value= {newOption}
+                id={useId()}
                 placeholder="New option"
                 onChange={e => setNewOption(e.target.value)}
                 ></input>
                 <button
-                onClick={e => addOption(newOption)}>
+                onClick={e => addOption(new pollOption(newOption))}>
                 
             Add Option button</button>
             </div>
