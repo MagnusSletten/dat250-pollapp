@@ -3,7 +3,6 @@ import { pollOption, Question } from "./Poll";
 import { useId } from 'react';
 
 export default function QuestionView({ question }: { question: Question }){
-    const [choice, setChoice] = useState(-1);
     const [name, setName] = useState(question.getQuestion())
     const [newOption, setNewOption] = useState("")
     const changeName = (name: string) => {
@@ -15,13 +14,14 @@ export default function QuestionView({ question }: { question: Question }){
     const addOption = (option:pollOption) => {
         setOptions([...question.getOptions(), option.getOption()])
         question.addOption(option)
+        setNewOption("")
+    }
+    const removeOption = (id:number) =>{
+        question.removeOption(id);
+        setOptions(question.getOptions())
+         
     }
    
-
-    const setChosenOption= (optionNumber: number) => {
-        setChoice(optionNumber)
-        question.setChoice(optionNumber)
-    }
     return(
         <div className="Question">
         <input
@@ -37,15 +37,16 @@ export default function QuestionView({ question }: { question: Question }){
         <div className="option-box">
             {question.pollOptions.map((option,o_i) => (
                 <div className="pollButtonBox">
+                <span key ={option.id}>{option.getOption()}</span>
                 <button
-                key={option.id} 
-                onClick={ e => setChosenOption(o_i)}
-                style = {{backgroundColor: choice === o_i ? "blue" : "green"}    
-                }>{option.getOption()}</button>
+                className="delete-button"
+                onClick={e => removeOption(option.id)} 
+                >X</button>
                 </div>
             ))}
-            <div>
+            <div className="add-option-box">
                 <input
+                className="option-input"
                 value= {newOption}
                 id={useId()}
                 placeholder="New option"
@@ -54,7 +55,7 @@ export default function QuestionView({ question }: { question: Question }){
                 <button
                 onClick={e => addOption(new pollOption(newOption))}>
                 
-            Add Option button</button>
+            Add Option</button>
             </div>
         </div>
 

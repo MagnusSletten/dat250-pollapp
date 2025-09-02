@@ -105,8 +105,8 @@ export class Question{
         return this.question
     }
 
-    removeOption(option_number: number){
-        return [...this.pollOptions.slice(0,option_number),...this.pollOptions.slice(option_number+1)]
+   removeOption(id:number){
+        this.pollOptions = this.pollOptions.filter(pollOption => pollOption.id != id)
 
     }
     getId(){

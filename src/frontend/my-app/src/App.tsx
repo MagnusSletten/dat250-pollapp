@@ -1,4 +1,3 @@
-import { use, useState } from 'react'
 import './App.css'
 import { Poll, Question } from "./Components/Poll"; 
 import PollView from './Components/PollView'
@@ -6,7 +5,6 @@ import PollView from './Components/PollView'
 function CustomPoll():Poll  {
   const poll = new Poll();
   const question = new Question();
-  poll.setTitle("This is a bad poll")
   return poll;
 }
 
