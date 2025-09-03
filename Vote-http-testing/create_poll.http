@@ -3,14 +3,11 @@ Content-Type: application/json
 
 {
   "title": "Pizza preference",
-  "questions": [
-    {
-      "question": "Do you hate pizza?",
-      "pollOptions": [
-        { "optionName": "yes" },
-        { "optionName": "no" }
-      ]
-    }]
-    
+  "question": {
+    "question_text": "Do you hate pizza?",
+    "pollOptions": [
+      { "text": "yes" },
+      { "text": "no" }
+    ]
+  }
 }
-

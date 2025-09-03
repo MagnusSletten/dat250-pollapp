@@ -4,8 +4,9 @@ import { Poll, Question } from "./Components/Poll";
 import PollView from './Components/PollView'
 
 function CustomPoll():Poll  {
-  const poll = new Poll();
+  
   const question = new Question();
+  const poll = new Poll(question);
   
   return poll;
 }

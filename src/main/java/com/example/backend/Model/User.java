@@ -1,30 +1,17 @@
 package com.example.backend.Model;
 
+import lombok.Data;
+
+@Data
 public class User{
     private String userName;
-    private String email; 
+    private String email;
+    private Integer userId;  
     public User(String userName, String email){
         this.userName = userName;
         this.email = email; 
     }
-        public User() {
-    }
 
-    public String getUserName() {
-        return userName;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

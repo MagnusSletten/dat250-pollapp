@@ -1,13 +1,9 @@
-export class Poll {
-    curr_question_id = 0;  
+export class Poll { 
     title: string
-    questions: Question[]
+    questionText: Question
 
-    constructor(questions: Question[] = []){
-        this.questions = questions;
-        for (const q of questions){
-            q.setID(this.getNextID())
-        }
+    constructor(question: Question){
+        this.questionText = question;
     }
 
     setTitle(name: string){
@@ -16,34 +12,20 @@ export class Poll {
     getTitle(){
         return this.title;
     }
-    getNextID(){
-        this.curr_question_id ++
-        return this.curr_question_id
-    }
-    addQuestion(question: Question){
-        this.curr_question_id ++;
-        question.setID(this.curr_question_id)
-        this.questions = [...this.questions, question]
+
+    setQuestion(question: Question){
+        this.questionText = question; 
     }
 
-    getQuestions(){
-        return this.questions; 
-    }
-
-    removeQuestion(id:number){
-        this.questions = this.questions.filter(question => question.id != id)
-
+    getQuestion(){
+        return this.questionText; 
     }
 
     toJSON(){
-        const list = this.questions.map( question => (
-            question.toJSON
-        ))
-        const questionJSON = Object.fromEntries(list.map( (item, index) => [item])
-        )
+ 
         const pollJson = {
             "title": this.title,
-            "questions": list
+            "questionText": this.questionText.toJSON()
         }
         return pollJson; 
     }
@@ -78,7 +60,7 @@ export class Question{
         this.id = id;  
     }  
 
-    get toJSON(){ 
+    toJSON(){ 
         const json = {
         "question": this.question,
         "pollOptions": this.getOptions()  }

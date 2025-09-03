@@ -2,22 +2,16 @@ package com.example.backend.Model.Poll;
 
 import java.util.Objects;
 
+import lombok.Data;
+
+@Data
 public class PollOption {
     private String optionName;
+    private Integer optionId; 
 
     public PollOption(String optionName){
         this.optionName = optionName; 
 
-    }
-    public PollOption(){
-    }
-
-    public String getOptionName() {
-        return optionName;
-    }
-
-    public void setOptionName(String optionName) {
-        this.optionName = optionName;
     }
 
     @Override

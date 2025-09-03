@@ -1,5 +1,6 @@
 package com.example.backend.Controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,23 +16,27 @@ import org.springframework.web.bind.annotation.RestController;
 import com.example.backend.Model.User;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollQuestion;
+import com.example.backend.Model.Poll.Vote;
 
 @Component
 public class PollManager {
     HashMap<Integer,Poll> polls;
     HashMap<Integer,User> users;
+    HashMap<Integer,List<Vote>> votes;  
     
     Integer maxPollId = 1;
     Integer maxUserId = 1;  
             
     public PollManager() {
-        this.polls = new HashMap<>(); 
+        this.polls = new HashMap<>();
+        this.users = new HashMap<>(); 
+        this.votes = new HashMap<>();  
 
     }
 
     public void addPoll(Poll poll){ 
         polls.put(maxPollId, poll);
-        poll.setID(maxPollId);
+        poll.setPollID(maxPollId);
         maxPollId ++;
         
     }
@@ -47,7 +52,21 @@ public class PollManager {
 
     public void addUser(User user){
         maxUserId ++; 
-        this.users.put(maxPollId, user);
+        this.users.put(maxUserId, user);
+        user.setUserId(maxUserId); 
+    }
+
+    public List<Vote> getVotes(Integer pollID){
+        return votes.get(pollID);
+    }
+
+    public void addVote(Integer pollId, Vote vote) {
+        List<Vote> pollVotes = votes.get(pollId);
+        if (pollVotes == null) {
+            pollVotes = new ArrayList<>();
+            votes.put(pollId, pollVotes);
+        }
+        pollVotes.add(vote);
     }
 
 

@@ -3,38 +3,34 @@ package com.example.backend.Model.Poll;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.Data;
+
+@Data
 public class PollQuestion {
-    private List<PollOption> options; 
-    private String question; 
+    private List<PollOption> pollOptions; 
+    private String questionText;
+    private Integer optionIdCounter = 0; 
+    private Integer questionID;  
 
-    public PollQuestion(){
-        this.options = new ArrayList<>();
-
-    }
-
-    public String getQuestion(){
-        return question; 
-    }
-    public void setQuestion(String question){
-        this.question = question; 
-    }
-
-    public void addOption(PollOption option){
-        this.options.add(option); 
-    }
-
-    public List<PollOption> getPollOptions() {
-        return this.options; 
+   
+    public void removeOption(PollOption option){
+        pollOptions.remove(option); 
     }
 
     public void setPollOptions(List<PollOption> options){
-        this.options = options; 
+            for (PollOption option : options) {
+            optionIdCounter++;
+            option.setOptionId(optionIdCounter);
+        } 
 
     }
 
-    public void removeOption(PollOption option){
-        options.remove(option); 
+    public void addOption(PollOption option) {
+        optionIdCounter++;
+        option.setOptionId(optionIdCounter);
+        pollOptions.add(option);
     }
-    
+
+
     
 }

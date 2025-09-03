@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollQuestion;
+import com.example.backend.Controllers.PollManager; 
 
 @RestController
 @CrossOrigin
 @RequestMapping("/polls")
 public class PollController {
     	HashMap<Integer,Poll> polls;
-        Integer max_Id = 1;
         PollManager manager; 
 
         public PollController(PollManager manager) {
@@ -31,7 +31,7 @@ public class PollController {
         public String addPoll(@RequestBody Poll poll){ 
             try {
             manager.addPoll(poll);
-            return "Succesfully added poll with ID:";
+            return "Succesfully added poll with ID: " +poll.getPollID();
             }
             catch(Exception e) {
                 return "Error adding question";
