@@ -8,6 +8,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.example.backend.Controllers.PollController;
+import com.example.backend.Controllers.UserController;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollOption;
 
@@ -17,7 +18,7 @@ public class DemoApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
 		PollController pollController = new PollController(); 
-
+		UserController userController = new UserController(); 
 		
 	}
 

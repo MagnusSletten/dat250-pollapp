@@ -2,10 +2,10 @@ package com.example.backend.Model;
 
 public class User{
     private String userName;
-    private Integer age; 
-    public User(String userName, Integer age){
+    private String email; 
+    public User(String userName, String email){
         this.userName = userName;
-        this.age = age; 
+        this.email = email; 
     }
         public User() {
     }
@@ -14,16 +14,16 @@ public class User{
         return userName;
     }
 
-    public Integer getAge() {
-        return age;
+    public String getEmail() {
+        return this.email;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
     }
 
-    public void setAge(Integer age) {
-        this.age = age;
+    public void setEmail(String email) {
+        this.email = email;
     }
     @Override
     public boolean equals(Object o) {

@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.example.backend.Model.Poll.PollOption;
 
-
+@Component
 public class Poll {
     private Integer pollID; 
     private String title; 
@@ -47,11 +49,7 @@ public class Poll {
 
     public void removeQuestion(int questionNumber){
         questions.remove((int) questionNumber);
-        
-        
+          
     }
-
-
-
     
 }

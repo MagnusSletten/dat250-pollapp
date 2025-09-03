@@ -1,4 +1,4 @@
-package com.example.backend;
+package com.example.backend.Controllers;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,21 +19,21 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("/users")
-public class Users {
-    private HashMap<String, User> users = new HashMap<>();
+public class UserController {
+    PollManager pollManager; 
     
-    public Users(){
-        users.put("Alice",new User("Alice",32));
+    public UserController(PollManager pollManager){
+        this.pollManager = pollManager;
     }
     @GetMapping("/get-User/{name}")
-    public User getUser(@PathVariable("name") String name) {
-        return users.get(name);
+    public User getUser(@PathVariable("id") Integer userId) {
+        return pollManager.getUser(userId);
     }
 
-    @PostMapping("/add_user/")
+    @PostMapping("/add_user")
     public String addName(@RequestBody User user){
-        users.put(user.getUserName(),user);
-        return "User added successfully:"+ user.getUserName() + "with age "+user.getAge(); 
+        pollManager.addUser(user);
+        return "User added successfully:"+ user.getUserName() + "with email "+user.getEmail(); 
     }
 }
 

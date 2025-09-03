@@ -19,58 +19,35 @@ import com.example.backend.Model.Poll.PollQuestion;
 @RequestMapping("/polls")
 public class PollController {
     	HashMap<Integer,Poll> polls;
-        Integer max_Id = 1;  
+        Integer max_Id = 1;
+        PollManager manager; 
 
-
-        public PollController() {
-            this.polls = new HashMap<>(); 
-
+        public PollController(PollManager manager) {
+            this.polls = new HashMap<>();
+            this.manager = manager;  
         }
 
         @PostMapping("/")
         public String addPoll(@RequestBody Poll poll){ 
             try {
-            polls.put(max_Id, poll);
-            poll.setID(max_Id);
-            max_Id ++; 
-            return "Succesfully added poll with ID:"+ (max_Id -1);
+            manager.addPoll(poll);
+            return "Succesfully added poll with ID:";
             }
             catch(Exception e) {
                 return "Error adding question";
 
-            } 
-            
+            }    
         }
 
         @GetMapping("/{pollID}")
         public Poll getPoll(@PathVariable("pollID") Integer pollID) throws Exception{
             try {
-            return polls.get(pollID);
+            return manager.getPoll(pollID);
             }
             catch(Exception e){
                 throw e; 
             }
  
         }
-
-        @PostMapping("/{poll-id}/questions/")
-        public String addQuestion( @PathVariable Integer pollID, @RequestBody PollQuestion question){ 
-            try {
-            polls.get(pollID).addQuestion(question);
-            return "Succesfully added question"+ question.getQuestion();
-            }
-            catch(Exception e) {
-                return "Error adding question";
-
-            } 
-            
-        }
-
-        @GetMapping("/{poll-id}/questions/")
-        public List<PollQuestion> getQuestionList(@PathVariable Integer pollID) {
-            return polls.get(pollID).getQuestions(); 
-        }
-
-
 
 }
