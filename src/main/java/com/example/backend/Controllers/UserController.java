@@ -21,7 +21,7 @@ public class UserController {
     public UserController(PollManager pollManager){
         this.pollManager = pollManager;
     }
-    @GetMapping("/get-User/{name}")
+    @GetMapping("/{id}")
     public User getUser(@PathVariable("id") Integer userId) {
         return pollManager.getUser(userId);
     }
