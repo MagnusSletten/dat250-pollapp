@@ -22,8 +22,7 @@ public class DemoApplication {
 		PollManager pollManager = new PollManager(); 
 		PollController PollController = new PollController(pollManager);
 		UserController userController = new UserController(pollManager);
-		VoteController voteController = new VoteController(pollManager);  
-
+		VoteController voteController = new VoteController(pollManager); 
 		
 	}
 

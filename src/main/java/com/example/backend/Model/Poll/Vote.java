@@ -3,7 +3,7 @@ import lombok.Data;
 import java.time.Instant;
 @Data
 public class Vote {
-    private Instant publishedAt = Instant.now();
+    Instant publishedAt = Instant.now();
     Integer userId;
     Integer pollId;
     Integer optionId; 
