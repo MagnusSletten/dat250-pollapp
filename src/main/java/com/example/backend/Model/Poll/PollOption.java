@@ -2,11 +2,16 @@ package com.example.backend.Model.Poll;
 
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PollOption {
     private String optionName;
+    @JsonIgnore
     private Integer optionId; 
 
     public PollOption(String optionName){

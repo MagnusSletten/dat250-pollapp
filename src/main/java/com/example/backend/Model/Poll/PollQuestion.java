@@ -3,14 +3,18 @@ package com.example.backend.Model.Poll;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 public class PollQuestion {
     private List<PollOption> pollOptions; 
     private String questionText;
+    @JsonIgnore
     private Integer optionIdCounter = 0; 
-    private Integer questionID;  
 
    
     public void removeOption(PollOption option){
@@ -18,9 +22,10 @@ public class PollQuestion {
     }
 
     public void setPollOptions(List<PollOption> options){
-            for (PollOption option : options) {
-            optionIdCounter++;
-            option.setOptionId(optionIdCounter);
+        this.pollOptions = options;
+        for (PollOption option : options) {
+        optionIdCounter++;
+        option.setOptionId(optionIdCounter);
         } 
 
     }
