@@ -1,5 +1,7 @@
 package com.example.backend.Controllers;
 
+import java.util.Collection;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,10 +26,15 @@ public class UserController {
         return pollManager.getUser(userId);
     }
 
-    @PostMapping("/add_user")
+    @PostMapping("/")
     public String addName(@RequestBody User user){
         pollManager.addUser(user);
         return "User added successfully:"+ user.getUserName() + "with email "+user.getEmail()+ "and userID: "+user.getUserId(); 
+    }
+
+    @GetMapping("/")
+    public Collection<User> getUsers(){
+       return pollManager.getUsers();  
     }
 }
 

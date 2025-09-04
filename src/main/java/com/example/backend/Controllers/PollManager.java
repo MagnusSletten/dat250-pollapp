@@ -1,6 +1,7 @@
 package com.example.backend.Controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -49,6 +50,10 @@ public class PollManager {
     public User getUser(Integer userID){
         return users.get(userID);
         
+    }
+
+    public Collection<User> getUsers(){
+        return users.values(); 
     }
 
     public void addUser(User user){
