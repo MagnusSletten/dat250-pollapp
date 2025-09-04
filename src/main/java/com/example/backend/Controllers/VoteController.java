@@ -3,6 +3,7 @@ package com.example.backend.Controllers;
 import java.util.HashMap;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,15 +21,17 @@ public class VoteController {
     }
 
     @PostMapping("/")
-    public String addPoll(@RequestBody Vote vote){ 
+    public String addVote(@RequestBody Vote vote){ 
         try {
-        pollManager.addVote(vote.getPollId(),vote);  
-        return "Succesfully voted with vote: "+vote.getOptionId();
+        String message = pollManager.addVote(vote.getPollId(),vote);  
+        return message;
         }
         catch(Exception e) {
             return "Error adding vote" + e;
 
         }    
     }
+
+
 
 }

@@ -3,6 +3,7 @@ package com.example.backend.Controllers;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -51,22 +52,72 @@ public class PollManager {
     }
 
     public void addUser(User user){
-        maxUserId ++; 
         this.users.put(maxUserId, user);
-        user.setUserId(maxUserId); 
+        user.setUserId(maxUserId);
+        maxUserId ++;  
     }
 
     public List<Vote> getVotes(Integer pollID){
-        return votes.get(pollID);
+        if(votes.keySet().contains(pollID)){
+            return votes.get(pollID);
+        }
+        throw new NoSuchElementException("No votes found for " + pollID);
+        
     }
 
-    public void addVote(Integer pollId, Vote vote) {
+    public String addVote(Integer pollId, Vote vote) {
+        boolean voted = false; 
+        if(userVoteExists(pollId, vote.getUserId())){
+            removeVote(pollId, vote.getUserId());
+            voted = true; 
+        }
         List<Vote> pollVotes = votes.get(pollId);
         if (pollVotes == null) {
             pollVotes = new ArrayList<>();
             votes.put(pollId, pollVotes);
         }
         pollVotes.add(vote);
+        if(!voted){
+            return "User with ID " + vote.getUserId().toString() + " has given a new vote"; 
+        }
+        else{
+            return "User with ID " + vote.getUserId().toString() + " has changed vote to "+ vote.getOptionId().toString(); 
+        }
+    }
+       
+    
+
+    public void removeVote(Integer pollID, Integer userId){
+        getVotes(pollID).remove((Vote) getUserVote(pollID, userId));
+
+    
+    }
+
+    public Vote getUserVote(Integer pollID, Integer userId){
+        for(Vote vote : this.getVotes(pollID)){
+            if(vote.getUserId().equals(userId)){
+                return vote; 
+            }
+
+        }
+       throw new NoSuchElementException("This pollID not found in votes");
+    }
+
+    public boolean userVoteExists(Integer pollID, Integer userId){
+        try {
+         getVotes(pollID);
+        } 
+        catch (NoSuchElementException e) {
+        return false;
+        }
+            
+        for(Vote vote : this.getVotes(pollID)){
+            if(vote.getUserId().equals(userId)){
+                return true; 
+            }
+
+        }
+       return false; 
     }
 
 
