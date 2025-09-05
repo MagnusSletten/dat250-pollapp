@@ -10,27 +10,26 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PollQuestion {
-    private List<PollOption> pollOptions; 
-    private String questionText;
+public class VoteOptions {
+    private List<VoteOption> pollOptions; 
     @JsonIgnore
     private Integer optionIdCounter = 0; 
 
    
-    public void removeOption(PollOption option){
+    public void removeOption(VoteOption option){
         pollOptions.remove(option); 
     }
 
-    public void setPollOptions(List<PollOption> options){
+    public void setPollOptions(List<VoteOption> options){
         this.pollOptions = options;
-        for (PollOption option : options) {
+        for (VoteOption option : options) {
         optionIdCounter++;
         option.setOptionId(optionIdCounter);
         } 
 
     }
 
-    public void addOption(PollOption option) {
+    public void addOption(VoteOption option) {
         optionIdCounter++;
         option.setOptionId(optionIdCounter);
         pollOptions.add(option);

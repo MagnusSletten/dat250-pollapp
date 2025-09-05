@@ -12,7 +12,7 @@ import com.example.backend.Controllers.PollManager;
 import com.example.backend.Controllers.UserController;
 import com.example.backend.Controllers.VoteController;
 import com.example.backend.Model.Poll.Poll;
-import com.example.backend.Model.Poll.PollOption;
+import com.example.backend.Model.Poll.VoteOption;
 
 @SpringBootApplication
 public class DemoApplication {

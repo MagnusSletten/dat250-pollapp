@@ -9,13 +9,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class PollOption {
-    private String optionName;
+public class VoteOption {
+    private String caption;
     @JsonIgnore
     private Integer optionId; 
 
-    public PollOption(String optionName){
-        this.optionName = optionName; 
+    public VoteOption(String caption){
+        this.caption = caption; 
 
     }
 
@@ -23,13 +23,13 @@ public class PollOption {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        PollOption that = (PollOption) o;
-        return Objects.equals(optionName, that.optionName);
+        VoteOption that = (VoteOption) o;
+        return Objects.equals(caption, that.caption);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(optionName);
+        return Objects.hash(caption);
     }
 
     

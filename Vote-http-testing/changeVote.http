@@ -4,6 +4,6 @@ Content-Type: application/json
 {
   "userId": 1,  
   "pollId": 1,
-  "optionId": 1
+  "optionId": 2
   
 }

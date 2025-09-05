@@ -7,6 +7,5 @@ public class Vote {
     Integer userId;
     Integer pollId;
     Integer optionId; 
- 
     
 }

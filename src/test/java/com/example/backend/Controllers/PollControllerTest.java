@@ -16,13 +16,11 @@ class PollControllerIT {
     String pollJSON = """
     {
       "title": "Pizza preference",
-      "question": {
-        "questionText": "Do you hate pizza?",
-        "pollOptions": [
-          { "optionName": "yes" },
-          { "optionName": "no" }
-        ]
-      }
+      "question": "Do you hate pizza?",
+      "voteOptions": [
+        { "caption": "yes" },
+        { "caption": "no" }
+      ]
     }
     """;
 

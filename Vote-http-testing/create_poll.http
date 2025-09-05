@@ -1,13 +1,12 @@
-POST http://localhost:8080/polls/
+POST http://localhost:8080/polls
 Content-Type: application/json
 
 {
   "title": "Pizza preference",
-  "question": {
-    "questionText": "Do you hate pizza?",
-    "pollOptions": [
-      { "optionName": "yes" },
-      { "optionName": "no" }
+  "question": "Do you hate pizza?",
+  "voteOptions": [
+      { "caption": "yes" },
+      { "caption": "no" }
     ]
-  }
+  
 }
