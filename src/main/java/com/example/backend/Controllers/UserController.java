@@ -26,13 +26,13 @@ public class UserController {
         return pollManager.getUser(userId);
     }
 
-    @PostMapping("/")
+    @PostMapping
     public String addName(@RequestBody User user){
         pollManager.addUser(user);
         return "User added successfully:"+ user.getUserName() + "with email "+user.getEmail()+ "and userID: "+user.getUserId(); 
     }
 
-    @GetMapping("/")
+    @GetMapping
     public Collection<User> getUsers(){
        return pollManager.getUsers();  
     }

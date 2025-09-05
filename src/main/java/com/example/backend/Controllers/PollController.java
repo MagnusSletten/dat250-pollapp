@@ -25,7 +25,7 @@ public class PollController {
             this.manager = manager;  
         }
 
-        @PostMapping("/")
+        @PostMapping
         public String addPoll(@RequestBody Poll poll){ 
             try {
             manager.addPoll(poll);
