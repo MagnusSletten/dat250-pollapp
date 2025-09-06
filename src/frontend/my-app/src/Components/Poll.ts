@@ -1,9 +1,11 @@
 export class Poll { 
     title: string
-    questionText: Question
+    question: string
+    voteOptions : VoteOptions
 
-    constructor(question: Question){
-        this.questionText = question;
+    constructor(question: string){
+        this.question = question;
+        this.voteOptions = new VoteOptions()
     }
 
     setTitle(name: string){
@@ -13,19 +15,23 @@ export class Poll {
         return this.title;
     }
 
-    setQuestion(question: Question){
-        this.questionText = question; 
+    setQuestion(question: string){
+        this.question = question; 
     }
 
     getQuestion(){
-        return this.questionText; 
+        return this.question; 
+    }
+    getVoteOptions(){
+        return this.voteOptions;
     }
 
     toJSON(){
  
         const pollJson = {
             "title": this.title,
-            "questionText": this.questionText.toJSON()
+            "question": this.question,
+            "voteOptions": this.voteOptions.getOptions()
         }
         return pollJson; 
     }
@@ -33,21 +39,17 @@ export class Poll {
 
 
 
-export class Question{
-    id: number 
-    question: string
-    pollOptions: pollOption[]
+export class VoteOptions{
+    voteOptions: VoteOption[]
     currPollId = 0; 
-    choice: number | null = null; 
 
-    constructor(question = "", pollOptions: pollOption[] = []) {
-    this.question = question;
-    this.pollOptions = pollOptions; 
+    constructor(pollOptions: VoteOption[] = []) {
+    this.voteOptions = pollOptions; 
     this.setPollIDs; 
     
     }
     setPollIDs(){
-        for(const option of this.pollOptions){
+        for(const option of this.voteOptions){
             option.setId(this.getNextPollOptionID())
         }
     }
@@ -56,61 +58,46 @@ export class Question{
         this.currPollId++
         return this.currPollId
     }
-    setID(id:number){
-        this.id = id;  
-    }  
-
     toJSON(){ 
         const json = {
-        "question": this.question,
         "pollOptions": this.getOptions()  }
         return json 
     }
-    setChoice(number:number){
-        this.choice = number
-    }
 
-    getPollOptions(){
-        return this.pollOptions;
+
+    getVoteOptions(){
+        return this.voteOptions;
     }
     getOptions(){
-        return this.pollOptions.map(option => option.getOption())
+        return this.voteOptions.map(option => option.getCaption())
     }
-    addOption(option: pollOption){
+    addOption(option: VoteOption){
        option.setId(this.getNextPollOptionID());
-       this.pollOptions = [...this.pollOptions,option]
-    }
-    setQuestion(question:string){
-        this.question = question; 
-    }
-    getQuestion(){
-        return this.question
+       this.voteOptions = [...this.voteOptions,option]
     }
 
    removeOption(id:number){
-        this.pollOptions = this.pollOptions.filter(pollOption => pollOption.id != id)
+        this.voteOptions = this.voteOptions.filter(pollOption => pollOption.id != id)
 
     }
-    getId(){
-        return this.id; 
-    }
+
 
     
 }
 
-export class pollOption{
+export class VoteOption{
     id:number
-    option: string 
+    caption: string 
 
-    constructor(option:string){
-        this.option = option; 
+    constructor(caption:string){
+        this.caption = caption; 
     }
 
     setId(id:number){
         this.id = id
     }
-    getOption(){
-        return this.option; 
+    getCaption(){
+        return this.caption; 
     }
 
     

@@ -1,43 +1,28 @@
 import { use, useState } from "react";
-import { pollOption, Question } from "./Poll";
+import { VoteOption, VoteOptions } from "./Poll";
 import { useId } from 'react';
 
-export default function QuestionView({ question }: { question: Question }){
-    const [name, setName] = useState(question.getQuestion())
+export default function VoteOptionsView({ voteoptions }: { voteoptions: VoteOptions }){
     const [newOption, setNewOption] = useState("")
-    const changeName = (name: string) => {
-        setName(name);
-        question.setQuestion(name);
-
-    }
-    const [options,setOptions] = useState(question.getOptions())
-    const addOption = (option:pollOption) => {
-        setOptions([...question.getOptions(), option.getOption()])
-        question.addOption(option)
+    const [options,setOptions] = useState(voteoptions.getOptions())
+    const addOption = (option:VoteOption) => {
+        voteoptions.addOption(option);
+        setOptions(voteoptions.getOptions())
         setNewOption("")
     }
     const removeOption = (id:number) =>{
-        question.removeOption(id);
-        setOptions(question.getOptions())
+        voteoptions.removeOption(id);
+        setOptions(voteoptions.getOptions())
          
     }
    
     return(
         <div className="Question">
-        <input
-          value={name}
-          placeholder="Question to ask"
-          className="Question-field"
-          onChange={(e) => ( changeName(e.target.value)
-
-          )}
-          >
-        </input>
         <div></div>
         <div className="option-box">
-            {question.pollOptions.map((option,o_i) => (
+            {voteoptions.getVoteOptions().map((option,o_i) => (
                 <div className="pollButtonBox">
-                <span key ={option.id}>{option.getOption()}</span>
+                <span key ={option.id}>{option.getCaption()}</span>
                 <button
                 className="delete-button"
                 onClick={e => removeOption(option.id)} 
@@ -53,7 +38,7 @@ export default function QuestionView({ question }: { question: Question }){
                 onChange={e => setNewOption(e.target.value)}
                 ></input>
                 <button
-                onClick={e => addOption(new pollOption(newOption))}>
+                onClick={e => addOption(new VoteOption(newOption))}>
                 
             Add Option</button>
             </div>

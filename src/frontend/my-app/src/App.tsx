@@ -1,11 +1,11 @@
 import { useState, useSyncExternalStore } from 'react';
 import './App.css'
-import { Poll, Question } from "./Components/Poll"; 
+import { Poll, VoteOptions } from "./Components/Poll"; 
 import PollView from './Components/PollView'
 
 function CustomPoll():Poll  {
   
-  const question = new Question();
+  const question = ""
   const poll = new Poll(question);
   
   return poll;
@@ -18,7 +18,7 @@ function App() {
   const [response, setResponse] = useState(""); 
 
   const sendPoll = async () => {
-  const url = 'http://localhost:8080/polls/'
+  const url = 'http://localhost:8080/polls'
   
   try {
   const res = await fetch(url, {
@@ -36,7 +36,6 @@ function App() {
   }
   }
  
-
   return (
     <>
       <PollView poll={poll} />

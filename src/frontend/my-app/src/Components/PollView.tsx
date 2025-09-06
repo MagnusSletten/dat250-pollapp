@@ -1,16 +1,17 @@
 import { useState } from "react";
-import { Poll, Question } from "./Poll";
-import QuestionView from "./QuestionView";
+import { Poll, VoteOptions } from "./Poll";
+import VoteOptionsView from "./VoteOptionsView";
 
 export default function PollView({ poll }: { poll: Poll }) {
   const [question, setQuestion] = useState(poll.getQuestion())
   const [showJSON, setShowJSON] = useState(false)
   const [title, setTitle] = useState(poll.getTitle())
-  const putQuestion = (question: Question) => {
-    poll.setQuestion(question)
-    setQuestion(poll.getQuestion())
-    
-  }
+ 
+  const changeQuestion = (name: string) => {
+      poll.setQuestion(name);
+      setQuestion(poll.getQuestion());
+
+    }
 
   const updateTitle = (title:string) => {
     poll.setTitle(title)
@@ -33,8 +34,19 @@ export default function PollView({ poll }: { poll: Poll }) {
             onChange={(e) => updateTitle(e.target.value)}
             value={title}>
         </input>
-        <div className="question-box">
-          <QuestionView question={poll.getQuestion()}/>
+        <div>
+          <input 
+            value={question}
+            placeholder="Question to ask"
+            className="Question-field"
+            onChange={(e) => ( changeQuestion(e.target.value)
+
+            )}
+            >
+          </input>
+        </div>
+        <div className="option-box">
+          <VoteOptionsView voteoptions={poll.getVoteOptions()}/>
         </div>
                 
        
