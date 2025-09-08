@@ -31,3 +31,7 @@ I have set up automatic testing via github actions, but I think this can be impr
 
 Code is available [here](https://github.com/MagnusSletten/Springboot_PollApp)
 
+# Update on issues
+### Important note: Everything below has been written after the due date for this assignment. 
+
+Being inspired by the lectures I implemented a new model/controller design where the Java objects: User, Poll, Vote... has real references to the java objects that relate to them as opposed to just ID references. To make POST process a bit simpler I made small DTO classes which could easily be transformed into the real Java objects with the backend information that wouldn't be easily accessible from the frontend. (Without further calls). Then I also used the jackson json annotations, for instance @JsonIdentityReference(alwaysAsId = true) to avoid returning too much nested object details for GET http requests. 
