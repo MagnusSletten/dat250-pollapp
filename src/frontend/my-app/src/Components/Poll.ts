@@ -2,10 +2,18 @@ export class Poll {
     title: string
     question: string
     voteOptions : VoteOptions
+    creator: string; 
 
     constructor(question: string){
         this.question = question;
         this.voteOptions = new VoteOptions()
+    }
+
+    setCreator(creator:string){
+        this.creator = creator; 
+    }
+    getCreator(){
+        return this.creator; 
     }
 
     setTitle(name: string){
@@ -31,7 +39,8 @@ export class Poll {
         const pollJson = {
             "title": this.title,
             "question": this.question,
-            "voteOptions": this.voteOptions.getOptions()
+            "voteOptions": this.voteOptions.toJSON(),
+            "creator": this.getCreator()
         }
         return pollJson; 
     }
@@ -58,11 +67,16 @@ export class VoteOptions{
         this.currPollId++
         return this.currPollId
     }
-    toJSON(){ 
-        const json = {
-        "pollOptions": this.getOptions()  }
-        return json 
-    }
+    toJSON() {
+    const json = [{
+        pollOptions: this.getOptions().map((option) => {
+        return {
+            caption: option
+        };
+        })
+    }];
+    return json;
+}
 
 
     getVoteOptions(){

@@ -10,8 +10,6 @@ function CustomPoll():Poll  {
   return poll;
 }
 
-
-
 function CreatePoll() {
   const poll = CustomPoll();
   const [response, setResponse] = useState(""); 

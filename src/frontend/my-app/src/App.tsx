@@ -1,12 +1,7 @@
 import { Children, use, useState } from "react";
-import { createBrowserRouter } from "react-router";
-import ReactDOM from "react-dom/client";
-import React from "react";
-import { RouterProvider } from "react-router-dom";
 import CreatePollComponent from './Components/CreatePollComponent'
-import { Outlet, Link } from "react-router-dom";
 import { Poll } from "./Components/Poll";
-import PollView from "./Components/PollView";
+import VotePollComponent from "./Components/VotePollComponent";
 
 
 function CustomPoll():Poll  {
@@ -19,10 +14,22 @@ function CustomPoll():Poll  {
 
 
 function App() {
-  const [pageState, setPageState] = useState();
+  const [pageState, setPageState] = useState(0);
+  const Components = [CreatePollComponent,VotePollComponent]
+  const ActiveComponent = Components[pageState];
 
   return (
-    <h1>hello</h1>
+    <>
+    <div className="page-tabs"> 
+      <button className="page-state-button"
+      onClick={()=> setPageState(0)}
+      >Poll-Creation</button>
+      <button className="page-state-button"
+      onClick={()=> setPageState(1)}
+      >Vote</button>
+    </div>
+    <ActiveComponent/>
+   </>
   )
 
 }
