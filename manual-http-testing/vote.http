@@ -1,10 +1,17 @@
-POST http://localhost:8080/vote/
+POST http://localhost:8080/polls/1/votes
 Content-Type: application/json
 
-{
-  "userId": 1,  
+{  
   "pollId": 1,
-  "optionId": 1
-  
+  "optionId": 1,
+  "userName": "Magnus",
+  "option": {
+    "caption": "yes"
+  }
 }
 
+    Integer voteId; 
+    Instant publishedAt = Instant.now();
+    String userName;
+    Integer pollId;
+    

@@ -4,6 +4,7 @@ import java.time.Instant;
 
 import com.example.backend.Model.User;
 import com.example.backend.Model.Poll.Poll;
+import com.example.backend.Model.Poll.VoteOption;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -16,6 +17,7 @@ public class VoteRequest {
     Instant publishedAt = Instant.now();
     String userName;
     Integer pollId;
+    VoteOption option; 
     
     public Vote toVote(User voter,Poll poll){
         Vote vote = new Vote(); 

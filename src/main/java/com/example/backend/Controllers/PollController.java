@@ -2,7 +2,9 @@ package com.example.backend.Controllers;
 
 import java.util.HashMap;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,6 +33,12 @@ public class PollController {
         public Poll addPoll(@RequestBody PollRequest pollRequest){ 
             Poll poll = manager.addPollFromRequest(pollRequest);
             return poll; 
+        }
+
+        @DeleteMapping("/{pollID}")
+        public boolean deletePoll(@PathVariable("pollID") Integer pollID){
+            return manager.deletePoll(pollID);
+ 
         }
 
         @GetMapping("/{pollID}")

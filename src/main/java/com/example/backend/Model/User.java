@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 public class User{
     private String userName;
     private String email;
-    private Integer userId;
     @JsonIdentityReference(alwaysAsId = true)
     private List<Poll> polls = new ArrayList<>();
     @JsonIdentityReference(alwaysAsId = true)
@@ -53,8 +52,15 @@ public class User{
 
     }
 
+    public void addVote(Vote vote){
+        this.votes.add(vote);
+    }
+
+    public void remoteVote(Vote vote){
+        this.votes.remove(vote);
+    }
     public boolean hasVoted(Integer pollId){
-        boolean hasVoted = true; 
+        boolean hasVoted = false; 
         for(Vote vote : votes){
             if(vote.getVoter().equals(this)){
                 hasVoted = true; 

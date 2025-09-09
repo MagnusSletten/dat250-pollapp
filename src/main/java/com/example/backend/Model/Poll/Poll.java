@@ -47,4 +47,11 @@ public class Poll {
         votes.set(votes.indexOf(vote),vote); 
     }
     
+    public void remoteVotes(){
+        for(int i = votes.size()-1; i>=0; i-- ){
+            Vote vote = votes.get(i);
+            vote.getVoter().remoteVote(vote);
+            votes.remove(i);
+        }
+    }
 }

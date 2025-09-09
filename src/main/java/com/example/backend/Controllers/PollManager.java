@@ -23,6 +23,7 @@ public class PollManager {
     
     Integer maxPollId = 1;
     Integer maxUserId = 1;  
+    Integer voteId = 1; 
             
     public PollManager() {
         this.polls = new HashMap<>();
@@ -52,6 +53,16 @@ public class PollManager {
         return users.values(); 
     }
 
+    public boolean deletePoll(Integer pollId){
+        if (polls.keySet().contains(pollId)){
+            polls.get(pollId).remoteVotes();
+            polls.remove(pollId);
+            return true;
+        }
+        return false;   
+
+    }
+
     public User addUserFromRequest(UserRequest userRequest){
       User user = userRequest.toUser();
       users.put(userRequest.getUserName(), user);
@@ -71,9 +82,12 @@ public class PollManager {
         Poll poll = polls.get(voteRequest.getPollId());
         
         Vote vote = voteRequest.toVote(user, poll);
+        vote.setVoteId(voteId);
+        voteId++;
 
         if (!user.hasVoted(poll.getPollID())){
             poll.addVote(vote);
+            user.addVote(vote);
 
         }
         else {

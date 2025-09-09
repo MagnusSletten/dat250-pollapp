@@ -5,13 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestClient;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -49,6 +48,24 @@ class PollControllerTest {
         JSONAssert.assertEquals(getExpectedPoll_1(), actual,true);  
           
     }
+
+    @Test
+    void deletePoll()throws JSONException{
+        sendUser();
+        ResponseEntity<String> pollReturn = createPoll(getPollRequest1());
+        assertNotNull(pollReturn);
+        ResponseEntity<String> deleteResponse = client.delete()
+        .uri("/polls/1")
+        .retrieve()
+        .toEntity(String.class);
+        ResponseEntity resp = getPoll1();
+        assertFalse((resp.getStatusCode().equals(HttpStatus.OK))); 
+
+
+
+    }
+
+
 
   
     ResponseEntity<String> createPoll(JSONObject poll) throws JSONException {
@@ -97,6 +114,15 @@ class PollControllerTest {
         .toEntity(String.class);
 
     }
+
+    ResponseEntity getPoll1() throws JSONException {
+    ResponseEntity<String> response = client.get()
+    .uri("/polls/1")
+    .retrieve()
+    .toEntity(String.class);
+
+    return response; 
+}
 
 
 }
