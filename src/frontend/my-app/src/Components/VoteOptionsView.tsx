@@ -13,7 +13,6 @@ export default function VoteOptionsView({ voteoptions }: { voteoptions: VoteOpti
     const removeOption = (id:number) =>{
         voteoptions.removeOption(id);
         setOptions(voteoptions.getOptions())
-         
     }
    
     return(
@@ -22,10 +21,10 @@ export default function VoteOptionsView({ voteoptions }: { voteoptions: VoteOpti
         <div className="option-box">
             {voteoptions.getVoteOptions().map((option,o_i) => (
                 <div className="pollButtonBox">
-                <span key ={option.id}>{option.getCaption()}</span>
+                <span key ={option.optionId}>{option.getCaption()}</span>
                 <button
                 className="delete-button"
-                onClick={e => removeOption(option.id)} 
+                onClick={e => removeOption(option.optionId)} 
                 >X</button>
                 </div>
             ))}
@@ -38,7 +37,7 @@ export default function VoteOptionsView({ voteoptions }: { voteoptions: VoteOpti
                 onChange={e => setNewOption(e.target.value)}
                 ></input>
                 <button
-                onClick={e => addOption(new VoteOption(newOption))}>
+                onClick={e => addOption(new VoteOption(newOption,options.length+1))}>
                 
             Add Option</button>
             </div>

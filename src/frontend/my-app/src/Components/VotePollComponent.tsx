@@ -1,15 +1,15 @@
 import { useState } from "react"
-import { Vote } from "./Poll";
+import { Vote, VoteOption, VoteOptions } from "./Poll";
 
 export default function VotePoll(){
     const [pollID, setPollID] = useState("1");
     const url = 'http://localhost:8080/polls/'
     const voteUrl = url+pollID+"/votes"
-    var [pollJson, setPollJson] = useState(null)
-    const [pollOptions, setPollOptions] = useState([]);
+    var [pollJson, setPollJson] = useState(null);
+    const [pollOptions, setPollOptions] = useState<VoteOptions>();
    
     const vote = async(optionId) =>{
-        const vote:Vote = new Vote(optionId)
+        const vote:Vote = new Vote(optionId,pollID)
 
         const response = await fetch(voteUrl, {
         method: 'POST',
@@ -22,18 +22,19 @@ export default function VotePoll(){
 
     const  getPoll = async() =>{
        const res = await fetch(url+pollID);
-       const pollJsonReturn = await res.json();
-       setPollJson(pollJsonReturn);
-       setPollOptions(pollJsonReturn.voteOptions)
+       const data = await res.json();
+       const voteoptions = new VoteOptions().fromJSON(data.voteOptions);
+       setPollOptions(voteoptions)
+       setPollJson(data);
         }
 
     
     const createOptionButtons = () => {
         return(
-        pollOptions.map(option => (
+        pollOptions?.getVoteOptions().map(option => (
             <button
-            onClick={() => vote()}
-            >{option.caption} </button>
+            onClick={() => vote(option.optionId)}
+            >{option.getCaption()}</button>
         ))
     )
 

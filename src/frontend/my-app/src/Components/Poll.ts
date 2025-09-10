@@ -59,7 +59,7 @@ export class VoteOptions{
     }
     setPollIDs(){
         for(const option of this.voteOptions){
-            option.setId(this.getNextPollOptionID())
+            option.setOptionId(this.getNextPollOptionID())
         }
     }
 
@@ -80,32 +80,45 @@ export class VoteOptions{
         return this.voteOptions.map(option => option.getCaption())
     }
     addOption(option: VoteOption){
-       option.setId(this.getNextPollOptionID());
+       option.setOptionId(this.getNextPollOptionID());
        this.voteOptions = [...this.voteOptions,option]
     }
 
    removeOption(id:number){
-        this.voteOptions = this.voteOptions.filter(pollOption => pollOption.id != id)
+        this.voteOptions = this.voteOptions.filter(pollOption => pollOption.optionId != id)
 
     }
+
+
+  fromJSON(optionsJSON: any[]): VoteOptions {
+    this.voteOptions = optionsJSON.map(
+      (opt) => new VoteOption(opt.optionId, opt.caption)
+    );
+    return this; 
+  }
 
 
     
 }
 
 export class VoteOption{
-    id:number
-    caption: string 
+    presentationOrder:number
+    caption: string
+    optionId: number 
 
-    constructor(caption:string){
+    constructor(caption:string,presentationOrder){
         this.caption = caption; 
+        this.presentationOrder = presentationOrder
+        this.optionId = this.optionId; 
     }
 
-    setId(id:number){
-        this.id = id
-    }
     getCaption():string {
         return this.caption; 
+    }
+
+    setOptionId(id: number){
+        this.optionId = id; 
+
     }
 
     
@@ -113,12 +126,17 @@ export class VoteOption{
 }
 
 export class Vote{
+    pollId;
     optionId:string
-    constructor(optionId){
-        this.optionId = optionId; 
+    constructor(optionId,pollId){
+        this.optionId = optionId;
+        this.pollId = pollId;  
     }
     toJSON(){
-        optionId: this.optionId
+        return {
+        "optionId": this.optionId,
+        "pollId": this.optionId
+        }
     }
 
 }
