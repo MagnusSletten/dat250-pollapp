@@ -6,12 +6,6 @@ export default function PollView({ poll }: { poll: Poll }) {
   const [question, setQuestion] = useState(poll.getQuestion())
   const [showJSON, setShowJSON] = useState(false)
   const [title, setTitle] = useState(poll.getTitle())
-  const [creator,setCreator] = useState(poll.getCreator())
-
-  const changeCreator = (name:string) => {
-    poll.setCreator(name);
-    setCreator(poll.getCreator());
-  }
  
   const changeQuestion = (name: string) => {
       poll.setQuestion(name);
@@ -53,15 +47,7 @@ export default function PollView({ poll }: { poll: Poll }) {
         </div>
         <div className="option-box">
           <VoteOptionsView voteoptions={poll.getVoteOptions()}/>
-        </div>
-        <input
-            className="creator"
-            placeholder="Set creator for the poll"
-            onChange={(e) => changeCreator(e.target.value)}
-            value={creator}>
-        </input>
-                
-       
+        </div>  
         </>  
     )
      }

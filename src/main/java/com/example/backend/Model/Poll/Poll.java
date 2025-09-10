@@ -32,7 +32,7 @@ public class Poll {
    @JsonIdentityReference(alwaysAsId = true)
     private User creator;
 
-
+    
     
     public void setCreator(User creator){
         this.creator = creator;

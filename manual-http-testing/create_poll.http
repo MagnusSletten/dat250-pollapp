@@ -5,9 +5,23 @@ Content-Type: application/json
   "title": "Pizza preference",
   "question": "Do you hate pizza?",
   "voteOptions": [
-      { "caption": "yes" },
-      { "caption": "no" }
+      { "caption": "yes",
+       "presentationOrder": 1 
+     },
+      { "caption": "no", 
+       "presentationOrder": 2}
     ],
   "creator": "Magnus"
 }  
 
+
+{
+  "question": "",
+  "voteOptions": {
+    "pollOptions": [
+      {
+        "caption": "Vote"
+      }
+    ]
+  }
+}

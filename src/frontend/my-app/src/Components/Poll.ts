@@ -52,8 +52,8 @@ export class VoteOptions{
     voteOptions: VoteOption[]
     currPollId = 0; 
 
-    constructor(pollOptions: VoteOption[] = []) {
-    this.voteOptions = pollOptions; 
+    constructor(voteOptions: VoteOption[] = []) {
+    this.voteOptions = voteOptions; 
     this.setPollIDs; 
     
     }
@@ -68,15 +68,9 @@ export class VoteOptions{
         return this.currPollId
     }
     toJSON() {
-    const json = [{
-        pollOptions: this.getOptions().map((option) => {
-        return {
-            caption: option
-        };
-        })
-    }];
-    return json;
-}
+    return this.getOptions().map((caption) => ({ caption }));
+    }
+
 
 
     getVoteOptions(){
@@ -110,10 +104,21 @@ export class VoteOption{
     setId(id:number){
         this.id = id
     }
-    getCaption(){
+    getCaption():string {
         return this.caption; 
     }
 
     
+
+}
+
+export class Vote{
+    optionId:string
+    constructor(optionId){
+        this.optionId = optionId; 
+    }
+    toJSON(){
+        optionId: this.optionId
+    }
 
 }

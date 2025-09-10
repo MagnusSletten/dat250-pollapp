@@ -17,7 +17,7 @@ import org.springframework.aot.generate.Generated;
 public class Vote {
  
     Integer voteId; 
-    Instant publishedAt = Instant.now();
+    Instant publishedAt = Instant.now(); 
     @JsonIdentityReference(alwaysAsId = true)
     User voter;
     @JsonIdentityReference(alwaysAsId = true)

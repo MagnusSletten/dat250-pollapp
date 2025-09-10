@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class VoteOption {
     private String caption;
+    private Integer presentationOrder;
     @JsonIgnore
     private Integer optionId; 
 
