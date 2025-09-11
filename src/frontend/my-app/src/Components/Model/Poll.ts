@@ -39,7 +39,7 @@ export class Poll {
         const pollJson = {
             "title": this.title,
             "question": this.question,
-            "voteOptions": this.voteOptions.toJSON(),
+            "voteOptions": this.voteOptions.toJSON().pollOptions,
             "creator": this.getCreator()
         }
         return pollJson; 
@@ -68,7 +68,10 @@ export class VoteOptions{
         return this.currPollId
     }
     toJSON() {
-    return this.getOptions().map((caption) => ({ caption }));
+     return { pollOptions: this.voteOptions.map(o => ({
+    caption: o.caption,
+    presentationOrder: o.presentationOrder
+     })) };
     }
 
 
@@ -77,7 +80,7 @@ export class VoteOptions{
         return this.voteOptions;
     }
     getOptions(){
-        return this.voteOptions.map(option => option.getCaption())
+        return this.voteOptions.map(option => (option.getCaption()))
     }
     addOption(option: VoteOption){
        option.setOptionId(this.getNextPollOptionID());
@@ -92,7 +95,7 @@ export class VoteOptions{
 
   fromJSON(optionsJSON: any[]): VoteOptions {
     this.voteOptions = optionsJSON.map(
-      (opt) => new VoteOption(opt.optionId, opt.caption)
+      (opt) => new VoteOption(opt.caption, opt.presentationOrder)
     );
     return this; 
   }
@@ -127,15 +130,15 @@ export class VoteOption{
 
 export class Vote{
     pollId;
-    optionId:string
-    constructor(optionId,pollId){
-        this.optionId = optionId;
+    presentationOrder:number
+    constructor(presentationOrder,pollId){
+        this.presentationOrder = presentationOrder;
         this.pollId = pollId;  
     }
     toJSON(){
         return {
-        "optionId": this.optionId,
-        "pollId": this.optionId
+        "presentationOrder": this.presentationOrder,
+        "pollId": this.pollId
         }
     }
 

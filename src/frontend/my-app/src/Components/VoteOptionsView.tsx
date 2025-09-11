@@ -1,5 +1,5 @@
 import { use, useState } from "react";
-import { VoteOption, VoteOptions } from "./Poll";
+import { VoteOption, VoteOptions } from "./Model/Poll";
 import { useId } from 'react';
 
 export default function VoteOptionsView({ voteoptions }: { voteoptions: VoteOptions }){

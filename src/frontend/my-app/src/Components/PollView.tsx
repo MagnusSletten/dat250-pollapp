@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Poll, VoteOptions } from "./Poll";
+import { Poll, VoteOptions } from "./Model/Poll";
 import VoteOptionsView from "./VoteOptionsView";
 
 export default function PollView({ poll }: { poll: Poll }) {

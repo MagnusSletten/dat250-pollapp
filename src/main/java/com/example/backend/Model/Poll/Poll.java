@@ -1,16 +1,15 @@
 package com.example.backend.Model.Poll;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.example.backend.Model.User;
 import com.example.backend.Model.Poll.Vote.Vote;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
@@ -43,10 +42,26 @@ public class Poll {
         this.votes.add(vote);
     }
 
-    public void changeVote(Vote vote){
-        votes.set(votes.indexOf(vote),vote); 
+    public void changeVote(Vote vote) {
+        for (int i = 0; i < votes.size(); i++) {
+            if (votes.get(i).getVoteId() == vote.getVoteId()) {
+                votes.set(i, vote);
+                return;
+            }
+        }
+        throw new IllegalArgumentException("Vote with id " + vote.getVoteId() + " not found");
     }
     
+    public Map<Integer, Long> countVotesByPresentationOrder() {
+    Map<Integer, Long> counts = new HashMap<>();
+
+    for (Vote vote : votes) {
+        counts.put(vote.getOption().getPresentationOrder(),
+                   counts.getOrDefault(vote.getOption().getPresentationOrder(), 0L) + 1);
+    }
+
+    return counts;
+}
     public void remoteVotes(){
         for(int i = votes.size()-1; i>=0; i-- ){
             Vote vote = votes.get(i);

@@ -59,7 +59,7 @@ class PollControllerTest {
         .retrieve()
         .toEntity(String.class);
         ResponseEntity resp = getPoll1();
-        assertFalse((resp.getStatusCode().equals(HttpStatus.OK))); 
+        assertNull((resp.getBody())); 
 
 
 
@@ -95,8 +95,12 @@ class PollControllerTest {
         pollJSON.put("question", "Do you hate pizza?");
 
         JSONArray voteOptions = new JSONArray();
-        voteOptions.put(new JSONObject().put("caption", "yes"));
-        voteOptions.put(new JSONObject().put("caption", "no"));
+        voteOptions.put(new JSONObject()
+            .put("caption", "yes")
+            .put("presentationOrder", 1));
+        voteOptions.put(new JSONObject()
+            .put("caption", "no")
+            .put("presentationOrder", 2));
         pollJSON.put("voteOptions", voteOptions);
         pollJSON.put("creator","Magnus");
 

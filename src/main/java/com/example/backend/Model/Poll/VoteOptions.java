@@ -1,6 +1,5 @@
 package com.example.backend.Model.Poll;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;

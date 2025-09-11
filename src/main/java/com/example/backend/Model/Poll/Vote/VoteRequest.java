@@ -4,8 +4,8 @@ import java.time.Instant;
 
 import com.example.backend.Model.User;
 import com.example.backend.Model.Poll.Poll;
-import com.example.backend.Model.Poll.VoteOption;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import lombok.Data;
@@ -17,13 +17,30 @@ public class VoteRequest {
     Instant publishedAt = Instant.now();
     String userName;
     Integer pollId;
-    VoteOption option; 
+    Integer presentationOrder;
+    @JsonIgnore
+    boolean hasUsername;
     
     public Vote toVote(User voter,Poll poll){
+       
+        Vote vote = new Vote(); 
+        hasUsername = userName.isEmpty(); 
+        vote.setVoter(voter);
+        vote.setPoll(poll);
+        vote.setPublishedAt(publishedAt);
+        vote.setOption(poll.getVoteOptions().get(presentationOrder-1));
+      
+        return vote; 
+
+    }
+
+    public Vote toVoteAnonymous(Poll poll){
+       
         Vote vote = new Vote(); 
         vote.setPoll(poll);
         vote.setPublishedAt(publishedAt);
-        vote.setVoter(voter);
+        vote.setOption(poll.getVoteOptions().get(presentationOrder-1));
+      
         return vote; 
 
     }

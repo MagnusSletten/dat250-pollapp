@@ -1,7 +1,6 @@
-import { use, useState, useSyncExternalStore } from 'react';
-import { Poll, VoteOptions } from "./Poll"; 
+import { useState,  } from 'react';
+import { Poll, VoteOptions } from "./Model/Poll"; 
 import PollView from './PollView'
-import LogInComponent from './LogInComponent';
 
 function CustomPoll():Poll  {
   
@@ -12,33 +11,37 @@ function CustomPoll():Poll  {
   return poll;
 }
 
-function CreatePoll() {
-  const [loginStatus, setLoginStatus] = useState(false);
+function CreatePoll({  userName,
+  loginStatus,
+}: {
+  userName: string;
+  loginStatus: boolean;
+   })  {
+  
   const poll = CustomPoll();
   const [response, setResponse] = useState(""); 
-  const [userName, setUsername] = useState("")
   const setCreator = ()=> {
     poll.setCreator(userName)
   } 
 
   const sendPoll = async () => {
-  const url = 'http://localhost:8080/polls'
-  
-  try {
-  setCreator()
-  const res = await fetch(url, {
-  method: 'POST',
-  headers: {
-    Accept: 'application/json',
-    'Content-Type': 'application/json',
-  },
-  body: JSON.stringify(poll.toJSON())}); 
-  setResponse(await res.text()); 
-  }
+    const url = 'http://localhost:8080/polls'
+    
+    try {
+      setCreator()
+      const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(poll.toJSON())}); 
+      setResponse(await res.text()); 
+      }
 
-  catch(error) {
-    setResponse(error.message);
-  }
+      catch(error) {
+        setResponse(error.message);
+    }
   }
   if(loginStatus){
   return (
@@ -54,14 +57,6 @@ function CreatePoll() {
 
   )
   }
-  else return (
-    <LogInComponent
-    setLoginStatus= {setLoginStatus}
-    userName={userName}
-    setUsername={setUsername}
-    />
-
-  )
 
 }
 

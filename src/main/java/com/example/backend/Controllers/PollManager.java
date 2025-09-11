@@ -1,13 +1,12 @@
 package com.example.backend.Controllers;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Component;
-
 
 import com.example.backend.Model.User;
 import com.example.backend.Model.UserRequest;
@@ -44,8 +43,8 @@ public class PollManager {
        return polls.get(poll_id);
     }
 
-    public User getUser(Integer userID){
-        return users.get(userID);
+    public User getUser(String userName){
+        return users.get(userName);
         
     }
 
@@ -70,33 +69,35 @@ public class PollManager {
     }
 
     public List<Vote> getVotes(Integer pollID){
-        if(polls.get(pollID).getVotes().contains(pollID)){
-            polls.get(pollID).getVotes();
-        }
-        throw new NoSuchElementException("No votes found for " + pollID);
+         return polls.get(pollID).getVotes(); 
+     
         
     }
 
-    public Vote addVote(VoteRequest voteRequest) {
-        User user = users.get(voteRequest.getUserName());
-        Poll poll = polls.get(voteRequest.getPollId());
-        
-        Vote vote = voteRequest.toVote(user, poll);
-        vote.setVoteId(voteId);
-        voteId++;
-
-        if (!user.hasVoted(poll.getPollID())){
-            poll.addVote(vote);
-            user.addVote(vote);
-
-        }
-        else {
-            poll.changeVote(vote);
-        }
-        return vote; 
-       
+    public Map<Integer, Long> getVoteResults(Integer pollID){
+        return polls.get(pollID).countVotesByPresentationOrder();
     }
-       
+public Vote addVoteWithUser(VoteRequest request)   {
+    User user = users.get(request.getUserName());
+    Poll poll = polls.get(request.getPollId());
+    Vote vote = request.toVote(user, poll);
+    vote.setVoteId(voteId++);
+    if (!user.hasVoted(poll.getPollID())) {
+        poll.addVote(vote);
+        user.addVote(vote);
+    } else {
+        poll.changeVote(vote);
+    }
+    return vote;
+}
+
+public Vote addVoteAnonymous(VoteRequest request) {
+    Poll poll = polls.get(request.getPollId());
+    Vote vote = request.toVoteAnonymous(poll);
+    vote.setVoteId(voteId++);
+    poll.addVote(vote);
+    return vote;
+}
     
 
     public void removeVote(Integer pollID, Integer userId){
