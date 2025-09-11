@@ -22,13 +22,12 @@ export default function VotePoll(){
             'Content-Type': 'application/json',
         },
         body: JSON.stringify(vote.toJSON())});
-         
+        getVotes()
         }
         const getVotes = async () => {
         const res = await fetch(voteUrl+"/results");
         const data = await res.json(); 
         setVotes(data);
-        getVotes();
         };
 
     const  getPoll = async() =>{
@@ -40,6 +39,7 @@ export default function VotePoll(){
        console.log(voteoptions)
        setPollJson(data);
        setPolltitle(data.title)
+       setPollID(data.pollID)
        getVotes();
        setPollQuestion(data.question);
         }
