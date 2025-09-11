@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.backend.Model.PollManager;
 import com.example.backend.Model.Poll.Vote.Vote;
 import com.example.backend.Model.Poll.Vote.VoteRequest;
 
@@ -27,7 +28,7 @@ public class VoteController {
 
     @PostMapping("/{pollID}/votes")
     public Vote addVote(@RequestBody VoteRequest voteRequest){ 
-        if(voteRequest.isHasUsername()){
+        if(voteRequest.hasUsername()){
             return pollManager.addVoteWithUser(voteRequest); 
         }
         else{

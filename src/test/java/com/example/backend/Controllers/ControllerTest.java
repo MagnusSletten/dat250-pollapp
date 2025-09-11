@@ -22,7 +22,7 @@ import org.json.JSONException;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) 
 
-class PollControllerTest {
+class ControllerTest {
 
 
     @LocalServerPort int port;

@@ -21,7 +21,8 @@ function App() {
           loginStatus={loginStatus}
         />
       ) : pageState === 1 ? (
-        <VotePollComponent />
+        <VotePollComponent 
+         userName= {userName}/>
       ) : (
         <LogInComponent
           userName={userName}

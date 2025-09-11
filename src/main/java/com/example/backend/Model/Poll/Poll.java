@@ -42,9 +42,10 @@ public class Poll {
         this.votes.add(vote);
     }
 
+
     public void changeVote(Vote vote) {
         for (int i = 0; i < votes.size(); i++) {
-            if (votes.get(i).getVoteId() == vote.getVoteId()) {
+            if (votes.get(i).getVoter().getUserName() == vote.getVoter().getUserName()) {
                 votes.set(i, vote);
                 return;
             }

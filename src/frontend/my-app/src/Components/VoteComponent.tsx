@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Vote, VoteOption, VoteOptions } from "./Model/Poll";
 
-export default function VotePoll(){
+export default function VotePoll(userName){
     const [pollID, setPollID] = useState("1");
     const url = 'http://localhost:8080/polls/'
     const voteUrl = url+pollID+"/votes"
@@ -12,7 +12,10 @@ export default function VotePoll(){
     const [pollQuestion, setPollQuestion] = useState("")
    
     const vote = async(presentationOrder) =>{
-        const vote:Vote = new Vote(presentationOrder,pollID)
+        const vote:Vote = new Vote(presentationOrder,pollID, null)
+        if(userName){
+            vote.userName = userName.userName; 
+        }
 
         console.log(vote)
         const response = await fetch(voteUrl, {

@@ -1,4 +1,4 @@
-package com.example.backend.Controllers;
+package com.example.backend.Model;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,8 +8,6 @@ import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Component;
 
-import com.example.backend.Model.User;
-import com.example.backend.Model.UserRequest;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
 import com.example.backend.Model.Poll.Vote.Vote;
@@ -100,11 +98,11 @@ public Vote addVoteAnonymous(VoteRequest request) {
 }
     
 
-    public void removeVote(Integer pollID, Integer userId){
-        getVotes(pollID).remove((Vote) getUserVote(pollID, userId));
+public void removeVote(Integer pollID, Integer userId){
+    getVotes(pollID).remove((Vote) getUserVote(pollID, userId));
 
-    
-    }
+
+}
 
     public Vote getUserVote(Integer pollID, Integer userId){
         for(Vote vote : this.getVotes(pollID)){

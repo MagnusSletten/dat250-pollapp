@@ -1,3 +1,5 @@
+import { use } from "react";
+
 export class Poll { 
     title: string
     question: string
@@ -131,15 +133,26 @@ export class VoteOption{
 export class Vote{
     pollId;
     presentationOrder:number
-    constructor(presentationOrder,pollId){
+    userName:String |null
+    constructor(presentationOrder,pollId, userName){
         this.presentationOrder = presentationOrder;
-        this.pollId = pollId;  
+        this.pollId = pollId; 
+        this.userName = userName;  
     }
     toJSON(){
+        if(!this.userName){
         return {
         "presentationOrder": this.presentationOrder,
         "pollId": this.pollId
         }
-    }
+        }
+        else return {
+            
+            "presentationOrder": this.presentationOrder,
+            "pollId": this.pollId,
+            "userName": this.userName
+        }
 
+        }
 }
+

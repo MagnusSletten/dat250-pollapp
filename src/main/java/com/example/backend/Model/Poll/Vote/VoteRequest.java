@@ -18,13 +18,11 @@ public class VoteRequest {
     String userName;
     Integer pollId;
     Integer presentationOrder;
-    @JsonIgnore
-    boolean hasUsername;
+
     
     public Vote toVote(User voter,Poll poll){
        
         Vote vote = new Vote(); 
-        hasUsername = userName.isEmpty(); 
         vote.setVoter(voter);
         vote.setPoll(poll);
         vote.setPublishedAt(publishedAt);
@@ -43,6 +41,10 @@ public class VoteRequest {
       
         return vote; 
 
+    }
+
+    public boolean hasUsername(){
+         return userName != null && !userName.isBlank();
     }
     
 }
