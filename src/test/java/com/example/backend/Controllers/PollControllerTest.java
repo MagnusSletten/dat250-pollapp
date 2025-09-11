@@ -1,7 +1,9 @@
 package com.example.backend.Controllers;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -18,13 +20,15 @@ import org.json.JSONException;
 
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) 
+
 class PollControllerTest {
 
 
     @LocalServerPort int port;
-    RestClient client;
+    RestClient client; 
 
-    @BeforeEach
+    @BeforeAll
     void setUp() {
         client = RestClient.builder()
                 .baseUrl("http://localhost:" + port)
