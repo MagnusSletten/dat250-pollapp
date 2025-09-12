@@ -68,15 +68,15 @@ public class PollManager {
 
     public List<Vote> getVotes(Integer pollID){
          return polls.get(pollID).getVotes(); 
-     
-        
+         
     }
 
     public Map<Integer, Long> getVoteResults(Integer pollID){
         return polls.get(pollID).countVotesByPresentationOrder();
     }
-public Vote addVoteWithUser(VoteRequest request)   {
+public Vote addVoteWithUser(VoteRequest request){
     User user = users.get(request.getUserName());
+    Integer id = request.getPollId(); 
     Poll poll = polls.get(request.getPollId());
     Vote vote = request.toVote(user, poll);
     vote.setVoteId(voteId++);

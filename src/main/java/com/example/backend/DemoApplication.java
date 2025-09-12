@@ -13,11 +13,8 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-		PollManager pollManager = new PollManager(); 
-		PollController PollController = new PollController(pollManager);
-		UserController userController = new UserController(pollManager);
-		VoteController voteController = new VoteController(pollManager); 
-		
+
+
 	}
 
 }

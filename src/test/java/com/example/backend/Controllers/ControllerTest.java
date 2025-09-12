@@ -9,6 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -28,7 +29,7 @@ class ControllerTest {
     @LocalServerPort int port;
     RestClient client; 
 
-    @BeforeAll
+    @BeforeEach
     void setUp() {
         client = RestClient.builder()
                 .baseUrl("http://localhost:" + port)
@@ -69,7 +70,46 @@ class ControllerTest {
 
     }
 
+    @Test 
+    void testSequence() throws JSONException{
+        sendUser();
+        ResponseEntity<String> usersReturn= getUsers();
+        assert(usersReturn.getBody().contains("Andrew"));
+        sendUser2();
+        ResponseEntity<String> usersReturn2= getUsers();
+        assert(usersReturn2.getBody().contains("Andrew"));
+        assert(usersReturn2.getBody().contains("Peter"));
+        ResponseEntity<String> poll =  createPoll(getPollRequest1());
+        JSONObject pollJSON = new JSONObject(poll.getBody());
+        Integer pollId = pollJSON.getInt("pollID");
+        sendVote(1,pollId);
+        sendVote(2,pollId);
+        ResponseEntity<String> votes = getVotes(pollId);
+        JSONArray arr = new JSONArray(votes.getBody());
+        assertEquals(1, arr.length());
+        client.delete()
+        .uri("/polls/" + pollId)
+        .retrieve()
+        .toEntity(String.class);
+        
+        assertThrows(HttpServerErrorException.class, () -> {
+    getVotes(pollId);
+});
+        
 
+                
+
+    }
+
+
+    ResponseEntity<String> getUsers(){
+    ResponseEntity<String> response = client.get()
+    .uri("/users")
+    .retrieve()
+    .toEntity(String.class);
+    return response; 
+
+    }
 
   
     ResponseEntity<String> createPoll(JSONObject poll) throws JSONException {
@@ -106,14 +146,26 @@ class ControllerTest {
             .put("caption", "no")
             .put("presentationOrder", 2));
         pollJSON.put("voteOptions", voteOptions);
-        pollJSON.put("creator","Magnus");
+        pollJSON.put("creator","Andrew");
 
         return pollJSON;
     }
 
     public void sendUser() throws JSONException{
         JSONObject user = new JSONObject();
-        user.put("userName", "Magnus");
+        user.put("userName", "Andrew");
+
+        var userResp = client.post().uri("/users")
+        .contentType(APPLICATION_JSON)
+        .body(user.toString())
+        .retrieve()
+        .toEntity(String.class);
+
+    }
+
+        public void sendUser2() throws JSONException{
+        JSONObject user = new JSONObject();
+        user.put("userName", "Peter");
 
         var userResp = client.post().uri("/users")
         .contentType(APPLICATION_JSON)
@@ -131,6 +183,37 @@ class ControllerTest {
 
     return response; 
 }
+
+
+
+    ResponseEntity<String> getVotes(Integer pollId) throws JSONException {
+    ResponseEntity<String> response = client.get()
+    .uri("/polls/" +pollId +"/votes")
+    .retrieve()
+    .toEntity(String.class);
+
+    return response; 
+}
+
+JSONObject getVote(Integer presentationOrder,Integer pollId) throws JSONException{
+        JSONObject voteJSON = new JSONObject();
+        voteJSON.put("pollId", pollId);
+        voteJSON.put("presentationOrder", presentationOrder);
+        voteJSON.put("userName", "Andrew");
+        return voteJSON;
+    }
+
+
+    public ResponseEntity<String> sendVote(Integer presentationOrder, Integer pollId) throws JSONException{
+        ResponseEntity<String> voteRes = client.post().uri("/polls/" + pollId + "/votes")
+        .contentType(APPLICATION_JSON)
+        .body(getVote(presentationOrder,pollId).toString())
+        .retrieve()
+        .toEntity(String.class);
+        return voteRes;
+
+
+    }
 
 
 }
