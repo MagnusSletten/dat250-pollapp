@@ -1,15 +1,8 @@
 import { useState,  } from 'react';
-import { Poll, VoteOptions } from "./Model/Poll"; 
+import { Poll } from "./Model/Poll"; 
 import PollView from './PollView'
 
-function CustomPoll():Poll  {
-  
-  const question = ""
-  const poll = new Poll(question);
-  
-  
-  return poll;
-}
+
 
 function CreatePoll({  userName,
   loginStatus,
@@ -18,7 +11,7 @@ function CreatePoll({  userName,
   loginStatus: boolean;
    })  {
   
-  const poll = CustomPoll();
+  const [poll, setPoll] = useState(new Poll());
   const [response, setResponse] = useState(""); 
   const setCreator = ()=> {
     poll.setCreator(userName)
@@ -38,9 +31,12 @@ function CreatePoll({  userName,
       body: JSON.stringify(poll.toJSON())}); 
       setResponse(await res.text()); 
       }
-
-      catch(error) {
-        setResponse(error.message);
+      catch(error:unknown){
+        if(error instanceof Error){
+          setResponse(error.message);
+      } else { setResponse(String(error));
+        
+      }
     }
   }
   if(loginStatus){

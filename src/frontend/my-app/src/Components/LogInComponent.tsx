@@ -1,12 +1,18 @@
-export default function LogInComponent({userName, setUsername, setLoginStatus}){
+type LogInProps = {
+  userName: string;
+  setUsername: React.Dispatch<React.SetStateAction<string>>;
+  setLoginStatus: React.Dispatch<React.SetStateAction<boolean>>;
+};
+
+export default function LogInComponent({userName, setUsername, setLoginStatus}: LogInProps){
 
     return (
-        <div className="loginSection"> 
+        <div className="login-section"> 
             <input
             className="loginField"
             onChange={(e) => setUsername(e.target.value)}
             value={userName}
-            defaultValue={"Username"}
+            placeholder={"Username"}
             >
             </input>
             <button

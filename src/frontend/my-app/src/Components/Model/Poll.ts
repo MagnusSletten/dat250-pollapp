@@ -6,10 +6,14 @@ export class Poll {
     voteOptions : VoteOptions
     creator: string; 
 
-    constructor(question: string){
-        this.question = question;
+    constructor(){
+        this.question = "";
         this.voteOptions = new VoteOptions()
+        this.title = "";
+        this.creator = ""
+        
     }
+
 
     setCreator(creator:string){
         this.creator = creator; 
@@ -89,15 +93,18 @@ export class VoteOptions{
        this.voteOptions = [...this.voteOptions,option]
     }
 
-   removeOption(id:number){
-        this.voteOptions = this.voteOptions.filter(pollOption => pollOption.optionId != id)
+    removeOption(id: number) {
+    this.voteOptions = this.voteOptions.filter(opt => opt.optionId !== id);
 
+    this.voteOptions.forEach((opt, idx) => {
+        opt.presentationOrder = idx + 1;
+    });
     }
 
 
   fromJSON(optionsJSON: any[]): VoteOptions {
     this.voteOptions = optionsJSON.map(
-      (opt) => new VoteOption(opt.caption, opt.presentationOrder)
+      (opt) => new VoteOption(opt.caption, opt.presentationOrder,this.getNextPollOptionID())
     );
     return this; 
   }
@@ -111,10 +118,10 @@ export class VoteOption{
     caption: string
     optionId: number 
 
-    constructor(caption:string,presentationOrder){
+    constructor(caption:string,presentationOrder:number, optionId:number){
         this.caption = caption; 
         this.presentationOrder = presentationOrder
-        this.optionId = this.optionId; 
+        this.optionId = optionId; 
     }
 
     getCaption():string {
@@ -133,8 +140,8 @@ export class VoteOption{
 export class Vote{
     pollId;
     presentationOrder:number
-    userName:String |null
-    constructor(presentationOrder,pollId, userName){
+    userName:String | null
+    constructor(presentationOrder: number,pollId: number, userName: string|null){
         this.presentationOrder = presentationOrder;
         this.pollId = pollId; 
         this.userName = userName;  

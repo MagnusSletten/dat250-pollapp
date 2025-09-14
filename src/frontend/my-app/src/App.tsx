@@ -9,11 +9,15 @@ function App() {
   const [userName, setUsername] = useState("");
 
   return (
+
     <>
+      <div className="login-box">
+        <button className="page-state-button" onClick={() => setPageState(2)}>Login</button>
+      </div>
       <div className="page-tabs">
         <button className="page-state-button" onClick={() => setPageState(0)}>Poll-Creation</button>
         <button className="page-state-button" onClick={() => setPageState(1)}>Vote</button>
-        <button className="page-state-button" onClick={() => setPageState(2)}>Login</button>
+        
       </div>
       {pageState === 0 ? (
         <CreatePollComponent

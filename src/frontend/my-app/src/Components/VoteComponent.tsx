@@ -1,8 +1,8 @@
 import { useState } from "react"
 import { Vote, VoteOption, VoteOptions } from "./Model/Poll";
 
-export default function VotePoll(userName){
-    const [pollID, setPollID] = useState("1");
+export default function VotePoll({userName}: {userName:string}){
+    const [pollID, setPollID] = useState(1);
     const url = 'http://localhost:8080/polls/'
     const voteUrl = url+pollID+"/votes"
     var [pollJson, setPollJson] = useState(null);
@@ -11,10 +11,10 @@ export default function VotePoll(userName){
     const [pollTitle, setPolltitle] = useState("")
     const [pollQuestion, setPollQuestion] = useState("")
    
-    const vote = async(presentationOrder) =>{
+    const vote = async(presentationOrder:number) =>{
         const vote:Vote = new Vote(presentationOrder,pollID, null)
         if(userName){
-            vote.userName = userName.userName; 
+            vote.userName = userName; 
         }
 
         console.log(vote)
@@ -53,7 +53,7 @@ export default function VotePoll(userName){
             <div className="voteOptionsBox">
         {pollOptions?.getVoteOptions().map(option => (
             <div className="voteOption"
-            key={option.presentationOrder}>
+            key={option.optionId}>
             <span className="caption">{option.getCaption()}</span>
             <button
             onClick={() => vote(option.presentationOrder)}
@@ -73,7 +73,7 @@ export default function VotePoll(userName){
         <div>
             <input
             placeholder={"Set Poll ID"}
-            onChange={(e)=> setPollID(e.target.value)}>
+            onChange={(e)=> setPollID(Number(e.target.value))}>
             </input>
             <button
             onClick={() => getPoll()}
