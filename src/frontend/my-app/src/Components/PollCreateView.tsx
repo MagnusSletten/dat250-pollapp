@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Poll, VoteOptions } from "./Model/Poll";
 import VoteOptionsView from "./VoteOptionsView";
 
-export default function PollView({ poll }: { poll: Poll }) {
+export default function PollCreateView({ poll }: { poll: Poll }) {
   const [question, setQuestion] = useState(poll.getQuestion())
   const [showJSON, setShowJSON] = useState(false)
   const [title, setTitle] = useState(poll.getTitle())

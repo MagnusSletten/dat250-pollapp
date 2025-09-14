@@ -1,6 +1,6 @@
-import { useState,  } from 'react';
+import { useRef, useState,  } from 'react';
 import { Poll } from "./Model/Poll"; 
-import PollView from './PollView'
+import PollCreateView from './PollCreateView'
 
 
 
@@ -13,9 +13,9 @@ function CreatePoll({  userName,
   
 
   const [response, setResponse] = useState(""); 
-  const [poll, setPoll] = useState(() => new Poll());
+  const pollRef = useRef(new Poll());
   const setCreator = ()=> {
-    poll.setCreator(userName)
+    pollRef.current.setCreator(userName)
   } 
 
   const sendPoll = async () => {
@@ -29,7 +29,7 @@ function CreatePoll({  userName,
         Accept: 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(poll.toJSON())}); 
+      body: JSON.stringify(pollRef.current.toJSON())}); 
       setResponse(await res.text()); 
       }
       catch(error:unknown){
@@ -44,7 +44,7 @@ function CreatePoll({  userName,
   return (
 
     <>
-      <PollView poll={poll} />
+      <PollCreateView poll={pollRef.current} />
       <button
       onClick={sendPoll}>
       Send Poll</button>

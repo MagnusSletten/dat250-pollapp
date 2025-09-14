@@ -60,9 +60,10 @@ public class PollManager {
 
     }
 
-    public User addUserFromRequest(UserRequest userRequest){
+    public User addUserFromRequest(UserRequest userRequest) throws Exception{
       User user = userRequest.toUser();
-      users.put(userRequest.getUserName(), user);
+      String userName = userRequest.getUserName(); 
+      users.put(userName, user);
       return user; 
     }
 

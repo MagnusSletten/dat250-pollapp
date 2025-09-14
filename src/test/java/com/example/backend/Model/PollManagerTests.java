@@ -1,6 +1,7 @@
 package com.example.backend.Model;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,6 @@ import com.example.backend.Model.Poll.Vote.VoteRequest;
 public class PollManagerTests {
     PollManager manager; 
 
-    //Minimal 
     void setUp(){
         manager = new PollManager(); 
 
@@ -26,7 +26,13 @@ public class PollManagerTests {
     manager = new PollManager();
     UserRequest user = new UserRequest(); 
     user.setUserName("Peter");
+    
+    try{
     manager.addUserFromRequest(user);
+    }
+    catch(Exception e){
+        
+    }
 
     PollRequest poll = new PollRequest();
     poll.setCreator("Peter");

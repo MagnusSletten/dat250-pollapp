@@ -5,12 +5,16 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.skyscreamer.jsonassert.JSONAssert;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
+
+import com.example.backend.Model.PollManager;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 
@@ -28,12 +32,14 @@ class ControllerTest {
 
     @LocalServerPort int port;
     RestClient client; 
+    @Autowired PollManager pollManager;
 
     @BeforeEach
     void setUp() {
         client = RestClient.builder()
                 .baseUrl("http://localhost:" + port)
                 .build();
+        pollManager = new PollManager(); 
         
     }
 

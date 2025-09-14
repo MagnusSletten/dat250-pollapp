@@ -5,7 +5,7 @@ export default function VotePoll({userName}: {userName:string}){
     const [pollID, setPollID] = useState(1);
     const url = 'http://localhost:8080/polls/'
     const voteUrl = url+pollID+"/votes"
-    var [pollJson, setPollJson] = useState(null);
+    const [pollJson, setPollJson] = useState(null);
     const [pollOptions, setPollOptions] = useState<VoteOptions>();
     const [votes,setVotes] = useState([])
     const [pollTitle, setPolltitle] = useState("")
