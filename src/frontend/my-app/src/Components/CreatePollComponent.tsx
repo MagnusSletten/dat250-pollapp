@@ -11,8 +11,9 @@ function CreatePoll({  userName,
   loginStatus: boolean;
    })  {
   
-  const [poll, setPoll] = useState(new Poll());
+
   const [response, setResponse] = useState(""); 
+  const [poll, setPoll] = useState(() => new Poll());
   const setCreator = ()=> {
     poll.setCreator(userName)
   } 
