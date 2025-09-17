@@ -7,6 +7,13 @@ import com.example.backend.Controllers.PollController;
 import com.example.backend.Controllers.UserController;
 import com.example.backend.Controllers.VoteController;
 import com.example.backend.Model.PollManager;
+import com.example.backend.Model.User;
+import com.example.backend.Model.Poll.Poll;
+import com.example.backend.Model.Poll.VoteOption;
+import com.example.backend.Model.Poll.Vote.Vote;
+
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.PersistenceConfiguration;
 
 @SpringBootApplication
 public class DemoApplication {

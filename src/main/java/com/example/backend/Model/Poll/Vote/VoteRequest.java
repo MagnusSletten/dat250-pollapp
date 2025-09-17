@@ -25,7 +25,7 @@ public class VoteRequest {
         vote.setVoter(voter);
         vote.setPoll(poll);
         vote.setPublishedAt(publishedAt);
-        vote.setOption(poll.getVoteOptions().get(presentationOrder-1));
+        vote.setVotesOn(poll.getOptions().get(presentationOrder-1));
       
         return vote; 
 
@@ -36,7 +36,7 @@ public class VoteRequest {
         Vote vote = new Vote(); 
         vote.setPoll(poll);
         vote.setPublishedAt(publishedAt);
-        vote.setOption(poll.getVoteOptions().get(presentationOrder-1));
+        vote.setVotesOn(poll.getOptions().get(presentationOrder-1));
       
         return vote; 
 

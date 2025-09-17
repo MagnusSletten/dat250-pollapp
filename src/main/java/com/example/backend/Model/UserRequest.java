@@ -23,7 +23,7 @@ public class UserRequest{
         User user = new User(); 
         user.setEmail(email);
         user.setPolls(new ArrayList<>());
-        user.setUserName(userName);
+        user.setUsername(userName);
         user.setVotes(new ArrayList<>());
 
         return user; 

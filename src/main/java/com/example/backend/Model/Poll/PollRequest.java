@@ -23,9 +23,9 @@ public class PollRequest {
     public Poll toPoll(Integer pollId, User creator){
     Poll poll = new Poll();
     poll.setPollID(pollId);
-    poll.setCreator(creator);
+    poll.setCreatedBy(creator);
     poll.setQuestion(question);
-    poll.setVoteOptions(voteOptions);
+    poll.setOptions(voteOptions);
     poll.setTitle(title);
     poll.setValidUntil(validUntil);
     poll.setPublishedAt(publishedAt);

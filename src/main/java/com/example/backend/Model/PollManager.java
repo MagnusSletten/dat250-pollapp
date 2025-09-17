@@ -80,7 +80,6 @@ public Vote addVoteWithUser(VoteRequest request){
     Integer id = request.getPollId(); 
     Poll poll = polls.get(request.getPollId());
     Vote vote = request.toVote(user, poll);
-    vote.setVoteId(voteId++);
     if (!user.hasVoted(poll.getPollID())) {
         poll.addVote(vote);
         user.addVote(vote);
@@ -93,7 +92,7 @@ public Vote addVoteWithUser(VoteRequest request){
 public Vote addVoteAnonymous(VoteRequest request) {
     Poll poll = polls.get(request.getPollId());
     Vote vote = request.toVoteAnonymous(poll);
-    vote.setVoteId(voteId++);
+ //   vote.setVoteId(voteId++);
     poll.addVote(vote);
     return vote;
 }

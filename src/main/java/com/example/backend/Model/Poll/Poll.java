@@ -12,40 +12,68 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
+@Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,  property = "pollID")
 public class Poll {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer pollID; 
     private String title;
     private String question;
-    private ArrayList<VoteOption> voteOptions = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<VoteOption> options = new ArrayList<>();
     private Instant publishedAt;
     private Instant validUntil;
     @JsonIdentityReference(alwaysAsId = true)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Vote> votes = new ArrayList<>();
+    @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true)
+    private User createdBy;
 
-   @JsonIdentityReference(alwaysAsId = true)
-    private User creator;
-
+    public Poll(String question){
+        this.question = question; 
+    }
     
-    
-    public void setCreator(User creator){
-        this.creator = creator;
+    public void setCreatedBy(User creator){
+        this.createdBy = creator;
 
     }
 
     public void addVote(Vote vote){
         this.votes.add(vote);
+        vote.setPoll(this);
+        vote.getVotesOn().setPoll(this);
     }
 
+    public VoteOption addVoteOption(String option){
+        VoteOption voteOption = new VoteOption(option);
+        voteOption.setPoll(this);
+        voteOption.setCaption(option);
+        voteOption.setPresentationOrder(this.options.size());
+        this.options.add(voteOption);
+        return voteOption; 
+    }
+
+ 
 
     public void changeVote(Vote vote) {
         for (int i = 0; i < votes.size(); i++) {
-            if (votes.get(i).getVoter().getUserName() == vote.getVoter().getUserName()) {
+            if (votes.get(i).getVoter().getUsername() == vote.getVoter().getUsername()) {
                 votes.set(i, vote);
                 return;
             }
@@ -57,8 +85,8 @@ public class Poll {
     Map<Integer, Long> counts = new HashMap<>();
 
     for (Vote vote : votes) {
-        counts.put(vote.getOption().getPresentationOrder(),
-                   counts.getOrDefault(vote.getOption().getPresentationOrder(), 0L) + 1);
+        counts.put(vote.getVotesOn().getPresentationOrder(),
+                   counts.getOrDefault(vote.getVotesOn().getPresentationOrder(), 0L) + 1);
     }
 
     return counts;
