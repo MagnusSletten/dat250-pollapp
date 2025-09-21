@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
@@ -12,24 +13,26 @@ import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
 import com.example.backend.Model.Poll.Vote.Vote;
 import com.example.backend.Model.Poll.Vote.VoteRequest;
+import com.example.backend.Repositories.PollRepository;
+import com.example.backend.Repositories.UserRepository;
+import com.example.backend.Repositories.VoteRepository;
+
 
 @Component
 public class PollManager {
-    HashMap<Integer,Poll> polls;
-    HashMap<String,User> users;
-    
+    private final PollRepository pollRepo;
+    private final VoteRepository voteRepo;
+    private final UserRepository userRepo;
+        
     Integer maxPollId = 1;
     Integer maxUserId = 1;  
     Integer voteId = 1; 
             
-    public PollManager() {
-        this.polls = new HashMap<>();
-        this.users = new HashMap<>(); 
-
-    }
-
     public Poll addPollFromRequest(PollRequest pollRequest){
-        User user = users.get(pollRequest.getCreator()); 
+        Optional<User> user = userRepo.findByUserName(pollRequest.getCreator());
+
+        if(instanceof() )
+        users.get(pollRequest.getCreator()); 
         Poll poll = pollRequest.toPoll(maxPollId, user);
         user.addPolls(poll);
         polls.put(maxPollId, poll);
