@@ -10,7 +10,7 @@ By starting the service and connecting it to the H2 database I could inspect the
 
 ![alt text](image-3.png)
  
-I can see the basic tables for Polls/Users but also the join tables such as for USERS_POLL which notes the ownership of polls for each user. For each Poll there is a foreign key for the user. I can also see similar information by directly outputting the commands to console:
+I can see the basic tables for Polls/Users/Vote and the associations via foreign keys makes sense. The same can be seen by directly outputting the commands to console:
 
 ![alt text](image.png)
 
