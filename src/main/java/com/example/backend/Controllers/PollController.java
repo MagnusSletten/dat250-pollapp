@@ -44,7 +44,7 @@ public class PollController {
         @GetMapping("/{pollID}")
         public Poll getPoll(@PathVariable("pollID") Integer pollID) throws Exception{
             try {
-            return manager.getPoll(pollID);
+            return manager.getPoll(pollID).get();
             }
             catch(Exception e){
                 throw e; 

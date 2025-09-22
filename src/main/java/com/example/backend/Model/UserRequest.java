@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator.class,
-    property = "userName"
+    property = "username"
 )
 public class UserRequest{
-    private String userName;
+    private String username;
     private String email;
     private Integer userId;
 
@@ -23,7 +23,7 @@ public class UserRequest{
         User user = new User(); 
         user.setEmail(email);
         user.setPolls(new ArrayList<>());
-        user.setUsername(userName);
+        user.setUsername(username);
         user.setVotes(new ArrayList<>());
 
         return user; 

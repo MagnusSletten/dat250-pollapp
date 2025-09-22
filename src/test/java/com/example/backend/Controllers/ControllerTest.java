@@ -14,6 +14,10 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 
 import com.example.backend.Model.PollManager;
+import com.example.backend.Model.User;
+import com.example.backend.Repositories.PollRepository;
+import com.example.backend.Repositories.UserRepository;
+import com.example.backend.Repositories.VoteRepository;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -31,15 +35,22 @@ class ControllerTest {
 
 
     @LocalServerPort int port;
-    RestClient client; 
+    @Autowired
+    UserRepository userRepository; 
+    @Autowired
+    PollRepository pollRepository; 
+    @Autowired
+    VoteRepository voteRepository; 
     @Autowired PollManager pollManager;
+    RestClient client; 
+
+
 
     @BeforeEach
     void setUp() {
         client = RestClient.builder()
                 .baseUrl("http://localhost:" + port)
                 .build();
-        pollManager = new PollManager(); 
         
     }
 
@@ -47,15 +58,15 @@ class ControllerTest {
     void createPollTest() throws JSONException{
         sendUser();
         var resp = createPoll(getPollRequest1());
-        assertTrue(resp.getBody().contains("pollID")); 
+        assertTrue(resp.getBody().contains("id")); 
     }
 
     @Test
     void getPollTest() throws JSONException {
         sendUser();
-        ResponseEntity<String> pollReturn = createPoll(getPollRequest1());
+        ResponseEntity<String> pollReturn = getPoll1();
         JSONObject actual = new JSONObject(pollReturn.getBody());
-        assertTrue(actual.has("pollID"));
+        assertTrue(actual.has("id"));
         JSONAssert.assertEquals(getExpectedPoll_1(), actual,true);  
           
     }
@@ -87,7 +98,7 @@ class ControllerTest {
         assert(usersReturn2.getBody().contains("Peter"));
         ResponseEntity<String> poll =  createPoll(getPollRequest1());
         JSONObject pollJSON = new JSONObject(poll.getBody());
-        Integer pollId = pollJSON.getInt("pollID");
+        Integer pollId = pollJSON.getInt("id");
         sendVote(1,pollId);
         sendVote(2,pollId);
         ResponseEntity<String> votes = getVotes(pollId);
@@ -130,7 +141,7 @@ class ControllerTest {
         }
     JSONObject getExpectedPoll_1() throws JSONException{
         JSONObject pollJSON = getPollRequest1();
-        pollJSON.put("pollID",1);
+        pollJSON.put("id",1);
         pollJSON.put("votes", new JSONArray());
         pollJSON.put("publishedAt",JSONObject.NULL);
         pollJSON.put("validUntil",JSONObject.NULL);
@@ -152,26 +163,26 @@ class ControllerTest {
             .put("caption", "no")
             .put("presentationOrder", 2));
         pollJSON.put("voteOptions", voteOptions);
-        pollJSON.put("creator","Andrew");
+        pollJSON.put("createdBy","Andrew");
 
         return pollJSON;
     }
 
     public void sendUser() throws JSONException{
         JSONObject user = new JSONObject();
-        user.put("userName", "Andrew");
+        user.put("username", "Andrew");
 
         var userResp = client.post().uri("/users")
         .contentType(APPLICATION_JSON)
         .body(user.toString())
         .retrieve()
-        .toEntity(String.class);
+        .toEntity(User.class);
 
     }
 
         public void sendUser2() throws JSONException{
         JSONObject user = new JSONObject();
-        user.put("userName", "Peter");
+        user.put("username", "Peter");
 
         var userResp = client.post().uri("/users")
         .contentType(APPLICATION_JSON)
@@ -205,7 +216,7 @@ JSONObject getVote(Integer presentationOrder,Integer pollId) throws JSONExceptio
         JSONObject voteJSON = new JSONObject();
         voteJSON.put("pollId", pollId);
         voteJSON.put("presentationOrder", presentationOrder);
-        voteJSON.put("userName", "Andrew");
+        voteJSON.put("username", "Andrew");
         return voteJSON;
     }
 

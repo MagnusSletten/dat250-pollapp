@@ -20,9 +20,8 @@ public class PollRequest {
     private Instant validUntil;
     private String creator;
 
-    public Poll toPoll(Integer pollId, User creator){
+    public Poll toPoll(User creator){
     Poll poll = new Poll();
-    poll.setPollID(pollId);
     poll.setCreatedBy(creator);
     poll.setQuestion(question);
     poll.setOptions(voteOptions);

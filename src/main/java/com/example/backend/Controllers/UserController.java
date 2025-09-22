@@ -28,7 +28,7 @@ public class UserController {
     }
     @GetMapping("/{userName}")
     public User getUser(@PathVariable("userName") String userName) {
-        return pollManager.getUser(userName);
+        return pollManager.getUser(userName).get();
     }
 
     @PostMapping

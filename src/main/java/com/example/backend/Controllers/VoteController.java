@@ -43,7 +43,7 @@ public class VoteController {
         }
         @GetMapping("/{pollID}/votes/results")
         public Map<Integer,Long> getVoteResults(@PathVariable Integer pollID){
-            return pollManager.getPoll(pollID).countVotesByPresentationOrder();
+            return pollManager.getPoll(pollID).get().countVotesByPresentationOrder();
         }
 }
 

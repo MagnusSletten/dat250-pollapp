@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
@@ -15,17 +16,14 @@ import com.example.backend.Model.Poll.VoteOption;
 import com.example.backend.Model.Poll.Vote.VoteRequest;
 
 public class PollManagerTests {
+    @Autowired
     PollManager manager; 
 
-    void setUp(){
-        manager = new PollManager(); 
 
-    }
 
     void PollSetUp(){
-    manager = new PollManager();
     UserRequest user = new UserRequest(); 
-    user.setUserName("Peter");
+    user.setUsername("Peter");
     
     try{
     manager.addUserFromRequest(user);
@@ -96,9 +94,9 @@ public class PollManagerTests {
         assert(manager.getVotes(1).size() == 0);
         manager.addVoteWithUser(vote);
         assert(manager.getVotes(1).size() == 1);
-        assert(manager.getUser("Peter").getVotes().size() == 1);
+        assert(manager.getUser("Peter").get().getVotes().size() == 1);
         manager.deletePoll(1);
-        assert(manager.getUser("Peter").getVotes().size() == 0);        
+        assert(manager.getUser("Peter").get().getVotes().size() == 0);        
 
 
     }

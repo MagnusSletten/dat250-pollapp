@@ -17,73 +17,84 @@ import com.example.backend.Repositories.PollRepository;
 import com.example.backend.Repositories.UserRepository;
 import com.example.backend.Repositories.VoteRepository;
 
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 
 @Component
+@Data
+
 public class PollManager {
     private final PollRepository pollRepo;
     private final VoteRepository voteRepo;
     private final UserRepository userRepo;
-        
-    Integer maxPollId = 1;
-    Integer maxUserId = 1;  
-    Integer voteId = 1; 
             
     public Poll addPollFromRequest(PollRequest pollRequest){
-        Optional<User> user = userRepo.findByUserName(pollRequest.getCreator());
+        Optional<User> userOpt = userRepo.findByUsername(pollRequest.getCreator());
+        if(userOpt.isPresent()){
+        User user = userOpt.get(); 
+        Poll poll = pollRequest.toPoll(user);
 
-        if(instanceof() )
-        users.get(pollRequest.getCreator()); 
-        Poll poll = pollRequest.toPoll(maxPollId, user);
         user.addPolls(poll);
-        polls.put(maxPollId, poll);
-        maxPollId++;     
+        pollRepo.save(poll);
         return poll; 
+        } 
+        return new Poll();     
+        
     }
 
-    public Poll getPoll(Integer poll_id){
-       return polls.get(poll_id);
+    public PollManager(PollRepository pollRepository, VoteRepository voteRepository, UserRepository userRepository){
+        this.pollRepo = pollRepository; 
+        this.voteRepo = voteRepository; 
+        this.userRepo = userRepository; 
+
     }
 
-    public User getUser(String userName){
-        return users.get(userName);
+    public Optional<Poll> getPoll(Integer poll_id){
+       return pollRepo.findById(poll_id);
+    }
+
+    public Optional<User> getUser(String userName){
+        return userRepo.findByUsername(userName);
         
     }
 
     public Collection<User> getUsers(){
-        return users.values(); 
+        return userRepo.findAll(); 
     }
 
     public boolean deletePoll(Integer pollId){
-        if (polls.keySet().contains(pollId)){
-            polls.get(pollId).remoteVotes();
-            polls.remove(pollId);
-            return true;
+        if (pollRepo.existsById(pollId)){
+            pollRepo.deleteById(pollId);
         }
+        
         return false;   
 
     }
 
     public User addUserFromRequest(UserRequest userRequest) throws Exception{
       User user = userRequest.toUser();
-      String userName = userRequest.getUserName(); 
-      users.put(userName, user);
+      String userName = userRequest.getUsername(); 
+      userRepo.save(user);
       return user; 
     }
 
     public List<Vote> getVotes(Integer pollID){
-         return polls.get(pollID).getVotes(); 
-         
+        return voteRepo.findByPollId(pollID);
+        
     }
 
     public Map<Integer, Long> getVoteResults(Integer pollID){
-        return polls.get(pollID).countVotesByPresentationOrder();
+           return pollRepo.findById(pollID).get().countVotesByPresentationOrder();   
+        
+        
     }
 public Vote addVoteWithUser(VoteRequest request){
-    User user = users.get(request.getUserName());
+    User user = userRepo.findByUsername(request.getUserName()).get();
     Integer id = request.getPollId(); 
-    Poll poll = polls.get(request.getPollId());
+    Poll poll = getPoll(id).get();
     Vote vote = request.toVote(user, poll);
-    if (!user.hasVoted(poll.getPollID())) {
+    if (!user.hasVoted(poll.getId())) {
         poll.addVote(vote);
         user.addVote(vote);
     } else {
@@ -93,7 +104,7 @@ public Vote addVoteWithUser(VoteRequest request){
 }
 
 public Vote addVoteAnonymous(VoteRequest request) {
-    Poll poll = polls.get(request.getPollId());
+    Poll poll = getPoll(request.getPollId()).get(); 
     Vote vote = request.toVoteAnonymous(poll);
  //   vote.setVoteId(voteId++);
     poll.addVote(vote);

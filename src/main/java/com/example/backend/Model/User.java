@@ -26,22 +26,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator.class,
-    property = "userName"
+    property = "username"
 )
 @Entity
 @Table(name = "users") 
 public class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     @Column(name = "username") 
     private String username;
     private String email;
-    @OneToMany
+    @OneToMany(mappedBy = "createdBy")
     @JsonIdentityReference(alwaysAsId = true)
     private List<Poll> polls = new ArrayList<>();
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voteId")
     private List<Vote> votes = new ArrayList<>(); 
 
     public User(String userName, String email){

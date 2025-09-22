@@ -25,21 +25,21 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,  property = "pollID")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,  property = "id")
 public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer pollID; 
+    private Integer id; 
     private String title;
     private String question;
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll")
     private List<VoteOption> options = new ArrayList<>();
     private Instant publishedAt;
     private Instant validUntil;
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll")
     private List<Vote> votes = new ArrayList<>();
-    @ManyToOne
+    @ManyToOne()
     @JsonIdentityReference(alwaysAsId = true)
     private User createdBy;
 
