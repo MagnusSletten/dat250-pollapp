@@ -79,12 +79,12 @@ public class Poll {
         throw new IllegalArgumentException("Vote with id " + vote.getVoteId() + " not found");
     }
     
-    public Map<Integer, Long> countVotesByPresentationOrder() {
-    Map<Integer, Long> counts = new HashMap<>();
+    public Map<Integer, Integer> countVotesByPresentationOrder() {
+    Map<Integer, Integer> counts = new HashMap<>();
 
     for (Vote vote : votes) {
         counts.put(vote.getVotesOn().getPresentationOrder(),
-                   counts.getOrDefault(vote.getVotesOn().getPresentationOrder(), 0L) + 1);
+                   counts.getOrDefault(vote.getVotesOn().getPresentationOrder(), 0) + 1);
     }
 
     return counts;

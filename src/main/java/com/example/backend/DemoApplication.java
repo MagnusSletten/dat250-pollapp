@@ -14,13 +14,20 @@ import com.example.backend.Model.Poll.Vote.Vote;
 
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceConfiguration;
+import redis.clients.jedis.UnifiedJedis;
 
 @SpringBootApplication
 public class DemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
+	 	UnifiedJedis jedis = new UnifiedJedis("redis://localhost:6379");
 
+        jedis.append("bob", "12");
+		System.out.println("break");
+
+		System.out.println(jedis.get("bob"));
+        jedis.close();
 
 	}
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,9 @@ public class PollManager {
     private final PollRepository pollRepo;
     private final VoteRepository voteRepo;
     private final UserRepository userRepo;
+    private final Set loggedIn;
+    private final HashMap<Integer,HashMap<Integer, Integer>> voteCash;
+    
             
     public Poll addPollFromRequest(PollRequest pollRequest){
         Optional<User> userOpt = userRepo.findByUsername(pollRequest.getCreator());
@@ -43,12 +47,9 @@ public class PollManager {
         
     }
 
-    public PollManager(PollRepository pollRepository, VoteRepository voteRepository, UserRepository userRepository){
-        this.pollRepo = pollRepository; 
-        this.voteRepo = voteRepository; 
-        this.userRepo = userRepository; 
 
-    }
+
+
 
     public Optional<Poll> getPoll(Integer poll_id){
        return pollRepo.findById(poll_id);
@@ -81,11 +82,16 @@ public class PollManager {
 
     public List<Vote> getVotes(Integer pollID){
         return voteRepo.findByPollId(pollID);
+        }
+ 
         
-    }
+    
 
-    public Map<Integer, Long> getVoteResults(Integer pollID){
-           return pollRepo.findById(pollID).get().countVotesByPresentationOrder();   
+    public Map<Integer, Integer> getVoteResults(Integer pollID){
+            if(voteCash.keySet().contains(pollID)){
+            return voteCash.get(pollID);
+            }
+            else return pollRepo.findById(pollID).get().countVotesByPresentationOrder();   
         
         
     }
