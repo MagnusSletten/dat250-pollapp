@@ -93,13 +93,13 @@ public class PollManager {
     public Map<Integer, Integer> getVoteResults(Integer pollID){
         Poll poll = getPoll(pollID).get();
         if(voteCache.isCached(poll)){
-        System.out.println("Poll {} cached returning from cache");
+        System.out.println("Poll is already cached. returning from cache");
         return voteCache.getVoteResults(poll);
         }
         
         else{ 
         voteCache.setVotes(poll);
-        System.out.println("Poll {} not cached querying DB and caching result");
+        System.out.println("Poll not cached, querying DB and caching result");
         return pollRepo.findById(poll.getId()).get().countVotesByPresentationOrder();   
         }
         

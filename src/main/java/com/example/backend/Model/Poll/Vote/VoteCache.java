@@ -14,7 +14,7 @@ public class VoteCache {
         
         public void setVotes(Poll poll){
             jedis.hset(poll.getId().toString(), poll.countVotesByPresentationOrderString());
-
+            jedis.expire(poll.getId().toString(),10);
         }
 
         public VoteCache(  ){
