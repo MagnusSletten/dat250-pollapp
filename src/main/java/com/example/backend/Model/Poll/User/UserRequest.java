@@ -1,4 +1,4 @@
-package com.example.backend.Model;
+package com.example.backend.Model.Poll.User;
 
 import java.util.ArrayList;
 

@@ -3,6 +3,7 @@ package com.example.backend.Model.Poll;
 import java.util.Objects;
 
 import com.example.backend.Model.Poll.Vote.Vote;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
@@ -20,14 +21,13 @@ public class VoteOption {
     private String caption;
     private Integer presentationOrder;
     @ManyToOne
+    @JsonIdentityReference(alwaysAsId = true) 
     private Poll poll;
     @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer optionId;
-    @ManyToOne
-    Vote vote; 
-     
+
 
     public VoteOption(String caption){
         this.caption = caption; 
@@ -45,6 +45,14 @@ public class VoteOption {
     @Override
     public int hashCode() {
         return Objects.hash(caption);
+    }
+
+    @Override
+    public String toString() {
+        return "VoteOption{id=" + optionId +
+            ", caption='" + caption + '\'' +
+            ", presentationOrder=" + presentationOrder +
+            '}';
     }
 
     

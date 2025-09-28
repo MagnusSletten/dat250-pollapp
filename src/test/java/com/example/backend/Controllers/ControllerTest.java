@@ -14,7 +14,7 @@ import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestClient;
 
 import com.example.backend.Model.PollManager;
-import com.example.backend.Model.User;
+import com.example.backend.Model.Poll.User.User;
 import com.example.backend.Repositories.PollRepository;
 import com.example.backend.Repositories.UserRepository;
 import com.example.backend.Repositories.VoteRepository;
@@ -64,6 +64,7 @@ class ControllerTest {
     @Test
     void getPollTest() throws JSONException {
         sendUser();
+        var resp = createPoll(getPollRequest1());
         ResponseEntity<String> pollReturn = getPoll1();
         JSONObject actual = new JSONObject(pollReturn.getBody());
         assertTrue(actual.has("id"));
@@ -74,6 +75,7 @@ class ControllerTest {
     @Test
     void deletePoll()throws JSONException{
         sendUser();
+        var resp1 = createPoll(getPollRequest1());
         ResponseEntity<String> pollReturn = createPoll(getPollRequest1());
         assertNotNull(pollReturn);
         ResponseEntity<String> deleteResponse = client.delete()
@@ -90,6 +92,7 @@ class ControllerTest {
     @Test 
     void testSequence() throws JSONException{
         sendUser();
+        var resp = createPoll(getPollRequest1());
         ResponseEntity<String> usersReturn= getUsers();
         assert(usersReturn.getBody().contains("Andrew"));
         sendUser2();

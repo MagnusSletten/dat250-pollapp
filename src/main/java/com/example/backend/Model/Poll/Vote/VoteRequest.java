@@ -2,8 +2,8 @@ package com.example.backend.Model.Poll.Vote;
 
 import java.time.Instant;
 
-import com.example.backend.Model.User;
 import com.example.backend.Model.Poll.Poll;
+import com.example.backend.Model.Poll.User.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -36,6 +36,7 @@ public class VoteRequest {
         Vote vote = new Vote(); 
         vote.setPoll(poll);
         vote.setPublishedAt(publishedAt);
+        System.out.println(poll.getOptions());
         vote.setVotesOn(poll.getOptions().get(presentationOrder-1));
       
         return vote; 

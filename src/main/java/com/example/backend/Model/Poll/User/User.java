@@ -1,4 +1,4 @@
-package com.example.backend.Model;
+package com.example.backend.Model.Poll.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator.class,
-    property = "username"
+    property = "id"
 )
 @Entity
 @Table(name = "users") 
@@ -37,11 +37,11 @@ public class User{
     @Column(name = "username") 
     private String username;
     private String email;
-    @OneToMany(mappedBy = "createdBy")
+    @OneToMany(mappedBy = "createdBy",orphanRemoval = true)
     @JsonIdentityReference(alwaysAsId = true)
     private List<Poll> polls = new ArrayList<>();
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "voteId")
+    @OneToMany(mappedBy = "voter", orphanRemoval = true) 
     private List<Vote> votes = new ArrayList<>(); 
 
     public User(String userName, String email){

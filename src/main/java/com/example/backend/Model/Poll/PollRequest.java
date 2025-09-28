@@ -3,9 +3,7 @@ package com.example.backend.Model.Poll;
 import java.time.Instant;
 import java.util.ArrayList;
 
-
-import com.example.backend.Model.User;
-
+import com.example.backend.Model.Poll.User.User;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,7 +22,13 @@ public class PollRequest {
     Poll poll = new Poll();
     poll.setCreatedBy(creator);
     poll.setQuestion(question);
-    poll.setOptions(voteOptions);
+    for (int i = 0; i < voteOptions.size(); i++) {
+        VoteOption vo = voteOptions.get(i);
+        vo.setPoll(poll);               
+        vo.setPresentationOrder(i+1);    
+        poll.getOptions().add(vo);      
+    }
+
     poll.setTitle(title);
     poll.setValidUntil(validUntil);
     poll.setPublishedAt(publishedAt);

@@ -8,18 +8,22 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 
+
 import org.springframework.stereotype.Component;
 
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
+import com.example.backend.Model.Poll.User.User;
+import com.example.backend.Model.Poll.User.UserRequest;
 import com.example.backend.Model.Poll.Vote.Vote;
+import com.example.backend.Model.Poll.Vote.VoteCache;
 import com.example.backend.Model.Poll.Vote.VoteRequest;
 import com.example.backend.Repositories.PollRepository;
 import com.example.backend.Repositories.UserRepository;
 import com.example.backend.Repositories.VoteRepository;
 
+import jakarta.transaction.Transactional;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 
 @Component
@@ -29,10 +33,9 @@ public class PollManager {
     private final PollRepository pollRepo;
     private final VoteRepository voteRepo;
     private final UserRepository userRepo;
-    private final Set loggedIn;
-    private final HashMap<Integer,HashMap<Integer, Integer>> voteCash;
+    private final VoteCache voteCache;
     
-            
+    @Transactional        
     public Poll addPollFromRequest(PollRequest pollRequest){
         Optional<User> userOpt = userRepo.findByUsername(pollRequest.getCreator());
         if(userOpt.isPresent()){
@@ -50,80 +53,104 @@ public class PollManager {
 
 
 
-
+    @Transactional
     public Optional<Poll> getPoll(Integer poll_id){
-       return pollRepo.findById(poll_id);
+        return pollRepo.findById(poll_id);
     }
-
+    @Transactional
     public Optional<User> getUser(String userName){
         return userRepo.findByUsername(userName);
         
     }
-
+    @Transactional
     public Collection<User> getUsers(){
         return userRepo.findAll(); 
     }
-
+    @Transactional
     public boolean deletePoll(Integer pollId){
         if (pollRepo.existsById(pollId)){
+            voteRepo.deleteByPollId(pollId);
             pollRepo.deleteById(pollId);
         }
         
         return false;   
 
     }
-
+    @Transactional
     public User addUserFromRequest(UserRequest userRequest) throws Exception{
-      User user = userRequest.toUser();
-      String userName = userRequest.getUsername(); 
-      userRepo.save(user);
-      return user; 
+        User user = userRequest.toUser();
+        userRepo.save(user);
+        return user; 
     }
 
     public List<Vote> getVotes(Integer pollID){
         return voteRepo.findByPollId(pollID);
         }
- 
-        
-    
 
+            
+        
+    @Transactional
     public Map<Integer, Integer> getVoteResults(Integer pollID){
-            if(voteCash.keySet().contains(pollID)){
-            return voteCash.get(pollID);
-            }
-            else return pollRepo.findById(pollID).get().countVotesByPresentationOrder();   
+        Poll poll = getPoll(pollID).get();
+        if(voteCache.isCached(poll)){
+        System.out.println("Poll {} cached returning from cache");
+        return voteCache.getVoteResults(poll);
+        }
+        
+        else{ 
+        voteCache.setVotes(poll);
+        System.out.println("Poll {} not cached querying DB and caching result");
+        return pollRepo.findById(poll.getId()).get().countVotesByPresentationOrder();   
+        }
         
         
     }
-public Vote addVoteWithUser(VoteRequest request){
-    User user = userRepo.findByUsername(request.getUserName()).get();
-    Integer id = request.getPollId(); 
-    Poll poll = getPoll(id).get();
-    Vote vote = request.toVote(user, poll);
-    if (!user.hasVoted(poll.getId())) {
+    @Transactional()
+    public Optional<Integer> getLatestPollId() {
+        return pollRepo.findTopByOrderByIdDesc()
+                    .map(Poll::getId);
+    }
+    @Transactional
+    public Vote addVoteWithUser(VoteRequest request){
+        User user = userRepo.findByUsername(request.getUserName()).get();
+        Integer id = request.getPollId(); 
+        Poll poll = getPoll(id).get();
+        if(voteCache.isCached(poll)){
+        voteCache.removeVotes(poll);
+        }
+        Vote vote = request.toVote(user, poll);
+        if (!voteRepo.existsByPollIdAndVoterId(id,user.getId())) {
+            poll.addVote(vote);
+            user.addVote(vote);
+
+            voteRepo.save(vote);
+        } else {
+            Vote vote2 = voteRepo.findByPollIdAndVoterId(id, user.getId());
+            vote2.setVotesOn(vote.getVotesOn());
+            poll.changeVote(vote2);
+            user.addVote(vote2);
+        
+        }
+        return vote;
+    }
+    @Transactional
+    public Vote addVoteAnonymous(VoteRequest request) {
+        Poll poll = getPoll(request.getPollId()).get();
+        if(voteCache.isCached(poll)){
+        voteCache.removeVotes(poll);
+        } 
+        Vote vote = request.toVoteAnonymous(poll);
         poll.addVote(vote);
-        user.addVote(vote);
-    } else {
-        poll.changeVote(vote);
+        return vote;
     }
-    return vote;
-}
-
-public Vote addVoteAnonymous(VoteRequest request) {
-    Poll poll = getPoll(request.getPollId()).get(); 
-    Vote vote = request.toVoteAnonymous(poll);
- //   vote.setVoteId(voteId++);
-    poll.addVote(vote);
-    return vote;
-}
-    
-
-public void removeVote(Integer pollID, Integer userId){
-    getVotes(pollID).remove((Vote) getUserVote(pollID, userId));
+        
+    @Transactional
+    public void removeVote(Integer pollID, Integer userId){
+        getVotes(pollID).remove((Vote) getUserVote(pollID, userId));
 
 
-}
-
+    }
+    @Transactional
     public Vote getUserVote(Integer pollID, Integer userId){
         for(Vote vote : this.getVotes(pollID)){
             if(vote.getVoteId().equals(userId)){
@@ -131,8 +158,8 @@ public void removeVote(Integer pollID, Integer userId){
             }
 
         }
-       throw new NoSuchElementException("This pollID not found in votes");
-    }
+        throw new NoSuchElementException("This pollID not found in votes");
+}
 
     
 

@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.backend.Model.User;
+import com.example.backend.Model.Poll.User.User;
 import com.example.backend.Model.Poll.Vote.Vote;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
@@ -32,12 +32,12 @@ public class Poll {
     private Integer id; 
     private String title;
     private String question;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll",orphanRemoval = true)
     private List<VoteOption> options = new ArrayList<>();
     private Instant publishedAt;
     private Instant validUntil;
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll",orphanRemoval = true)
     private List<Vote> votes = new ArrayList<>();
     @ManyToOne()
     @JsonIdentityReference(alwaysAsId = true)
@@ -61,6 +61,7 @@ public class Poll {
     public VoteOption addVoteOption(String option){
         VoteOption voteOption = new VoteOption(option);
         voteOption.setPoll(this);
+
         voteOption.setCaption(option);
         voteOption.setPresentationOrder(this.options.size());
         this.options.add(voteOption);
@@ -85,6 +86,17 @@ public class Poll {
     for (Vote vote : votes) {
         counts.put(vote.getVotesOn().getPresentationOrder(),
                    counts.getOrDefault(vote.getVotesOn().getPresentationOrder(), 0) + 1);
+    }
+
+    return counts;
+}
+
+    public Map<String, String> countVotesByPresentationOrderString() {
+    Map<String, String> counts = new HashMap<>();
+
+    for (Vote vote : votes) {
+        counts.put(vote.getVotesOn().getPresentationOrder().toString(),
+                   counts.getOrDefault(vote.getVotesOn().getPresentationOrder().toString(), "0") + 1);
     }
 
     return counts;

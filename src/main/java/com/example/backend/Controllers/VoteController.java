@@ -21,6 +21,7 @@ import com.example.backend.Model.Poll.Vote.VoteRequest;
 @RequestMapping("/polls")
 public class VoteController {
     PollManager pollManager;
+    
 
     public VoteController(PollManager pollManager){
         this.pollManager = pollManager; 
@@ -42,8 +43,8 @@ public class VoteController {
             return pollManager.getVotes(pollID);
         }
         @GetMapping("/{pollID}/votes/results")
-        public Map<Integer,Long> getVoteResults(@PathVariable Integer pollID){
-            return pollManager.getPoll(pollID).get().countVotesByPresentationOrder();
+        public Map<Integer,Integer> getVoteResults(@PathVariable Integer pollID){
+            return pollManager.getVoteResults(pollID);
         }
 }
 

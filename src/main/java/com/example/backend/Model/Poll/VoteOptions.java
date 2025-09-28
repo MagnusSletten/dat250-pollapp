@@ -24,6 +24,7 @@ public class VoteOptions {
         for (VoteOption option : options) {
         optionIdCounter++;
         option.setOptionId(optionIdCounter);
+        
         } 
 
     }
