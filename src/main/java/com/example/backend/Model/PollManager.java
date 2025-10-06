@@ -28,7 +28,6 @@ import lombok.Data;
 
 @Component
 @Data
-
 public class PollManager {
     private final PollRepository pollRepo;
     private final VoteRepository voteRepo;
@@ -49,9 +48,6 @@ public class PollManager {
         return new Poll();     
         
     }
-
-
-
 
     @Transactional
     public Optional<Poll> getPoll(Integer poll_id){

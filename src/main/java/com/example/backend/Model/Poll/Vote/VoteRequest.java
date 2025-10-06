@@ -4,8 +4,14 @@ import java.time.Instant;
 
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.User.User;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import lombok.Data;
 
@@ -17,6 +23,8 @@ public class VoteRequest {
     String userName;
     Integer pollId;
     Integer presentationOrder;
+    @JsonIgnore
+    ObjectMapper mapper = initJackson(); 
 
     
     public Vote toVote(User voter,Poll poll){
@@ -46,5 +54,36 @@ public class VoteRequest {
     public boolean hasUsername(){
          return userName != null && !userName.isBlank();
     }
+
+    public String toJson() {
+        
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to serialize VoteRequest to JSON", e);
+        }
+    }
+
+    public static VoteRequest fromJson(String json) {
+        ObjectMapper mapper = initJackson();
+        try {
+            return mapper.readValue(json, VoteRequest.class);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Failed to deserialize JSON to VoteRequest", e);
+        }
+    }
+
+    private static ObjectMapper initJackson() {
+    ObjectMapper mapper = new ObjectMapper();
+
+    mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+    mapper.registerModule(new JavaTimeModule());
+    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+    return mapper;
+}
+
+ 
     
 }

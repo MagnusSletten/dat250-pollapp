@@ -15,7 +15,7 @@ export default function CreateUserComponent (){
       },
       body: JSON.stringify(
         {
-            "userName": userName,
+            "username": userName,
             "email": email
         }
       )});

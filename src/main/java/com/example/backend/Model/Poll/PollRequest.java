@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PollRequest {
+    private Integer id; 
     private String title;
     private String question;
     private ArrayList<VoteOption> voteOptions = new ArrayList<>();
@@ -34,6 +35,24 @@ public class PollRequest {
     poll.setPublishedAt(publishedAt);
     return poll; 
     }
+
+    public static PollRequest fromPoll(Poll poll) {
+    PollRequest request = new PollRequest();
+    request.setTitle(poll.getTitle());
+    request.setQuestion(poll.getQuestion());
+    request.setPublishedAt(poll.getPublishedAt());
+    request.setValidUntil(poll.getValidUntil());
+
+    if (poll.getOptions() != null) {
+        request.getVoteOptions().addAll(poll.getOptions());
+    }
+
+    if (poll.getCreatedBy() != null) {
+        request.setCreator(poll.getCreatedBy().getUsername());
+    }
+
+    return request;
+}
 
 }
 

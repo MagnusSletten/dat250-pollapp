@@ -18,7 +18,7 @@ export default function VotePoll({userName}: {userName:string}){
         }
 
         console.log(vote)
-        const response = await fetch(voteUrl, {
+        const response = await fetch(url+pollID+"/votes", {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -28,7 +28,7 @@ export default function VotePoll({userName}: {userName:string}){
         getVotes()
         }
         const getVotes = async () => {
-        const res = await fetch(voteUrl+"/results");
+        const res = await fetch(url+pollID+"/votes/results");
         const data = await res.json(); 
         setVotes(data);
         };
@@ -36,13 +36,13 @@ export default function VotePoll({userName}: {userName:string}){
     const  getPoll = async() =>{
        const res = await fetch(url+pollID);
        const data = await res.json();
-       const voteoptions = new VoteOptions().fromJSON(data.voteOptions);
+       const voteoptions = new VoteOptions().fromJSON(data.options);
        setPollOptions(voteoptions)
        console.log((data))
        console.log(voteoptions)
        setPollJson(data);
        setPolltitle(data.title)
-       setPollID(data.pollID)
+       setPollID(data.id)
        getVotes();
        setPollQuestion(data.question);
         }

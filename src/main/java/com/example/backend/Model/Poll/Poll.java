@@ -108,4 +108,24 @@ public class Poll {
             votes.remove(i);
         }
     }
+public PollRequest toPollRequest() {
+    PollRequest request = new PollRequest();
+    request.setId(id);
+    request.setTitle(this.getTitle());
+    request.setQuestion(this.getQuestion());
+    request.setPublishedAt(this.getPublishedAt());
+    request.setValidUntil(this.getValidUntil());
+
+    if (this.getOptions() != null) {
+        request.getVoteOptions().addAll(this.getOptions());
+    }
+
+    if (this.getCreatedBy() != null) {
+        request.setCreator(this.getCreatedBy().getUsername());
+    }
+
+    return request;
+}
+
+    
 }
