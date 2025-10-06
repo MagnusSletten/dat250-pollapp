@@ -20,17 +20,21 @@ import com.example.backend.Model.PollManager;
 import com.example.backend.Model.Poll.Vote.Vote;
 import com.example.backend.Model.Poll.Vote.VoteRequest;
 
+import jakarta.annotation.PostConstruct;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/polls")
-public class VoteController implements MyListener, CommandLineRunner  {
+public class VoteController implements MyListener  {
     PollManager pollManager;
-    PollBroker broker; 
+    PollBroker broker;
+    PollReciever pollReciever;  
     
 
-    public VoteController(PollManager pollManager){
+    public VoteController(PollManager pollManager, PollBroker broker, PollReciever pollReceiver) {
         this.pollManager = pollManager;
-        this.broker = new PollBroker();  
+        this.broker = broker;
+        this.pollReciever = pollReceiver;
     }
 
     @PostMapping("/{pollID}/votes")
@@ -38,6 +42,16 @@ public class VoteController implements MyListener, CommandLineRunner  {
             broker.sendVoteEvent(voteRequest.getPollId(), voteRequest);
             return voteRequest; 
 
+    }
+    @PostConstruct
+    public void register() throws Exception{
+        try{
+        pollReciever.voteReciever(this);
+        }
+        catch (Exception e){
+           System.out.println(e);
+
+        }
     }
       
     @GetMapping("/{pollID}/votes")
@@ -61,12 +75,7 @@ public class VoteController implements MyListener, CommandLineRunner  {
         
     }
 
-    @Override
-    public void run(String... args) throws Exception {
-        PollReciever reciever = new PollReciever(); 
-        reciever.voteReciever(this);
-    }
+
+
+
 }
-
-
-

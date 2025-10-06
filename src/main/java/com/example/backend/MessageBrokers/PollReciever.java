@@ -2,16 +2,16 @@ package com.example.backend.MessageBrokers;
 
 import com.rabbitmq.client.DeliverCallback;
 
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
-
+@Component
 public class PollReciever  {
 
-     private static final String EXCHANGE_NAME = "poll";
+  private static final String EXCHANGE_NAME = "poll";
 
   public static void main(String[] argv) throws Exception {
     ConnectionFactory factory = new ConnectionFactory();
@@ -42,18 +42,19 @@ public class PollReciever  {
   }
 
 
-    public void voteReciever(MyListener callbackListener) throws Exception {
+    public void voteReciever(MyListener callbackListener) {
     ConnectionFactory factory = new ConnectionFactory();
     factory.setHost("localhost");
+    try {
     Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
+    
 
     channel.exchangeDeclare("polls", "topic");
     String queueName = channel.queueDeclare().getQueue();
 
     channel.queueBind(queueName, EXCHANGE_NAME, "poll.*.vote.cast");
-
-
+    
     System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
     DeliverCallback deliverCallback = (consumerTag, delivery) -> {
@@ -63,6 +64,12 @@ public class PollReciever  {
         callbackListener.onEvent(message);
     };
     channel.basicConsume(queueName, true, deliverCallback, consumerTag -> { });
+    }
+    catch(Exception e){
+      System.out.println(e);
+    }
+
+
   }
 
 

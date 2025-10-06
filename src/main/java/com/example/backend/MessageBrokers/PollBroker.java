@@ -8,6 +8,7 @@ import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
 
+@Component
 public class PollBroker {
 
     private static final String EXCHANGE_NAME = "poll";
