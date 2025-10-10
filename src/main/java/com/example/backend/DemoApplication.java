@@ -21,7 +21,10 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-	 	UnifiedJedis jedis = new UnifiedJedis("redis://localhost:6379");
+	 	String host = System.getenv().getOrDefault("REDIS_HOST", "localhost");
+		String port = System.getenv().getOrDefault("REDIS_PORT", "6379");
+		UnifiedJedis jedis = new UnifiedJedis("redis://" + host + ":" + port);
+
 
         jedis.append("bob", "12");
 		System.out.println("break");

@@ -15,7 +15,8 @@ public class PollReciever  {
 
   public static void main(String[] argv) throws Exception {
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost("localhost");
+    factory.setHost(System.getenv().getOrDefault("RABBITMQ_HOST", "rabbitmq"));
+factory.setPort(Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "5672")));;
     Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
 

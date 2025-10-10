@@ -10,7 +10,9 @@ import com.example.backend.Model.Poll.Poll;
 import redis.clients.jedis.UnifiedJedis;
 @Component
 public class VoteCache {
-    	UnifiedJedis jedis= new UnifiedJedis("redis://localhost:6379");
+    	String host = System.getenv().getOrDefault("REDIS_HOST", "localhost");
+		String port = System.getenv().getOrDefault("REDIS_PORT", "6379");
+		UnifiedJedis jedis = new UnifiedJedis("redis://" + host + ":" + port);
         
         public void setVotes(Poll poll){
             jedis.hset(poll.getId().toString(), poll.countVotesByPresentationOrderString());

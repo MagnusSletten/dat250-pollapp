@@ -12,7 +12,8 @@ public class VoteReciever {
     
     public VoteReciever(MyListener callbackListener) throws Exception{
         
-    factory.setHost("localhost");
+        factory.setHost(System.getenv().getOrDefault("RABBITMQ_HOST", "rabbitmq"));
+    factory.setPort(Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "5672")));
     Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
 
