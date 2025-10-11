@@ -28,7 +28,7 @@ import jakarta.annotation.PostConstruct;
 public class VoteController implements MyListener  {
     PollManager pollManager;
     PollBroker broker;
-    PollReciever pollReciever;  
+    PollReciever pollReciever; 
     
 
     public VoteController(PollManager pollManager, PollBroker broker, PollReciever pollReceiver) {
@@ -46,9 +46,11 @@ public class VoteController implements MyListener  {
     @PostConstruct
     public void register() throws Exception{
         try{
+        System.out.println("Adding Poll reciever");
         pollReciever.voteReciever(this);
         }
         catch (Exception e){
+            System.out.println("Poll reciever error");
            System.out.println(e);
 
         }
@@ -65,9 +67,10 @@ public class VoteController implements MyListener  {
 
     @Override
     public void onEvent(String message) {
+    System.out.println(message);
     VoteRequest voteRequest = VoteRequest.fromJson(message); 
     if(voteRequest.hasUsername()){
-            pollManager.addVoteWithUser(voteRequest); 
+        pollManager.addVoteWithUser(voteRequest); 
     }
     else{
             pollManager.addVoteAnonymous(voteRequest); 

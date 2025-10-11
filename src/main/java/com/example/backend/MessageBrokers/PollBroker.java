@@ -32,13 +32,16 @@ public class PollBroker {
 
     public void sendVoteEvent(Integer pollId, VoteRequest vote) throws Exception {
     ConnectionFactory factory = new ConnectionFactory();
+    var host = System.getenv().getOrDefault("RABBITMQ_HOST", "rabbitmq");
+    var port = Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "5672"));
+
     factory.setHost(System.getenv().getOrDefault("RABBITMQ_HOST", "rabbitmq"));
     factory.setPort(Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "5672")));
     try (Connection connection = factory.newConnection();
         Channel channel = connection.createChannel()) {
 
         channel.exchangeDeclare(EXCHANGE_NAME, "topic");
-
+        System.out.println("[PollBroker] connecting to " + host + ":" + port);
         String routingKey ="poll."+pollId.toString()+".vote.cast";
         String message = vote.toJson(); 
 

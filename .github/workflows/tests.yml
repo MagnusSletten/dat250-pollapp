@@ -20,6 +20,11 @@ jobs:
       - name: Set run permissions for gradlew
         run: chmod +x gradlew
 
+      - name: Start docker compose containers
+        run: |
+          docker compose up -d rabbitmq
+          docker compose up -d redis
+
       - name: Run tests
         run: ./gradlew test 
     

@@ -45,16 +45,17 @@ factory.setPort(Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "
 
     public void voteReciever(MyListener callbackListener) {
     ConnectionFactory factory = new ConnectionFactory();
-    factory.setHost("localhost");
+    factory.setHost(System.getenv().getOrDefault("RABBITMQ_HOST", "rabbitmq"));
+    factory.setPort(Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "5672")));;
     try {
     Connection connection = factory.newConnection();
     Channel channel = connection.createChannel();
     
 
-    channel.exchangeDeclare("polls", "topic");
+    channel.exchangeDeclare(EXCHANGE_NAME, "topic");
     String queueName = channel.queueDeclare().getQueue();
 
-    channel.queueBind(queueName, EXCHANGE_NAME, "poll.*.vote.cast");
+    channel.queueBind(queueName, EXCHANGE_NAME, EXCHANGE_NAME+".*.vote.cast");
     
     System.out.println(" [*] Waiting for messages. To exit press CTRL+C");
 
