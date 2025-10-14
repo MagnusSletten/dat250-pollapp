@@ -2,8 +2,8 @@ package com.example.backend.MessageBrokers;
 
 import org.springframework.stereotype.Component;
 
-import com.example.backend.Model.Poll.Vote.Vote;
-import com.example.backend.Model.Poll.Vote.VoteRequest;
+import com.example.backend.Model.Vote.Vote;
+import com.example.backend.Model.Vote.VoteRequest;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;

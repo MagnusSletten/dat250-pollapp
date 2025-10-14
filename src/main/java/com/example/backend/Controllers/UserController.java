@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.Model.PollManager;
-import com.example.backend.Model.Poll.User.User;
-import com.example.backend.Model.Poll.User.UserRequest;
+import com.example.backend.Model.User.User;
+import com.example.backend.Model.User.UserRequest;
 
 import org.springframework.web.bind.annotation.PathVariable;
 

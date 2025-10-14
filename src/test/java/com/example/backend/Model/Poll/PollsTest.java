@@ -2,8 +2,8 @@ package com.example.backend.Model.Poll;
 
 import org.junit.jupiter.api.Test;
 
-import com.example.backend.Model.Poll.User.User;
-import com.example.backend.Model.Poll.Vote.Vote;
+import com.example.backend.Model.User.User;
+import com.example.backend.Model.Vote.Vote;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

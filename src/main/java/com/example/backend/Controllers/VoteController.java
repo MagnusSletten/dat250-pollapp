@@ -17,8 +17,8 @@ import com.example.backend.MessageBrokers.MyListener;
 import com.example.backend.MessageBrokers.PollBroker;
 import com.example.backend.MessageBrokers.PollReciever;
 import com.example.backend.Model.PollManager;
-import com.example.backend.Model.Poll.Vote.Vote;
-import com.example.backend.Model.Poll.Vote.VoteRequest;
+import com.example.backend.Model.Vote.Vote;
+import com.example.backend.Model.Vote.VoteRequest;
 
 import jakarta.annotation.PostConstruct;
 

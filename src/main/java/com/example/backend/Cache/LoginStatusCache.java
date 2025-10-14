@@ -1,5 +1,7 @@
-package com.example.backend.Model.Poll.User;
+package com.example.backend.Cache;
 
+
+import com.example.backend.Model.User.User;
 
 import redis.clients.jedis.UnifiedJedis;
 

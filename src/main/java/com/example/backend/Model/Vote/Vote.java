@@ -1,10 +1,10 @@
-package com.example.backend.Model.Poll.Vote;
+package com.example.backend.Model.Vote;
 import lombok.Data;
 import java.time.Instant;
 
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.VoteOption;
-import com.example.backend.Model.Poll.User.User;
+import com.example.backend.Model.User.User;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

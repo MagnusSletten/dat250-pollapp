@@ -3,7 +3,7 @@ package com.example.backend.Model.Poll;
 import java.time.Instant;
 import java.util.ArrayList;
 
-import com.example.backend.Model.Poll.User.User;
+import com.example.backend.Model.User.User;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

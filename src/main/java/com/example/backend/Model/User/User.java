@@ -1,11 +1,11 @@
-package com.example.backend.Model.Poll.User;
+package com.example.backend.Model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.VoteOption;
-import com.example.backend.Model.Poll.Vote.Vote;
+import com.example.backend.Model.Vote.Vote;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

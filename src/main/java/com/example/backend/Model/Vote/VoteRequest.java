@@ -1,9 +1,9 @@
-package com.example.backend.Model.Poll.Vote;
+package com.example.backend.Model.Vote;
 
 import java.time.Instant;
 
 import com.example.backend.Model.Poll.Poll;
-import com.example.backend.Model.Poll.User.User;
+import com.example.backend.Model.User.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;

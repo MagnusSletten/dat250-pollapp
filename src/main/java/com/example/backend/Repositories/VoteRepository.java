@@ -9,8 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.example.backend.Model.Poll.Poll;
-import com.example.backend.Model.Poll.User.User;
-import com.example.backend.Model.Poll.Vote.Vote;
+import com.example.backend.Model.User.User;
+import com.example.backend.Model.Vote.Vote;
 
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, Integer> {

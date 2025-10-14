@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.example.backend.Model.Poll.User.User;
-import com.example.backend.Model.Poll.Vote.Vote;
+import com.example.backend.Model.User.User;
+import com.example.backend.Model.Vote.Vote;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;

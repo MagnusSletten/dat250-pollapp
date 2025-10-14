@@ -11,13 +11,13 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+import com.example.backend.Cache.VoteCache;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
-import com.example.backend.Model.Poll.User.User;
-import com.example.backend.Model.Poll.User.UserRequest;
-import com.example.backend.Model.Poll.Vote.Vote;
-import com.example.backend.Model.Poll.Vote.VoteCache;
-import com.example.backend.Model.Poll.Vote.VoteRequest;
+import com.example.backend.Model.User.User;
+import com.example.backend.Model.User.UserRequest;
+import com.example.backend.Model.Vote.Vote;
+import com.example.backend.Model.Vote.VoteRequest;
 import com.example.backend.Repositories.PollRepository;
 import com.example.backend.Repositories.UserRepository;
 import com.example.backend.Repositories.VoteRepository;
