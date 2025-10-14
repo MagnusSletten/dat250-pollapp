@@ -1,4 +1,4 @@
-package com.example.backend.Model;
+package com.example.backend.Managers;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -11,6 +11,7 @@ import java.util.Set;
 
 import org.springframework.stereotype.Component;
 
+import com.example.backend.Cache.RedisVoteCache;
 import com.example.backend.Cache.VoteCache;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
@@ -23,11 +24,12 @@ import com.example.backend.Repositories.UserRepository;
 import com.example.backend.Repositories.VoteRepository;
 
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 
 @Component
-@Data
+@AllArgsConstructor
 public class PollManager {
     private final PollRepository pollRepo;
     private final VoteRepository voteRepo;
@@ -40,7 +42,6 @@ public class PollManager {
         if(userOpt.isPresent()){
         User user = userOpt.get(); 
         Poll poll = pollRequest.toPoll(user);
-
         user.addPolls(poll);
         pollRepo.save(poll);
         return poll; 

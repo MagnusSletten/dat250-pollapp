@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.backend.MessageBrokers.MyListener;
+import com.example.backend.Managers.PollManager;
+import com.example.backend.MessageBrokers.Listener;
 import com.example.backend.MessageBrokers.PollBroker;
-import com.example.backend.MessageBrokers.PollReciever;
-import com.example.backend.Model.PollManager;
 import com.example.backend.Model.Vote.Vote;
 import com.example.backend.Model.Vote.VoteRequest;
 
@@ -25,21 +24,19 @@ import jakarta.annotation.PostConstruct;
 @RestController
 @CrossOrigin
 @RequestMapping("/polls")
-public class VoteController implements MyListener  {
+public class VoteController implements Listener  {
     PollManager pollManager;
     PollBroker broker;
-    PollReciever pollReciever; 
     
 
-    public VoteController(PollManager pollManager, PollBroker broker, PollReciever pollReceiver) {
+    public VoteController(PollManager pollManager, PollBroker broker) {
         this.pollManager = pollManager;
         this.broker = broker;
-        this.pollReciever = pollReceiver;
     }
 
     @PostMapping("/{pollID}/votes")
     public VoteRequest addVote(@RequestBody VoteRequest voteRequest) throws Exception { 
-            broker.sendVoteEvent(voteRequest.getPollId(), voteRequest);
+            broker.sendVote(voteRequest.getPollId(), voteRequest);
             return voteRequest; 
 
     }
@@ -47,7 +44,7 @@ public class VoteController implements MyListener  {
     public void register() throws Exception{
         try{
         System.out.println("Adding Poll reciever");
-        pollReciever.voteReciever(this);
+        broker.recieve(this);
         }
         catch (Exception e){
             System.out.println("Poll reciever error");

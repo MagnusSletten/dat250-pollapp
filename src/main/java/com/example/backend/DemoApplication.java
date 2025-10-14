@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.example.backend.Controllers.PollController;
 import com.example.backend.Controllers.UserController;
 import com.example.backend.Controllers.VoteController;
-import com.example.backend.Model.PollManager;
+import com.example.backend.Managers.PollManager;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.VoteOption;
 import com.example.backend.Model.User.User;
