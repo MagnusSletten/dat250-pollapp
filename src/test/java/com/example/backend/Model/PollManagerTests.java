@@ -1,20 +1,15 @@
 package com.example.backend.Model;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.example.backend.Managers.PollManager;
-import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
 import com.example.backend.Model.Poll.VoteOption;
 import com.example.backend.Model.User.UserRequest;

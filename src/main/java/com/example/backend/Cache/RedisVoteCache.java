@@ -19,7 +19,7 @@ public class RedisVoteCache implements VoteCache {
             jedis.expire(poll.getId().toString(),20*60);
         }
 
-        public RedisVoteCache(  ){
+        public RedisVoteCache(){
         }
 
         public RedisVoteCache(  UnifiedJedis jedis){

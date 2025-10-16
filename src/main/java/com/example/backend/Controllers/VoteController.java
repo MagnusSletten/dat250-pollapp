@@ -3,8 +3,9 @@ package com.example.backend.Controllers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,68 +15,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.Managers.PollManager;
-import com.example.backend.MessageBrokers.Listener;
-import com.example.backend.MessageBrokers.PollBroker;
+
 import com.example.backend.Model.Vote.Vote;
 import com.example.backend.Model.Vote.VoteRequest;
 
-import jakarta.annotation.PostConstruct;
 
 @RestController
 @CrossOrigin
 @RequestMapping("/polls")
-public class VoteController implements Listener  {
+public class VoteController  {
     PollManager pollManager;
-    PollBroker broker;
     
 
-    public VoteController(PollManager pollManager, PollBroker broker) {
+    public VoteController(PollManager pollManager ) {
         this.pollManager = pollManager;
-        this.broker = broker;
     }
 
     @PostMapping("/{pollID}/votes")
-    public VoteRequest addVote(@RequestBody VoteRequest voteRequest) throws Exception { 
-            broker.sendVote(voteRequest.getPollId(), voteRequest);
-            return voteRequest; 
+    public ResponseEntity<VoteRequest> addVote(@RequestBody VoteRequest voteRequest) throws Exception { 
+        pollManager.addVote(voteRequest);
+        try {
+        return ResponseEntity.ok(voteRequest); 
+        }
+        catch(Exception e) {
+            return ResponseEntity.internalServerError().build();
+        }
 
     }
-    @PostConstruct
-    public void register() throws Exception{
-        try{
-        System.out.println("Adding Poll reciever");
-        broker.recieve(this);
-        }
-        catch (Exception e){
-            System.out.println("Poll reciever error");
-           System.out.println(e);
 
-        }
-    }
       
     @GetMapping("/{pollID}/votes")
     public List<Vote> getVotes(@PathVariable Integer pollID){
         return pollManager.getVotes(pollID);
     }
+
     @GetMapping("/{pollID}/votes/results")
-    public Map<Integer,Integer> getVoteResults(@PathVariable Integer pollID){
-        return pollManager.getVoteResults(pollID);
-    }
-
-    @Override
-    public void onEvent(String message) {
-    System.out.println(message);
-    VoteRequest voteRequest = VoteRequest.fromJson(message); 
-    if(voteRequest.hasUsername()){
-        pollManager.addVoteWithUser(voteRequest); 
-    }
-    else{
-            pollManager.addVoteAnonymous(voteRequest); 
-    }
-        
-    }
-
-
+    public ResponseEntity<Map<Integer, Integer>> getVoteResults(@PathVariable Integer pollID) {
+        try {
+            Map<Integer, Integer> results = pollManager.getVoteResults(pollID);
+            return ResponseEntity.ok(results);
+        } catch (NoSuchElementException e) {
+            System.out.println("Poll not found: " + e.getMessage());
+            return ResponseEntity.notFound().build();
+        }
+}
 
 
 }

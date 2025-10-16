@@ -17,7 +17,6 @@ import lombok.NoArgsConstructor;
 public class UserRequest{
     private String username;
     private String email;
-    private Integer userId;
 
     public User toUser(){
         User user = new User(); 

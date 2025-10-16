@@ -1,12 +1,8 @@
 package com.example.backend.Repositories;
 
-import org.springframework.stereotype.Repository;
 
 import com.example.backend.Model.User.User;
-
-import java.util.List;
 import java.util.Optional;
-
 import org.springframework.data.jpa.repository.JpaRepository;
 
 

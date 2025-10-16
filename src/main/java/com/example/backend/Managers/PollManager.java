@@ -1,18 +1,17 @@
 package com.example.backend.Managers;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
-import java.util.Set;
 
 
 import org.springframework.stereotype.Component;
 
-import com.example.backend.Cache.RedisVoteCache;
 import com.example.backend.Cache.VoteCache;
+import com.example.backend.MessageBrokers.Listener;
+import com.example.backend.MessageBrokers.PollBroker;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
 import com.example.backend.Model.User.User;
@@ -25,19 +24,20 @@ import com.example.backend.Repositories.VoteRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 
 
 @Component
 @AllArgsConstructor
-public class PollManager {
+public class PollManager implements Listener {
     private final PollRepository pollRepo;
     private final VoteRepository voteRepo;
     private final UserRepository userRepo;
     private final VoteCache voteCache;
+    private final PollBroker broker;
+
     
     @Transactional        
-    public Poll addPollFromRequest(PollRequest pollRequest){
+    public Poll addPollFromRequest(PollRequest pollRequest) throws NoSuchElementException{
         Optional<User> userOpt = userRepo.findByUsername(pollRequest.getCreator());
         if(userOpt.isPresent()){
         User user = userOpt.get(); 
@@ -46,7 +46,7 @@ public class PollManager {
         pollRepo.save(poll);
         return poll; 
         } 
-        return new Poll();     
+        throw(new NoSuchElementException("creator not found"));   
         
     }
 
@@ -66,7 +66,6 @@ public class PollManager {
     @Transactional
     public boolean deletePoll(Integer pollId){
         if (pollRepo.existsById(pollId)){
-            voteRepo.deleteByPollId(pollId);
             pollRepo.deleteById(pollId);
         }
         
@@ -80,8 +79,13 @@ public class PollManager {
         return user; 
     }
 
-    public List<Vote> getVotes(Integer pollID){
+    public List<Vote> getVotes(Integer pollID) throws NoSuchElementException{
+        if(pollRepo.existsById(pollID)){
         return voteRepo.findByPollId(pollID);
+        }
+        else{
+            throw(new NoSuchElementException("No poll found with this ID")); 
+        }
         }
 
             
@@ -119,7 +123,6 @@ public class PollManager {
         if (!voteRepo.existsByPollIdAndVoterId(id,user.getId())) {
             poll.addVote(vote);
             user.addVote(vote);
-
             voteRepo.save(vote);
         } else {
             Vote vote2 = voteRepo.findByPollIdAndVoterId(id, user.getId());
@@ -127,6 +130,12 @@ public class PollManager {
             poll.changeVote(vote2);
             user.addVote(vote2);
         
+        }
+        try {
+        broker.sendVote(request.getPollId(),request);
+        }
+        catch(Exception e){
+            System.out.println(e);
         }
         return vote;
     }
@@ -140,6 +149,22 @@ public class PollManager {
         poll.addVote(vote);
         return vote;
     }
+
+    @Transactional
+    public Vote addVote(VoteRequest request){
+    if(request.hasUsername()){
+        addVoteWithUser(request); 
+    }
+    else{
+        addVoteAnonymous(request); 
+    }
+    if(request.hasUsername()){
+    return request.toVote(getUser(request.getUserName()).get(), getPoll(request.getPollId()).get());
+    }
+    else return request.toVoteAnonymous(getPoll( request.getPollId()).get());
+    }
+
+    
         
     @Transactional
     public void removeVote(Integer pollID, Integer userId){
@@ -150,7 +175,7 @@ public class PollManager {
     @Transactional
     public Vote getUserVote(Integer pollID, Integer userId){
         for(Vote vote : this.getVotes(pollID)){
-            if(vote.getVoteId().equals(userId)){
+            if(vote.getVoter().getId().equals(userId)){
                 return vote; 
             }
 
@@ -158,6 +183,23 @@ public class PollManager {
         throw new NoSuchElementException("This pollID not found in votes");
 }
 
+   @Override
+    public void onEvent(String message) {
+    System.out.println(message);
+    VoteRequest voteRequest = VoteRequest.fromJson(message); 
+    try{
+    if(voteRequest.hasUsername()){
+        addVoteWithUser(voteRequest); 
+    }
+    else{
+        addVoteAnonymous(voteRequest); 
+    }
+    }
+    catch(Exception e){
+        System.out.println(e);
+    }
+        
+    }
     
 
 

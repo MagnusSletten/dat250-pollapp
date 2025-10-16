@@ -110,7 +110,6 @@ public class Poll {
     }
 public PollRequest toPollRequest() {
     PollRequest request = new PollRequest();
-    request.setId(id);
     request.setTitle(this.getTitle());
     request.setQuestion(this.getQuestion());
     request.setPublishedAt(this.getPublishedAt());

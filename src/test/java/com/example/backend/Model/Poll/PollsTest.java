@@ -12,19 +12,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceConfiguration;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-// TODO: you may have to adjust the imports to import the domain model entities
-// import no.hvl.dat250.jpa.polls.Poll;
-// import no.hvl.dat250.jpa.polls.User;
-// import no.hvl.dat250.jpa.polls.VoteOption;
-// import no.hvl.dat250.jpa.polls.Vote;
 
 
 public class PollsTest {

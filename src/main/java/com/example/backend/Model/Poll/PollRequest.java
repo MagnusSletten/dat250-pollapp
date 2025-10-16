@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class PollRequest {
-    private Integer id; 
     private String title;
     private String question;
     private ArrayList<VoteOption> voteOptions = new ArrayList<>();

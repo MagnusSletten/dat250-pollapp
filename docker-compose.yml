@@ -15,7 +15,7 @@ services:
       timeout: 2s
       retries: 30
 
-  polltest:
+  pollservice:
     depends_on:
       rabbitmq:
         condition: service_healthy

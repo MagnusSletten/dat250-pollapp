@@ -1,9 +1,8 @@
-POST http://localhost:8080/vote/
+POST http://localhost:8080/polls/1/votes
 Content-Type: application/json
 
 {
-  "userId": 1,  
   "pollId": 1,
-  "optionId": 2
-  
+  "presentationOrder": 2,
+  "userName": "Magnus"
 }

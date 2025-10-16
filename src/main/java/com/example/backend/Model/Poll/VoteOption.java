@@ -2,7 +2,6 @@ package com.example.backend.Model.Poll;
 
 import java.util.Objects;
 
-import com.example.backend.Model.Vote.Vote;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

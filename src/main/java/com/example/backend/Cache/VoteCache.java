@@ -4,7 +4,6 @@ import java.util.Map;
 
 import com.example.backend.Model.Poll.Poll;
 
-import redis.clients.jedis.UnifiedJedis;
 
 public interface VoteCache {
 

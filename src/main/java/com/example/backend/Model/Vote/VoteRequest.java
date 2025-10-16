@@ -4,7 +4,6 @@ import java.time.Instant;
 
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.User.User;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
