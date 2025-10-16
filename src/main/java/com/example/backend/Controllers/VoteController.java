@@ -1,6 +1,5 @@
 package com.example.backend.Controllers;
 
-
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
@@ -19,33 +18,29 @@ import com.example.backend.Managers.PollManager;
 import com.example.backend.Model.Vote.Vote;
 import com.example.backend.Model.Vote.VoteRequest;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/polls")
-public class VoteController  {
+public class VoteController {
     PollManager pollManager;
-    
 
-    public VoteController(PollManager pollManager ) {
+    public VoteController(PollManager pollManager) {
         this.pollManager = pollManager;
     }
 
     @PostMapping("/{pollID}/votes")
-    public ResponseEntity<VoteRequest> addVote(@RequestBody VoteRequest voteRequest) throws Exception { 
+    public ResponseEntity<VoteRequest> addVote(@RequestBody VoteRequest voteRequest) throws Exception {
         pollManager.addVote(voteRequest);
         try {
-        return ResponseEntity.ok(voteRequest); 
-        }
-        catch(Exception e) {
+            return ResponseEntity.ok(voteRequest);
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
 
     }
 
-      
     @GetMapping("/{pollID}/votes")
-    public List<Vote> getVotes(@PathVariable Integer pollID){
+    public List<Vote> getVotes(@PathVariable Integer pollID) {
         return pollManager.getVotes(pollID);
     }
 
@@ -58,7 +53,6 @@ public class VoteController  {
             System.out.println("Poll not found: " + e.getMessage());
             return ResponseEntity.notFound().build();
         }
-}
-
+    }
 
 }

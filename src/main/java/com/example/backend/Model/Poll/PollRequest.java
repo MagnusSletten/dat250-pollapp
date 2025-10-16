@@ -18,40 +18,39 @@ public class PollRequest {
     private Instant validUntil;
     private String creator;
 
-    public Poll toPoll(User creator){
-    Poll poll = new Poll();
-    poll.setCreatedBy(creator);
-    poll.setQuestion(question);
-    for (int i = 0; i < voteOptions.size(); i++) {
-        VoteOption vo = voteOptions.get(i);
-        vo.setPoll(poll);               
-        vo.setPresentationOrder(i+1);    
-        poll.getOptions().add(vo);      
-    }
+    public Poll toPoll(User creator) {
+        Poll poll = new Poll();
+        poll.setCreatedBy(creator);
+        poll.setQuestion(question);
+        for (int i = 0; i < voteOptions.size(); i++) {
+            VoteOption vo = voteOptions.get(i);
+            vo.setPoll(poll);
+            vo.setPresentationOrder(i + 1);
+            poll.getOptions().add(vo);
+        }
 
-    poll.setTitle(title);
-    poll.setValidUntil(validUntil);
-    poll.setPublishedAt(publishedAt);
-    return poll; 
+        poll.setTitle(title);
+        poll.setValidUntil(validUntil);
+        poll.setPublishedAt(publishedAt);
+        return poll;
     }
 
     public static PollRequest fromPoll(Poll poll) {
-    PollRequest request = new PollRequest();
-    request.setTitle(poll.getTitle());
-    request.setQuestion(poll.getQuestion());
-    request.setPublishedAt(poll.getPublishedAt());
-    request.setValidUntil(poll.getValidUntil());
+        PollRequest request = new PollRequest();
+        request.setTitle(poll.getTitle());
+        request.setQuestion(poll.getQuestion());
+        request.setPublishedAt(poll.getPublishedAt());
+        request.setValidUntil(poll.getValidUntil());
 
-    if (poll.getOptions() != null) {
-        request.getVoteOptions().addAll(poll.getOptions());
+        if (poll.getOptions() != null) {
+            request.getVoteOptions().addAll(poll.getOptions());
+        }
+
+        if (poll.getCreatedBy() != null) {
+            request.setCreator(poll.getCreatedBy().getUsername());
+        }
+
+        return request;
     }
 
-    if (poll.getCreatedBy() != null) {
-        request.setCreator(poll.getCreatedBy().getUsername());
-    }
-
-    return request;
 }
-
-}
-

@@ -13,9 +13,13 @@ import com.example.backend.Model.Vote.Vote;
 @Repository
 public interface VoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> findByPollId(Integer pollId);
+
     List<Vote> findAllByVoter(User voter);
+
     Vote findByPollIdAndVoterId(Integer pollId, Integer voterId);
+
     boolean existsByPollIdAndVoterId(Integer pollId, Integer voterId);
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     int deleteByPollId(@Param("pollId") Integer pollId);
 }

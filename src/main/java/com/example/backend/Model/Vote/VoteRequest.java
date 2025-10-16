@@ -15,47 +15,46 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.Data;
 
 @Data
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,  property = "voteId")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "voteId")
 public class VoteRequest {
-    Integer voteId; 
+    Integer voteId;
     Instant publishedAt = Instant.now();
     String userName;
     Integer pollId;
     Integer presentationOrder;
     @JsonIgnore
-    ObjectMapper mapper = initJackson(); 
+    ObjectMapper mapper = initJackson();
 
-    
-    public Vote toVote(User voter,Poll poll){
-       
-        Vote vote = new Vote(); 
+    public Vote toVote(User voter, Poll poll) {
+
+        Vote vote = new Vote();
         vote.setVoter(voter);
         vote.setPoll(poll);
         vote.setPublishedAt(publishedAt);
-        vote.setVotesOn(poll.getOptions().get(presentationOrder-1));
-      
-        return vote; 
+        vote.setVotesOn(poll.getOptions().get(presentationOrder - 1));
+
+        return vote;
 
     }
 
-    public Vote toVoteAnonymous(Poll poll){
-       
-        Vote vote = new Vote(); 
+    public Vote toVoteAnonymous(Poll poll) {
+
+        Vote vote = new Vote();
         vote.setPoll(poll);
         vote.setPublishedAt(publishedAt);
         System.out.println(poll.getOptions());
-        vote.setVotesOn(poll.getOptions().get(presentationOrder-1));
-      
-        return vote; 
+        vote.setVotesOn(poll.getOptions().get(presentationOrder - 1));
+
+        return vote;
 
     }
 
-    public boolean hasUsername(){
-         return userName != null && !userName.isBlank();
+    public boolean hasUsername() {
+        return userName != null && !userName.isBlank();
     }
 
     public String toJson() {
-        
+
         try {
             return mapper.writeValueAsString(this);
         } catch (JsonProcessingException e) {
@@ -73,16 +72,14 @@ public class VoteRequest {
     }
 
     private static ObjectMapper initJackson() {
-    ObjectMapper mapper = new ObjectMapper();
+        ObjectMapper mapper = new ObjectMapper();
 
-    mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-    mapper.registerModule(new JavaTimeModule());
-    mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+        mapper.registerModule(new JavaTimeModule());
+        mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
-    return mapper;
-}
+        return mapper;
+    }
 
- 
-    
 }

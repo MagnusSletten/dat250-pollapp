@@ -11,5 +11,6 @@ import com.example.backend.Model.Poll.Poll;
 @Repository
 public interface PollRepository extends JpaRepository<Poll, Integer> {
     List<Poll> findByTitleContainingIgnoreCase(String titlePart);
+
     Optional<Poll> findTopByOrderByIdDesc();
 }

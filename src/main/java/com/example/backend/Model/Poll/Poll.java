@@ -25,50 +25,48 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,  property = "id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class Poll {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id; 
+    private Integer id;
     private String title;
     private String question;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll", orphanRemoval = true)
     private List<VoteOption> options = new ArrayList<>();
     private Instant publishedAt;
     private Instant validUntil;
     @JsonIdentityReference(alwaysAsId = true)
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll",orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll", orphanRemoval = true)
     private List<Vote> votes = new ArrayList<>();
     @ManyToOne()
     @JsonIdentityReference(alwaysAsId = true)
     private User createdBy;
 
-    public Poll(String question){
-        this.question = question; 
+    public Poll(String question) {
+        this.question = question;
     }
-    
-    public void setCreatedBy(User creator){
+
+    public void setCreatedBy(User creator) {
         this.createdBy = creator;
 
     }
 
-    public void addVote(Vote vote){
+    public void addVote(Vote vote) {
         this.votes.add(vote);
         vote.setPoll(this);
         vote.getVotesOn().setPoll(this);
     }
 
-    public VoteOption addVoteOption(String option){
+    public VoteOption addVoteOption(String option) {
         VoteOption voteOption = new VoteOption(option);
         voteOption.setPoll(this);
 
         voteOption.setCaption(option);
         voteOption.setPresentationOrder(this.options.size());
         this.options.add(voteOption);
-        return voteOption; 
+        return voteOption;
     }
-
- 
 
     public void changeVote(Vote vote) {
         for (int i = 0; i < votes.size(); i++) {
@@ -79,52 +77,53 @@ public class Poll {
         }
         throw new IllegalArgumentException("Vote with id " + vote.getVoteId() + " not found");
     }
-    
+
     public Map<Integer, Integer> countVotesByPresentationOrder() {
-    Map<Integer, Integer> counts = new HashMap<>();
+        Map<Integer, Integer> counts = new HashMap<>();
 
-    for (Vote vote : votes) {
-        counts.put(vote.getVotesOn().getPresentationOrder(),
-                   counts.getOrDefault(vote.getVotesOn().getPresentationOrder(), 0) + 1);
+        for (Vote vote : votes) {
+            counts.put(vote.getVotesOn().getPresentationOrder(),
+                    counts.getOrDefault(vote.getVotesOn().getPresentationOrder(), 0) + 1);
+        }
+
+        return counts;
     }
-
-    return counts;
-}
 
     public Map<String, String> countVotesByPresentationOrderString() {
-    Map<String, String> counts = new HashMap<>();
+        Map<String, String> counts = new HashMap<>();
 
-    for (Vote vote : votes) {
-        counts.put(vote.getVotesOn().getPresentationOrder().toString(),
-                   counts.getOrDefault(vote.getVotesOn().getPresentationOrder().toString(), "0") + 1);
+        for (Vote vote : votes) {
+            counts.put(vote.getVotesOn().getPresentationOrder().toString(),
+                    counts.getOrDefault(vote.getVotesOn().getPresentationOrder().toString(), "0") + 1);
+        }
+
+        return counts;
     }
 
-    return counts;
-}
-    public void remoteVotes(){
-        for(int i = votes.size()-1; i>=0; i-- ){
+    public void remoteVotes() {
+        for (int i = votes.size() - 1; i >= 0; i--) {
             Vote vote = votes.get(i);
             vote.getVoter().remoteVote(vote);
             votes.remove(i);
         }
     }
-public PollRequest toPollRequest() {
-    PollRequest request = new PollRequest();
-    request.setTitle(this.getTitle());
-    request.setQuestion(this.getQuestion());
-    request.setPublishedAt(this.getPublishedAt());
-    request.setValidUntil(this.getValidUntil());
 
-    if (this.getOptions() != null) {
-        request.getVoteOptions().addAll(this.getOptions());
+    public PollRequest toPollRequest() {
+        PollRequest request = new PollRequest();
+        request.setTitle(this.getTitle());
+        request.setQuestion(this.getQuestion());
+        request.setPublishedAt(this.getPublishedAt());
+        request.setValidUntil(this.getValidUntil());
+
+        if (this.getOptions() != null) {
+            request.getVoteOptions().addAll(this.getOptions());
+        }
+
+        if (this.getCreatedBy() != null) {
+            request.setCreator(this.getCreatedBy().getUsername());
+        }
+
+        return request;
     }
 
-    if (this.getCreatedBy() != null) {
-        request.setCreator(this.getCreatedBy().getUsername());
-    }
-
-    return request;
-}
-
-    
 }

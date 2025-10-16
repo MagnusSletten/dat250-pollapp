@@ -16,35 +16,33 @@ import com.example.backend.Model.User.UserRequest;
 
 import org.springframework.web.bind.annotation.PathVariable;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/users")
 public class UserController {
-    PollManager pollManager; 
-    
-    public UserController(PollManager pollManager){
+    PollManager pollManager;
+
+    public UserController(PollManager pollManager) {
         this.pollManager = pollManager;
     }
+
     @GetMapping("/{userName}")
     public User getUser(@PathVariable("userName") String userName) {
         return pollManager.getUser(userName).get();
     }
 
     @PostMapping
-    public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest){
+    public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest) {
         try {
-        User user = pollManager.addUserFromRequest(userRequest);
-        return ResponseEntity.ok(user); 
+            User user = pollManager.addUserFromRequest(userRequest);
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
         }
-        catch(Exception e){
-            return ResponseEntity.badRequest().build(); 
-        } 
     }
 
     @GetMapping
-    public Collection<User> getUsers(){
-       return pollManager.getUsers();  
+    public Collection<User> getUsers() {
+        return pollManager.getUsers();
     }
 }
-

@@ -15,40 +15,38 @@ import com.example.backend.Managers.PollManager;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollRequest;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping("/polls")
 public class PollController {
-    	HashMap<Integer,Poll> polls;
-        PollManager manager;
-         
-        public PollController(PollManager manager) {
-            this.polls = new HashMap<>();
-            this.manager = manager;  
-        }
+    HashMap<Integer, Poll> polls;
+    PollManager manager;
 
-        @PostMapping
-        public Poll addPoll(@RequestBody PollRequest pollRequest){ 
-            Poll poll = manager.addPollFromRequest(pollRequest);
-            return poll; 
-        }
+    public PollController(PollManager manager) {
+        this.polls = new HashMap<>();
+        this.manager = manager;
+    }
 
-        @DeleteMapping("/{pollID}")
-        public boolean deletePoll(@PathVariable("pollID") Integer pollID){
-            return manager.deletePoll(pollID);
- 
-        }
+    @PostMapping
+    public Poll addPoll(@RequestBody PollRequest pollRequest) {
+        Poll poll = manager.addPollFromRequest(pollRequest);
+        return poll;
+    }
 
-        @GetMapping("/{pollID}")
-        public Poll getPoll(@PathVariable("pollID") Integer pollID) throws Exception{
-            try {
+    @DeleteMapping("/{pollID}")
+    public boolean deletePoll(@PathVariable("pollID") Integer pollID) {
+        return manager.deletePoll(pollID);
+
+    }
+
+    @GetMapping("/{pollID}")
+    public Poll getPoll(@PathVariable("pollID") Integer pollID) throws Exception {
+        try {
             return manager.getPoll(pollID).get();
-            }
-            catch(Exception e){
-                throw e; 
-            }
- 
+        } catch (Exception e) {
+            throw e;
         }
+
+    }
 
 }

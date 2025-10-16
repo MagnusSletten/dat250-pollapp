@@ -1,4 +1,5 @@
 package com.example.backend.Model.Vote;
+
 import lombok.Data;
 import java.time.Instant;
 
@@ -15,16 +16,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 
-
-
 @Data
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "voteId")
 public class Vote {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long voteId; 
-    Instant publishedAt = Instant.now(); 
+    Long voteId;
+    Instant publishedAt = Instant.now();
     @JsonIdentityReference(alwaysAsId = true)
     @ManyToOne
     User voter;
@@ -32,12 +31,11 @@ public class Vote {
     @ManyToOne()
     Poll poll;
     @ManyToOne()
-    @JsonIdentityReference(alwaysAsId = true) 
+    @JsonIdentityReference(alwaysAsId = true)
     VoteOption votesOn;
-    
-    public void votesOn(){
-        
-    }
-    
-}
 
+    public void votesOn() {
+
+    }
+
+}
