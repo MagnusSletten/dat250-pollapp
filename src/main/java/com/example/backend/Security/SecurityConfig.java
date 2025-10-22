@@ -86,7 +86,7 @@ SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 @Bean
 CorsConfigurationSource corsConfigurationSource() {
   var cfg = new CorsConfiguration();
-  cfg.setAllowedOrigins(List.of("http://localhost:5173")); 
+  cfg.setAllowedOrigins(List.of("http://localhost:5173", "https://magnus-demo-project.com")); 
   cfg.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
   cfg.setAllowedHeaders(List.of("Content-Type","X-XSRF-TOKEN","Authorization","X-Requested-With"));
   cfg.setAllowCredentials(true);

@@ -7,7 +7,7 @@ type LogInProps = {
   setLoginStatus: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const url = 'http://localhost:8080';
+const url = BACKEND_URL;
 
 export default function LogInComponent({
   userName,

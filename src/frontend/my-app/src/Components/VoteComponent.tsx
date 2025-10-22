@@ -4,7 +4,7 @@ import { BACKEND_URL } from './Constants/constants.js';
 
 export default function VotePoll({userName}: {userName:string}){
     const [pollID, setPollID] = useState(1);
-    const url = BACKEND_URL + "/polls"
+    const url = BACKEND_URL + "/polls/"+pollID+"/votes"
     const [pollJson, setPollJson] = useState(null);
     const [pollOptions, setPollOptions] = useState<VoteOptions>();
     const [votes,setVotes] = useState([])
@@ -21,7 +21,7 @@ export default function VotePoll({userName}: {userName:string}){
             .find(c => c.startsWith(name + '='))?.split('=')[1] ?? '';
         const xsrf = getCookieRaw('XSRF-TOKEN');
         console.log(vote)
-        const response = await fetch(url+pollID+"/votes", {
+        const response = await fetch(url, {
         method: 'POST',
         credentials: "include",
         headers: {
@@ -33,13 +33,13 @@ export default function VotePoll({userName}: {userName:string}){
         getVotes()
         }
         const getVotes = async () => {
-        const res = await fetch(url+pollID+"/votes/results");
+        const res = await fetch(url+"/results");
         const data = await res.json(); 
         setVotes(data);
         };
 
     const  getPoll = async() =>{
-       const res = await fetch(url+pollID);
+       const res = await fetch(BACKEND_URL+"/polls/"+pollID);
        const data = await res.json();
        const voteoptions = new VoteOptions().fromJSON(data.options);
        setPollOptions(voteoptions)
