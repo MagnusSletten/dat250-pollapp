@@ -1,0 +1,4 @@
+curl -i -c cookies.txt \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -X POST http://localhost:8080/users/auth/login \
+  -d "username=Magnuse&password=abcd"

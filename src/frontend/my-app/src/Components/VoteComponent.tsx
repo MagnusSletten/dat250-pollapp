@@ -16,13 +16,18 @@ export default function VotePoll({userName}: {userName:string}){
         if(userName){
             vote.userName = userName; 
         }
-
+        const getCookieRaw = (name: string) =>
+        document.cookie.split('; ')
+            .find(c => c.startsWith(name + '='))?.split('=')[1] ?? '';
+        const xsrf = getCookieRaw('XSRF-TOKEN');
         console.log(vote)
         const response = await fetch(url+pollID+"/votes", {
         method: 'POST',
+        credentials: "include",
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
+            'X-XSRF-TOKEN': xsrf,
         },
         body: JSON.stringify(vote.toJSON())});
         getVotes()

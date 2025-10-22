@@ -11,13 +11,15 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "username")
-public class UserRequest {
+public class UserRequest   {
     private String username;
     private String email;
+    private String password; 
 
     public User toUser() {
         User user = new User();
         user.setEmail(email);
+        user.setPassword(password);
         user.setPolls(new ArrayList<>());
         user.setUsername(username);
         user.setVotes(new ArrayList<>());

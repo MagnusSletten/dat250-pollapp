@@ -18,18 +18,32 @@ function CreatePoll({  userName,
     pollRef.current.setCreator(userName)
   } 
 
+  const getCookieRaw = (name: string) =>
+  document.cookie.split('; ')
+    .find(c => c.startsWith(name + '='))?.split('=')[1] ?? '';
+
   const sendPoll = async () => {
-    const url = 'http://localhost:8080/polls'
+    const url = 'http://localhost:8080';
+
     
     try {
       setCreator()
-      const res = await fetch(url, {
+      const raw = document.cookie.split('; ')
+      .find(c => c.startsWith('XSRF-TOKEN='))?.split('=')[1];
+    const xsrf = getCookieRaw('XSRF-TOKEN');
+    console.log(xsrf)
+    if (!xsrf) throw new Error('No XSRF-TOKEN cookie present');
+      
+    const res = await fetch(url+'/polls', {
       method: 'POST',
+      credentials: 'include', // sends cookies automatically
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
+         'X-XSRF-TOKEN': xsrf,
+        
       },
-      body: JSON.stringify(pollRef.current.toJSON())}); 
+      body: JSON.stringify(pollRef.current.toJSON()),
+    });
       setResponse(await res.text()); 
       }
       catch(error:unknown){

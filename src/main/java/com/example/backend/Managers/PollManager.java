@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
+
 import org.springframework.stereotype.Component;
 
+import com.example.backend.Cache.LoginStatusCache;
 import com.example.backend.Cache.VoteCache;
 import com.example.backend.MessageBrokers.Listener;
 import com.example.backend.MessageBrokers.PollBroker;
@@ -20,6 +22,7 @@ import com.example.backend.Model.Vote.VoteRequest;
 import com.example.backend.Repositories.PollRepository;
 import com.example.backend.Repositories.UserRepository;
 import com.example.backend.Repositories.VoteRepository;
+import com.example.backend.Security.SecurityConfig;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -32,6 +35,8 @@ public class PollManager implements Listener {
     private final UserRepository userRepo;
     private final VoteCache voteCache;
     private final PollBroker broker;
+    private final LoginStatusCache loginCache;
+    private final SecurityConfig securityConfig; 
 
     @Transactional
     public Poll addPollFromRequest(PollRequest pollRequest) throws NoSuchElementException {
@@ -76,8 +81,20 @@ public class PollManager implements Listener {
     @Transactional
     public User addUserFromRequest(UserRequest userRequest) throws Exception {
         User user = userRequest.toUser();
+        user.setPassword(securityConfig.passwordEncoder().encode(user.getPassword()));
         userRepo.save(user);
         return user;
+    }
+
+    public Boolean matchUserPasswords(UserRequest userRequest){
+        try{
+        return securityConfig.passwordEncoder().matches(userRequest.getPassword(), getUser(userRequest.getUsername()).get().getPassword());
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return false; 
+
+        }
     }
 
     public List<Vote> getVotes(Integer pollID) throws NoSuchElementException {
@@ -192,6 +209,15 @@ public class PollManager implements Listener {
             System.out.println(e);
         }
 
+    }
+
+    public void login(User user){
+    
+        loginCache.logIn(user);
+    }
+
+    public void logout(User user){
+        loginCache.logOut(user);
     }
 
 }

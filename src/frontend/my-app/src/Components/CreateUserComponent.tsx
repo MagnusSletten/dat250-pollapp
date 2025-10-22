@@ -2,6 +2,7 @@ import { use, useState } from "react";
 
 export default function CreateUserComponent (){
     const [userName, setUsername] = useState("");
+    const [password, setPassword] = useState(""); 
     const [email, setEmail] = useState("");
     const url = "http://localhost:8080/users"
     const [message,setMessage] = useState("");
@@ -16,7 +17,8 @@ export default function CreateUserComponent (){
       body: JSON.stringify(
         {
             "username": userName,
-            "email": email
+            "email": email,
+            "password": password
         }
       )});
       if(res.ok){
@@ -29,11 +31,15 @@ export default function CreateUserComponent (){
         <input
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Set username"
-
         ></input>
         <input
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Set email"
+
+        ></input>
+        <input
+        onChange={(e) => setPassword(e.target.value)}
+        placeholder="Set password"
 
         ></input>
         <button

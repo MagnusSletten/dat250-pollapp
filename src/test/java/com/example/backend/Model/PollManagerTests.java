@@ -39,6 +39,7 @@ public class PollManagerTests {
     userRepo.deleteAll();
     UserRequest user = new UserRequest(); 
     user.setUsername("Peter");
+    user.setPassword("a");
     
     try{
     manager.addUserFromRequest(user);

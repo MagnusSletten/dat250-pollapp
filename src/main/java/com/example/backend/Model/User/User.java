@@ -1,6 +1,8 @@
 package com.example.backend.Model.User;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import com.example.backend.Model.Poll.Poll;
@@ -19,13 +21,18 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
+import org.springframework.security.core.CredentialsContainer;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 @Data
 @NoArgsConstructor
+@ToString(exclude = { "polls", "votes", "password" }) // ✅ exclude lazy + sensitive fields
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "users")
-public class User {
+public class User implements UserDetails, CredentialsContainer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -38,12 +45,26 @@ public class User {
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(mappedBy = "voter", orphanRemoval = true)
     private List<Vote> votes = new ArrayList<>();
+    private String password;
+    private Roles role = Roles.NORMAL; 
 
-    public User(String userName, String email) {
+    public User(String userName, String email, String password) {
         this.username = userName;
         this.email = email;
         this.polls = new ArrayList<>();
         this.votes = new ArrayList<>();
+        this.role = Roles.NORMAL;
+
+    }
+
+        public User(String userName, String email) {
+        this.username = userName;
+        this.email = email;
+        this.polls = new ArrayList<>();
+        this.votes = new ArrayList<>();
+        this.role = Roles.NORMAL;
+        this.password = "password";
+
     }
 
     @Override
@@ -111,5 +132,48 @@ public class User {
         }
         return hasVoted;
 
+    }
+
+     public enum Roles implements GrantedAuthority {
+        NORMAL,
+        PRIVILEGED;
+
+        @Override
+        public String getAuthority() {
+            return name();
+        }
+    }
+
+    @Override
+    public void eraseCredentials() {
+        this.password = null; 
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Arrays.asList(this.role);
+    }
+
+    @Override
+    public String getPassword() {
+        return password; 
+    }
+    
+
+    public Roles getRole() {
+        return role;
+    }
+
+    public void setRole(Roles role) {
+        this.role = role;
+    }
+
+    public void setPassword(String password){
+        this.password = password; 
+}
+
+    @Override
+    public String getUsername() {
+        return username; 
     }
 }

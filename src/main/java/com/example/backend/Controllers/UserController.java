@@ -3,6 +3,7 @@ package com.example.backend.Controllers;
 import java.util.Collection;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -33,13 +34,23 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest) {
+
         try {
             User user = pollManager.addUserFromRequest(userRequest);
+            if (user.getRole() == null ) {  
+            user.setRole(User.Roles.NORMAL);}
             return ResponseEntity.ok(user);
-        } catch (Exception e) {
+            }
+            catch (Exception e) {
             return ResponseEntity.badRequest().build();
-        }
+        
     }
+    }
+
+        
+     
+
+    
 
     @GetMapping
     public Collection<User> getUsers() {
