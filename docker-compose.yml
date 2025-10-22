@@ -23,6 +23,7 @@ services:
     build: 
       context: .
       dockerfile: docker/backend.dockerfile
+    image: magnussletten/pollservice:latest 
     ports:
       - "8080:8080"
     environment:
