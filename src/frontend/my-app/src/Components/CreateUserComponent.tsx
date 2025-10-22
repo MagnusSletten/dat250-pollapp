@@ -1,14 +1,14 @@
 import { use, useState } from "react";
+import { BACKEND_URL } from './Constants/constants.js';
 
 export default function CreateUserComponent (){
     const [userName, setUsername] = useState("");
     const [password, setPassword] = useState(""); 
     const [email, setEmail] = useState("");
-    const url = "http://localhost:8080/users"
     const [message,setMessage] = useState("");
 
     const sendUser = async () =>{ 
-      const res = await fetch(url, {
+      const res = await fetch(BACKEND_URL+"/users", {
       method: 'POST',
       headers: {
         Accept: 'application/json',

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { BACKEND_URL } from './Constants/constants.js';
 
 type LogInProps = {
   userName: string;
@@ -26,7 +27,7 @@ export default function LogInComponent({
         password: password,
       });
       
-      const res = await fetch(url+"/users/auth/login", {
+      const res = await fetch(BACKEND_URL+"/users/auth/login", {
         method: "POST",
         credentials: "include", // send session cookie (JSESSIONID)
         headers: {

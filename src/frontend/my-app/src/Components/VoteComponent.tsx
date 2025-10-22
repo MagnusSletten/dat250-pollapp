@@ -1,10 +1,10 @@
 import { useState } from "react"
 import { Vote, VoteOption, VoteOptions } from "./Model/Poll";
+import { BACKEND_URL } from './Constants/constants.js';
 
 export default function VotePoll({userName}: {userName:string}){
     const [pollID, setPollID] = useState(1);
-    const url = 'http://localhost:8080/polls/'
-    const voteUrl = url+pollID+"/votes"
+    const url = BACKEND_URL + "/polls"
     const [pollJson, setPollJson] = useState(null);
     const [pollOptions, setPollOptions] = useState<VoteOptions>();
     const [votes,setVotes] = useState([])

@@ -1,7 +1,7 @@
 import { useRef, useState,  } from 'react';
 import { Poll } from "./Model/Poll"; 
 import PollCreateView from './PollCreateView'
-
+import { BACKEND_URL } from './Constants/constants.js';
 
 
 function CreatePoll({  userName,
@@ -23,7 +23,7 @@ function CreatePoll({  userName,
     .find(c => c.startsWith(name + '='))?.split('=')[1] ?? '';
 
   const sendPoll = async () => {
-    const url = 'http://localhost:8080';
+  
 
     
     try {
@@ -34,7 +34,7 @@ function CreatePoll({  userName,
     console.log(xsrf)
     if (!xsrf) throw new Error('No XSRF-TOKEN cookie present');
       
-    const res = await fetch(url+'/polls', {
+    const res = await fetch(BACKEND_URL+'/polls', {
       method: 'POST',
       credentials: 'include', // sends cookies automatically
       headers: {
