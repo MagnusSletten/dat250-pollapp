@@ -14,7 +14,6 @@ export class Poll {
         
     }
 
-
     setCreator(creator:string){
         this.creator = creator; 
     }

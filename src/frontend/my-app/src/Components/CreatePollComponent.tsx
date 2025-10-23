@@ -68,6 +68,13 @@ function CreatePoll({  userName,
 
   )
   }
+  else{
+    return(
+      <div className='Login-message'>
+      <h3>Login To Create A Poll</h3>
+      </div>
+    )
+  }
 
 }
 

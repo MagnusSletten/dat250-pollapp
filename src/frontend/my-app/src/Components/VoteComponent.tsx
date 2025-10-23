@@ -5,13 +5,21 @@ import { BACKEND_URL } from './Constants/constants.js';
 export default function VotePoll({userName}: {userName:string}){
     const [pollID, setPollID] = useState(1);
     const url = BACKEND_URL + "/polls/"+pollID+"/votes"
+    const [error, setError] = useState<string | null>(null);
     const [pollJson, setPollJson] = useState(null);
     const [pollOptions, setPollOptions] = useState<VoteOptions>();
     const [votes,setVotes] = useState([])
     const [pollTitle, setPolltitle] = useState("")
     const [pollQuestion, setPollQuestion] = useState("")
    
+
+    const getVotes = async () => {
+        const res = await fetch(url+"/results");
+        const data = await res.json(); 
+        setVotes(data);
+        }
     const vote = async(presentationOrder:number) =>{
+        try{
         const vote:Vote = new Vote(presentationOrder,pollID, null)
         if(userName){
             vote.userName = userName; 
@@ -30,15 +38,16 @@ export default function VotePoll({userName}: {userName:string}){
             'X-XSRF-TOKEN': xsrf,
         },
         body: JSON.stringify(vote.toJSON())});
-        getVotes()
+        getVotes();
         }
-        const getVotes = async () => {
-        const res = await fetch(url+"/results");
-        const data = await res.json(); 
-        setVotes(data);
-        };
-
+        catch(e: any){
+        setError("Error voting");
+       }
+    }
+ 
     const  getPoll = async() =>{
+       setError("")
+       try {
        const res = await fetch(BACKEND_URL+"/polls/"+pollID);
        const data = await res.json();
        const voteoptions = new VoteOptions().fromJSON(data.options);
@@ -50,9 +59,12 @@ export default function VotePoll({userName}: {userName:string}){
        setPollID(data.id)
        getVotes();
        setPollQuestion(data.question);
-        }
+       }
+       catch(e: any){
+        setError("Error fetching poll with id"+pollID);
+       }
+    }
 
-    
     const createOptionButtons = () => {
         return(
             <div className="voteOptionsBox">
@@ -85,6 +97,7 @@ export default function VotePoll({userName}: {userName:string}){
             >
             Get Poll
             </button>
+            <h3>{error}</h3>
             {pollJson && (
             <>
             <h2>{pollTitle}</h2>
