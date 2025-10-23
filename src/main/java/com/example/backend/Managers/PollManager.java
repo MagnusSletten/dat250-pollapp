@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
-
 import org.springframework.stereotype.Component;
 
 import com.example.backend.Cache.LoginStatusCache;
@@ -36,7 +35,7 @@ public class PollManager implements Listener {
     private final VoteCache voteCache;
     private final PollBroker broker;
     private final LoginStatusCache loginCache;
-    private final SecurityConfig securityConfig; 
+    private final SecurityConfig securityConfig;
 
     @Transactional
     public Poll addPollFromRequest(PollRequest pollRequest) throws NoSuchElementException {
@@ -86,13 +85,13 @@ public class PollManager implements Listener {
         return user;
     }
 
-    public Boolean matchUserPasswords(UserRequest userRequest){
-        try{
-        return securityConfig.passwordEncoder().matches(userRequest.getPassword(), getUser(userRequest.getUsername()).get().getPassword());
-        }
-        catch(Exception e){
+    public Boolean matchUserPasswords(UserRequest userRequest) {
+        try {
+            return securityConfig.passwordEncoder().matches(userRequest.getPassword(),
+                    getUser(userRequest.getUsername()).get().getPassword());
+        } catch (Exception e) {
             System.out.println(e);
-            return false; 
+            return false;
 
         }
     }
@@ -142,6 +141,7 @@ public class PollManager implements Listener {
         } else {
             Vote vote2 = voteRepo.findByPollIdAndVoterId(id, user.getId());
             vote2.setVotesOn(vote.getVotesOn());
+            vote = vote2;
             poll.changeVote(vote2);
             user.addVote(vote2);
 
@@ -211,12 +211,12 @@ public class PollManager implements Listener {
 
     }
 
-    public void login(User user){
-    
+    public void login(User user) {
+
         loginCache.logIn(user);
     }
 
-    public void logout(User user){
+    public void logout(User user) {
         loginCache.logOut(user);
     }
 

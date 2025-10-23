@@ -7,7 +7,6 @@ import com.example.backend.Model.Vote.Vote;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceConfiguration;
@@ -18,11 +17,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-
 public class PollsTest {
 
     private EntityManagerFactory emf;
-
 
     private void populate(EntityManager em) {
         User alice = new User("alice", "alice@online.com");
@@ -47,15 +44,11 @@ public class PollsTest {
 
     @BeforeEach
     public void setUp() {
-        EntityManagerFactory emf = new PersistenceConfiguration("polls")
-                .managedClass(Poll.class)
-                .managedClass(User.class)
-                .managedClass(Vote.class)
-                .managedClass(VoteOption.class)
+        EntityManagerFactory emf = new PersistenceConfiguration("polls").managedClass(Poll.class)
+                .managedClass(User.class).managedClass(Vote.class).managedClass(VoteOption.class)
                 .property(PersistenceConfiguration.JDBC_URL, "jdbc:h2:mem:polls")
                 .property(PersistenceConfiguration.SCHEMAGEN_DATABASE_ACTION, "drop-and-create")
-                .property(PersistenceConfiguration.JDBC_USER, "sa")
-                .property(PersistenceConfiguration.JDBC_PASSWORD, "")
+                .property(PersistenceConfiguration.JDBC_USER, "sa").property(PersistenceConfiguration.JDBC_PASSWORD, "")
                 .createEntityManagerFactory();
         emf.runInTransaction(em -> {
             populate(em);
@@ -66,10 +59,12 @@ public class PollsTest {
     @Test
     public void testUsers() {
         emf.runInTransaction(em -> {
-            Integer actual = (Integer) em.createNativeQuery("select count(id) from users", Integer.class).getSingleResult();
+            Integer actual = (Integer) em.createNativeQuery("select count(id) from users", Integer.class)
+                    .getSingleResult();
             assertEquals(3, actual);
 
-            User maybeBob = em.createQuery("select u from User u where u.username like 'bob'", User.class).getSingleResultOrNull();
+            User maybeBob = em.createQuery("select u from User u where u.username like 'bob'", User.class)
+                    .getSingleResultOrNull();
             assertNotNull(maybeBob);
         });
     }
@@ -77,8 +72,12 @@ public class PollsTest {
     @Test
     public void testVotes() {
         emf.runInTransaction(em -> {
-            Long vimVotes = em.createQuery("select count(v) from Vote v join v.votesOn as o join o.poll as p join p.createdBy u where u.email = :mail and o.presentationOrder = :order", Long.class).setParameter("mail", "alice@online.com").setParameter("order", 0).getSingleResult();
-            Long emacsVotes = em.createQuery("select count(v) from Vote v join v.votesOn as o join o.poll as p join p.createdBy u where u.email = :mail and o.presentationOrder = :order", Long.class).setParameter("mail", "alice@online.com").setParameter("order", 1).getSingleResult();
+            Long vimVotes = em.createQuery(
+                    "select count(v) from Vote v join v.votesOn as o join o.poll as p join p.createdBy u where u.email = :mail and o.presentationOrder = :order",
+                    Long.class).setParameter("mail", "alice@online.com").setParameter("order", 0).getSingleResult();
+            Long emacsVotes = em.createQuery(
+                    "select count(v) from Vote v join v.votesOn as o join o.poll as p join p.createdBy u where u.email = :mail and o.presentationOrder = :order",
+                    Long.class).setParameter("mail", "alice@online.com").setParameter("order", 1).getSingleResult();
             assertEquals(2, vimVotes);
             assertEquals(1, emacsVotes);
         });
@@ -87,7 +86,9 @@ public class PollsTest {
     @Test
     public void testOptions() {
         emf.runInTransaction(em -> {
-            List<String> poll2Options = em.createQuery("select o.caption from Poll p join p.options o join p.createdBy u where u.email = :mail order by o.presentationOrder", String.class).setParameter("mail", "eve@mail.org").getResultList();
+            List<String> poll2Options = em.createQuery(
+                    "select o.caption from Poll p join p.options o join p.createdBy u where u.email = :mail order by o.presentationOrder",
+                    String.class).setParameter("mail", "eve@mail.org").getResultList();
             List<String> expected = Arrays.asList("Yes! Yammy!", "Mamma mia: Nooooo!");
             assertEquals(expected, poll2Options);
         });

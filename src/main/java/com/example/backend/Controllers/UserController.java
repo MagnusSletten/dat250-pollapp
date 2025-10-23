@@ -37,20 +37,15 @@ public class UserController {
 
         try {
             User user = pollManager.addUserFromRequest(userRequest);
-            if (user.getRole() == null ) {  
-            user.setRole(User.Roles.NORMAL);}
-            return ResponseEntity.ok(user);
+            if (user.getRole() == null) {
+                user.setRole(User.Roles.NORMAL);
             }
-            catch (Exception e) {
+            return ResponseEntity.ok(user);
+        } catch (Exception e) {
             return ResponseEntity.badRequest().build();
-        
-    }
-    }
 
-        
-     
-
-    
+        }
+    }
 
     @GetMapping
     public Collection<User> getUsers() {

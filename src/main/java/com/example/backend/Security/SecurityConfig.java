@@ -40,40 +40,36 @@ public class SecurityConfig {
 SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     var repo = CookieCsrfTokenRepository.withHttpOnlyFalse();
     repo.setHeaderName("X-XSRF-TOKEN");
-    repo.setCookieCustomizer(c -> c.path("/").sameSite("Lax")); 
+    repo.setCookieCustomizer(c -> c.path("/polling").sameSite("Lax"));
 
     var requestHandler = new CsrfTokenRequestAttributeHandler();
-    requestHandler.setCsrfRequestAttributeName("_csrf"); 
+    requestHandler.setCsrfRequestAttributeName("_csrf");
 
     return http
         .cors(Customizer.withDefaults())
-        //csrf protection
         .csrf(csrf -> csrf
             .csrfTokenRepository(repo)
-            .csrfTokenRequestHandler(requestHandler) 
+            .csrfTokenRequestHandler(requestHandler)
             .ignoringRequestMatchers(
-                request -> request.getRequestURI().startsWith("/users/auth/"),
-                request -> request.getRequestURI().startsWith("/auth/csrf"),
-                request -> request.getRequestURI().equals("/users") && "POST".equals(request.getMethod())
+                req -> req.getRequestURI().startsWith("/polling/backend/users/auth/"),
+                req -> req.getRequestURI().startsWith("/polling/backend/auth/csrf"),
+                req -> req.getRequestURI().equals("/polling/backend/users") && "POST".equals(req.getMethod())
             )
         )
-        //Session based security, related to logins
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-            .requestMatchers("/users/auth/**").permitAll()
-            .requestMatchers("/auth/csrf").permitAll()
-            .requestMatchers(HttpMethod.GET, "/polls/**").permitAll()
-            .requestMatchers(HttpMethod.POST, "/users").permitAll()
-            .requestMatchers(HttpMethod.POST, "/polls/**").authenticated()
-            
+            .requestMatchers("/polling/backend/users/auth/**").permitAll()
+            .requestMatchers("/polling/backend/auth/csrf").permitAll()
+            .requestMatchers(HttpMethod.GET,  "/polling/backend/polls/**").permitAll()
+            .requestMatchers(HttpMethod.POST, "/polling/backend/users").permitAll()
+            .requestMatchers(HttpMethod.POST, "/polling/backend/polls/**").authenticated()
+            .anyRequest().permitAll()
         )
         .formLogin(f -> f
             .loginProcessingUrl("/users/auth/login")
             .successHandler((req, res, auth) -> {
                 CsrfToken token = (CsrfToken) req.getAttribute(CsrfToken.class.getName());
-                if (token != null) {
-                    res.setHeader(token.getHeaderName(), token.getToken());
-                }
+                if (token != null) res.setHeader(token.getHeaderName(), token.getToken());
                 res.setStatus(HttpServletResponse.SC_OK);
             })
             .failureHandler((req, res, ex) -> res.setStatus(401))
@@ -82,11 +78,10 @@ SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         .build();
 }
 
-// Allow our frontend to read backend responses 
 @Bean
 CorsConfigurationSource corsConfigurationSource() {
   var cfg = new CorsConfiguration();
-  cfg.setAllowedOrigins(List.of("http://localhost:5173", "https://magnus-demo-project.com")); 
+  cfg.setAllowedOrigins(List.of("http://localhost:5173", "https://magnus-demo-project.com"));
   cfg.setAllowedMethods(List.of("GET","POST","PUT","PATCH","DELETE","OPTIONS"));
   cfg.setAllowedHeaders(List.of("Content-Type","X-XSRF-TOKEN","Authorization","X-Requested-With"));
   cfg.setAllowCredentials(true);
@@ -94,8 +89,6 @@ CorsConfigurationSource corsConfigurationSource() {
   source.registerCorsConfiguration("/**", cfg);
   return source;
 }
-
-
 // User validation
 @Bean
 public UserDetailsService userDetailsService(UserRepository userRepository) {

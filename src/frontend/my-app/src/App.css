@@ -134,26 +134,8 @@ button.page-state-button { min-width: 9.5em; }
 .downvote { background: var(--accent); }
 .downvote:hover { background: var(--accent-hover); }
 
-.voteOptionsBox {
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 14px;
-  box-shadow: var(--shadow);
-  margin: 1.5rem 0;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.option-box {
-  width: 100%;
-  display: grid;
-  gap: 10px;
-  padding: 12px;
-  background: var(--muted);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-}
+
+
 .top { display: flex; gap: 12px; }
 .title {
   font-size: 1.6rem;
@@ -162,52 +144,6 @@ button.page-state-button { min-width: 9.5em; }
   background: transparent;
   border: none;
   color: var(--text);
-}
-.pollButtonBox {
-  padding-left: 1rem;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 12px;
-  width: 20%;
-  min-width: 220px;
-  display: flex;
-  justify-content: space-between;
-}
-
-.login-form {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  box-shadow: var(--shadow);
-  max-width: 440px;
-  margin: 0 auto;
-  padding: 20px;
-  text-align: center;
-}
-.login-form h2 { margin-bottom: 12px; }
-.login-form input { margin: 10px 0; }
-.login-form p { margin-top: 14px; font-size: 0.95em; color: var(--text-muted); }
-.login-form p button {
-  background: none;
-  border: none;
-  color: var(--primary);
-  font-weight: 600;
-  cursor: pointer;
-  padding: 0;
-}
-.login-form p button:hover { text-decoration: underline; }
-
-.login-status {
-  margin-top: 1rem;
-  text-align: right;
-  color: var(--text);
-}
-.Login-message {
-  text-align: center;
-  margin-top: 2rem;
-  color: var(--text-muted);
-  font-size: 1.2rem;
-  font-weight: 500;
 }
 
 .Title {
@@ -222,4 +158,63 @@ button.page-state-button { min-width: 9.5em; }
   color: var(--primary);
   letter-spacing: 0.5px;
   text-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+.poll-form {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.voteOptionsBox,
+.option-box {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.poll-form input[type="text"],
+.poll-form input[type="search"],
+.poll-form input[type="number"],
+.poll-form textarea {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.poll-form button {
+  margin-top: 12px;
+  border-radius: 10px;
+}
+
+.poll-form > * + * { margin-top: 16px; }
+
+.voteOption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  border-bottom: 1px dashed var(--border);
+}
+.voteOption:last-child { border-bottom: 0; }
+
+.button-row,
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.poll-form h2 { margin: 0 0 8px; }
+
+.actions button { min-width: 120px; }
+
+.login-status {
+  margin-top: 12px;
+  text-align: right;
 }

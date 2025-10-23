@@ -16,7 +16,11 @@ public class RedisVoteCache implements VoteCache {
     UnifiedJedis jedis = new UnifiedJedis("redis://" + host + ":" + port);
 
     public void setVotes(Poll poll) {
-        jedis.hset(poll.getId().toString(), poll.countVotesByPresentationOrderString());
+        Map<String, String> votes = poll.countVotesByPresentationOrderString();
+        if (votes == null || votes.isEmpty()) {
+            return;
+        }
+        jedis.hset(poll.getId().toString(), votes);
         jedis.expire(poll.getId().toString(), 20 * 60);
     }
 

@@ -20,12 +20,6 @@ export default function PollCreateView({ poll }: { poll: Poll }) {
   return (
     <div className="Poll">
     <>
-      <div className="top">
-      <button
-      onClick={e => setShowJSON(!showJSON)}
-      className="button-json"
-      >ShowJson</button>
-      </div>
       {!showJSON && (
         <>
         <input
@@ -51,12 +45,20 @@ export default function PollCreateView({ poll }: { poll: Poll }) {
         </>  
     )
      }
+     
     {showJSON && (
       <pre>
     {JSON.stringify(poll.toJSON(), null, 2)}
       </pre>
 
        )}
+
+    <div className="top">
+      <button
+      onClick={e => setShowJSON(!showJSON)}
+      className="button-json"
+      >ShowJson</button>
+      </div>
    
 </>
 </div>

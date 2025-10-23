@@ -12,7 +12,7 @@ export default function App() {
 return (
   <>
   <div className="Title">
-    <h1>Welcome to out polling app</h1>
+    <h1>Welcome to our polling app</h1>
   </div>
   <div className="app-container">
  
