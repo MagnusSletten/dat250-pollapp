@@ -22,7 +22,7 @@ export default function CreateUserComponent (){
         }
       )});
       if(res.ok){
-        setMessage(await res.text())
+        setMessage("User sent successfully")
       }
     }
 
