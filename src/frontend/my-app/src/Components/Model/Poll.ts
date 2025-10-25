@@ -1,56 +1,68 @@
 import { use } from "react";
 
-export class Poll { 
-    title: string
-    question: string
-    voteOptions : VoteOptions
-    creator: string; 
+export class Poll {
+  title: string;
+  question: string;
+  voteOptions: VoteOptions;
+  creator: string;
+  publishedAt: string;   
+  validUntil: string;   
+  constructor() {
+    this.title = "";
+    this.question = "";
+    this.voteOptions = new VoteOptions();
+    this.creator = "";
+    const now = new Date();
+    this.publishedAt = now.toISOString();
+    this.validUntil = new Date(now.getTime() + 60 * 15 * 1000).toISOString();}
 
-    constructor(){
-        this.question = "";
-        this.voteOptions = new VoteOptions()
-        this.title = "";
-        this.creator = ""
-        
-    }
+  setCreator(creator: string) {
+    this.creator = creator;
+  }
 
-    setCreator(creator:string){
-        this.creator = creator; 
-    }
-    getCreator(){
-        return this.creator; 
-    }
+  getCreator() {
+    return this.creator;
+  }
 
-    setTitle(name: string){
-        this.title = name; 
-    }
-    getTitle(){
-        return this.title;
-    }
+  setTitle(name: string) {
+    this.title = name;
+  }
 
-    setQuestion(question: string){
-        this.question = question; 
-    }
+  getTitle() {
+    return this.title;
+  }
 
-    getQuestion(){
-        return this.question; 
-    }
-    getVoteOptions(){
-        return this.voteOptions;
-    }
+  setQuestion(question: string) {
+    this.question = question;
+  }
 
-    toJSON(){
- 
-        const pollJson = {
-            "title": this.title,
-            "question": this.question,
-            "voteOptions": this.voteOptions.toJSON().pollOptions,
-            "creator": this.getCreator()
-        }
-        return pollJson; 
-    }
-}  
+  getQuestion() {
+    return this.question;
+  }
 
+  getVoteOptions() {
+    return this.voteOptions;
+  }
+
+  setPublishedAt(date: Date) {
+    this.publishedAt = date.toISOString();
+  }
+
+  setValidUntil(date: Date) {
+    this.validUntil = date.toISOString();
+  }
+
+  toJSON() {
+    return {
+      title: this.title,
+      question: this.question,
+      voteOptions: this.voteOptions.toJSON().pollOptions,
+      creator: this.creator,
+      publishedAt: this.publishedAt,
+      validUntil: this.validUntil,
+    };
+  }
+}
 
 
 export class VoteOptions{

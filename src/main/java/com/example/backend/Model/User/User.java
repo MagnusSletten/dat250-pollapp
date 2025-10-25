@@ -26,6 +26,7 @@ import lombok.ToString;
 import org.springframework.security.core.CredentialsContainer;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
 @Data
 @NoArgsConstructor
 @ToString(exclude = { "polls", "votes", "password" }) // ✅ exclude lazy + sensitive fields
@@ -46,7 +47,7 @@ public class User implements UserDetails, CredentialsContainer {
     @OneToMany(mappedBy = "voter", orphanRemoval = true)
     private List<Vote> votes = new ArrayList<>();
     private String password;
-    private Roles role = Roles.NORMAL; 
+    private Roles role = Roles.NORMAL;
 
     public User(String userName, String email, String password) {
         this.username = userName;
@@ -57,7 +58,7 @@ public class User implements UserDetails, CredentialsContainer {
 
     }
 
-        public User(String userName, String email) {
+    public User(String userName, String email) {
         this.username = userName;
         this.email = email;
         this.polls = new ArrayList<>();
@@ -134,9 +135,8 @@ public class User implements UserDetails, CredentialsContainer {
 
     }
 
-     public enum Roles implements GrantedAuthority {
-        NORMAL,
-        PRIVILEGED;
+    public enum Roles implements GrantedAuthority {
+        NORMAL, Admin;
 
         @Override
         public String getAuthority() {
@@ -146,7 +146,7 @@ public class User implements UserDetails, CredentialsContainer {
 
     @Override
     public void eraseCredentials() {
-        this.password = null; 
+        this.password = null;
     }
 
     @Override
@@ -156,9 +156,8 @@ public class User implements UserDetails, CredentialsContainer {
 
     @Override
     public String getPassword() {
-        return password; 
+        return password;
     }
-    
 
     public Roles getRole() {
         return role;
@@ -168,12 +167,12 @@ public class User implements UserDetails, CredentialsContainer {
         this.role = role;
     }
 
-    public void setPassword(String password){
-        this.password = password; 
-}
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     @Override
     public String getUsername() {
-        return username; 
+        return username;
     }
 }

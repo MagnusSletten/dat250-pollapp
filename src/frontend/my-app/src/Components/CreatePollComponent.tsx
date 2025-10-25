@@ -4,6 +4,11 @@ import PollCreateView from './PollCreateView'
 import { BACKEND_URL } from './Constants/constants.js';
 
 
+
+ export const getCookieRaw = (name: string) =>
+  document.cookie.split('; ')
+    .find(c => c.startsWith(name + '='))?.split('=')[1] ?? '';
+
 function CreatePoll({  userName,
   loginStatus,
 }: {
@@ -18,9 +23,7 @@ function CreatePoll({  userName,
     pollRef.current.setCreator(userName)
   } 
 
-  const getCookieRaw = (name: string) =>
-  document.cookie.split('; ')
-    .find(c => c.startsWith(name + '='))?.split('=')[1] ?? '';
+
 
   const sendPoll = async () => {
   

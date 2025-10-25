@@ -17,6 +17,9 @@
 
   --input-bg:#f0fdfa;     
   --input-border:#99f6e4; 
+
+  --delete:#f87171;        
+  --delete-hover:#dc6b6b;  
 }
 
 html, body {
@@ -217,4 +220,31 @@ button.page-state-button { min-width: 9.5em; }
 .login-status {
   margin-top: 12px;
   text-align: right;
+}
+
+.poll-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.poll-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.delete-button {
+  background-color: var(--delete);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 2px 6px;
+  margin: 0.5rem;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+   background-color: var(--delete-hover);
 }

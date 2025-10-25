@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.Managers.PollManager;
+import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.User.User;
 import com.example.backend.Model.User.UserRequest;
 
@@ -31,6 +32,7 @@ public class UserController {
     public User getUser(@PathVariable("userName") String userName) {
         return pollManager.getUser(userName).get();
     }
+
 
     @PostMapping
     public ResponseEntity<User> addUser(@RequestBody UserRequest userRequest) {

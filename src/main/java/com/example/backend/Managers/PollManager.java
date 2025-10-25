@@ -1,5 +1,6 @@
 package com.example.backend.Managers;
 
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -77,6 +78,16 @@ public class PollManager implements Listener {
 
     }
 
+    public List<Poll> getPollsByUserName(String username){
+        return pollRepo.findByCreatedByUsername(username);
+
+    }
+    public List<Poll> getPolls(){
+        return pollRepo.findAll(); 
+
+    }
+
+
     @Transactional
     public User addUserFromRequest(UserRequest userRequest) throws Exception {
         User user = userRequest.toUser();
@@ -129,7 +140,12 @@ public class PollManager implements Listener {
     public Vote addVoteWithUser(VoteRequest request) {
         User user = userRepo.findByUsername(request.getUserName()).get();
         Integer id = request.getPollId();
+        
         Poll poll = getPoll(id).get();
+        Instant now = Instant.now();
+        if (now.isBefore(poll.getPublishedAt()) || now.isAfter(poll.getValidUntil())) {
+        throw new IllegalStateException("Voting is closed for this poll");
+    }
         if (voteCache.isCached(poll)) {
             voteCache.removeVotes(poll);
         }
@@ -219,5 +235,7 @@ public class PollManager implements Listener {
     public void logout(User user) {
         loginCache.logOut(user);
     }
+
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.backend.Model.Poll;
 
 import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,8 +35,8 @@ public class Poll {
     private String question;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll", orphanRemoval = true)
     private List<VoteOption> options = new ArrayList<>();
-    private Instant publishedAt;
-    private Instant validUntil;
+    private Instant publishedAt = Instant.now();
+    private Instant validUntil = Instant.now().plus(15, ChronoUnit.MINUTES);
     @JsonIdentityReference(alwaysAsId = true)
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "poll", orphanRemoval = true)
     private List<Vote> votes = new ArrayList<>();

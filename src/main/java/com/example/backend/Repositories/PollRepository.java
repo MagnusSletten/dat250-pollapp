@@ -13,4 +13,6 @@ public interface PollRepository extends JpaRepository<Poll, Integer> {
     List<Poll> findByTitleContainingIgnoreCase(String titlePart);
 
     Optional<Poll> findTopByOrderByIdDesc();
+
+    List<Poll> findByCreatedByUsername(String username);
 }

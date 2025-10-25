@@ -19,8 +19,8 @@ return (
     <div className="topbar">
       <div className="login-box">
         <button className="page-state-button" onClick={() => setPageState(0)}>
-          Login
-        </button>
+        { loginStatus ? "User profile" : "Log in"}
+      </button>
       </div>
     </div>
 
@@ -40,6 +40,7 @@ return (
           userName={userName}
           setLoginStatus={setLoginStatus}
           setUsername={setUsername}
+          loginStatus={loginStatus}
         />
       ) : (
         <CreateUserComponent />
