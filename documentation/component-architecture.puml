@@ -2,7 +2,7 @@
 
 node "External\nClients" as mu
 node "PollService" {
-node "Nginx" as nginx
+component "Nginx" as nginx
 component "Web UI\n(React)" as ui
 interface HTTP
 component "REST API\n(Spring Web MVC)" as api
