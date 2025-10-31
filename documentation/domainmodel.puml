@@ -12,7 +12,6 @@ component pollservice{
 ru --> (Login)
 Admin --> (Login)
 ru --> (Vote)
-Admin --> (Vote)
 ur --> (Vote)
 Admin --> (User Management)
 @enduml

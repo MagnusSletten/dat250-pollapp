@@ -1,12 +1,15 @@
 @startuml Architechture
 
 node "External\nClients" as mu
+interface HTTPS
 node "PollService" {
 component "Nginx" as nginx
 component "Web UI\n(React)" as ui
 interface HTTP
 component "REST API\n(Spring Web MVC)" as api
 
+nginx -right-HTTPS
+nginx -down- ui
 api -up- HTTP
 HTTP -right- nginx
 component "Business Logic(Poll Manager)" as dom
@@ -24,8 +27,7 @@ dom --> msg : messaging
 api -left-> redis : vote-cache
 
 actor "End Users"  as ru
-nginx <.> ru  
-ui <.> nginx 
+HTTPS <.> ru  
 mu <.down.> nginx
 mu .> msg
 @enduml
