@@ -23,12 +23,8 @@ function CreatePoll({  userName,
     pollRef.current.setCreator(userName)
   } 
 
-
-
   const sendPoll = async () => {
-  
 
-    
     try {
       setCreator()
       const raw = document.cookie.split('; ')
@@ -47,7 +43,7 @@ function CreatePoll({  userName,
       },
       body: JSON.stringify(pollRef.current.toJSON()),
     });
-      setResponse(await res.text()); 
+      setResponse("Poll Sent Successfully"); 
       }
       catch(error:unknown){
         if(error instanceof Error){

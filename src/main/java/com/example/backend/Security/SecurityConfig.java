@@ -57,7 +57,7 @@ SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         )
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.GET, "/users")
-            .hasAuthority("Admin")
+            .hasAuthority("ADMIN")
             .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
             .requestMatchers("/users/auth/**").permitAll()
             .requestMatchers("/auth/csrf").permitAll()

@@ -136,7 +136,7 @@ public class User implements UserDetails, CredentialsContainer {
     }
 
     public enum Roles implements GrantedAuthority {
-        NORMAL, Admin;
+        NORMAL, ADMIN;
 
         @Override
         public String getAuthority() {

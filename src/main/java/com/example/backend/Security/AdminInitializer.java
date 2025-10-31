@@ -8,7 +8,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.example.backend.Model.User.User;
 import com.example.backend.Repositories.UserRepository;
 
-
 @Configuration
 public class AdminInitializer {
 
@@ -27,7 +26,7 @@ public class AdminInitializer {
                 User admin = new User();
                 admin.setUsername(adminUsername);
                 admin.setPassword(passwordEncoder.encode(envPassword));
-                admin.setRole(User.Roles.Admin); 
+                admin.setRole(User.Roles.ADMIN);
                 userRepository.save(admin);
                 System.out.println("Admin user created: username=" + adminUsername);
             } else {

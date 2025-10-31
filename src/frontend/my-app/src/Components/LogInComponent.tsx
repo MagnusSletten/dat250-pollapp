@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { BACKEND_URL } from './Constants/constants.js';
 import {getCookieRaw} from './CreatePollComponent.js'
 
@@ -17,6 +17,7 @@ export default function LogInComponent({
   loginStatus
 }: LogInProps) {
   const [password, setPassword] = useState("");
+  const [admin, setAdmin] = useState(false)
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [polls, setPolls] = useState<any[]>([]);
@@ -31,7 +32,7 @@ const fetchUsers = async () => {
     const xsrf = getCookieRaw('XSRF-TOKEN');
 
     const res = await fetch(`${BACKEND_URL}/users`, {
-      credentials: "include", // send JSESSIONID
+      credentials: "include", 
       headers: {
          'X-XSRF-TOKEN': xsrf,   
       }     
@@ -68,6 +69,16 @@ const fetchUsers = async () => {
         },
         body: body.toString(),
       });
+       const roleRes = await fetch(`${BACKEND_URL}/users/me/role`, {
+      credentials: "include",
+      });
+      if (!roleRes.ok) throw new Error("Could not fetch role");
+
+      const role = await roleRes.json();
+      if (role === "ADMIN") {
+        setAdmin(true);
+      }
+            
 
       if (!res.ok) throw new Error(`Login failed (${res.status})`);
       await fetch(`${BACKEND_URL}/auth/csrf`, { credentials: "include" });
@@ -161,9 +172,11 @@ return (
       )}
     </div>
     <div style={{ marginTop: "1rem" }}>
+  {admin &&(
   <button className="pollButton" onClick={fetchUsers}>
     Show Users (admin)
   </button>
+  )}
   {showUsers && (
     <ul className="poll-list" style={{ marginTop: "0.5rem" }}>
       {users.map(u => (

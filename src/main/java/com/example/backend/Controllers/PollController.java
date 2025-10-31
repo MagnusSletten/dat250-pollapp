@@ -1,6 +1,7 @@
 package com.example.backend.Controllers;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.backend.Managers.PollManager;
+import com.example.backend.Model.Poll.BasicPollInfoDto;
 import com.example.backend.Model.Poll.Poll;
 import com.example.backend.Model.Poll.PollDTO;
 
@@ -51,11 +53,15 @@ public class PollController {
     }
 
     @GetMapping("/{pollID}")
-    public Poll getPoll(@PathVariable("pollID") Integer pollID) throws Exception {
+    public ResponseEntity<Poll> getPoll(@PathVariable("pollID") Integer pollID) throws Exception {
         try {
-            return manager.getPoll(pollID).get();
+            Optional<Poll> poll = manager.getPoll(pollID);
+            if(manager.getPoll(pollID).isPresent()){
+                return  ResponseEntity.ok(poll.get()); 
+            }
+            else return ResponseEntity.notFound().build();
         } catch (Exception e) {
-            throw e;
+           return ResponseEntity.internalServerError().build(); 
         }
 
     }
@@ -70,5 +76,18 @@ public class PollController {
         }
         return ResponseEntity.ok(polls);
     }
+
+
+
+    @GetMapping("/info")
+    public ResponseEntity<List<BasicPollInfoDto>> getPollInfo() {
+        
+        List<BasicPollInfoDto> pollInfo = manager.getBasicPollInfo(); 
+        if(!pollInfo.isEmpty()){return ResponseEntity.ok(pollInfo);}
+        else {
+            return ResponseEntity.noContent().build(); 
+        }
+    }
+
 
 }

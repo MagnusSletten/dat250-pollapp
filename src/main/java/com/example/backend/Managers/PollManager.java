@@ -14,6 +14,7 @@ import com.example.backend.Cache.VoteCache;
 import com.example.backend.MessageBrokers.Listener;
 import com.example.backend.MessageBrokers.PollBroker;
 import com.example.backend.Model.Poll.Poll;
+import com.example.backend.Model.Poll.BasicPollInfoDto;
 import com.example.backend.Model.Poll.PollDTO;
 import com.example.backend.Model.User.User;
 import com.example.backend.Model.User.UserDTO;
@@ -55,6 +56,11 @@ public class PollManager implements Listener {
     @Transactional
     public Optional<Poll> getPoll(Integer poll_id) {
         return pollRepo.findById(poll_id);
+    }
+
+    @Transactional
+    public List<BasicPollInfoDto> getBasicPollInfo() {
+        return pollRepo.findBasicPollInfo();
     }
 
     @Transactional
