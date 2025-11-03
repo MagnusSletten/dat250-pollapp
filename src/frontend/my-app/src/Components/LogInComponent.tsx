@@ -69,7 +69,18 @@ const fetchUsers = async () => {
         },
         body: body.toString(),
       });
-       const roleRes = await fetch(`${BACKEND_URL}/users/me/role`, {
+
+      if (!res.ok) throw new Error(`Login failed (${res.status})`);
+      await fetch(`${BACKEND_URL}/auth/csrf`, { credentials: "include" });
+      setLoginStatus(true);
+    } catch (e: any) {
+      setErr(e.message ?? "Login failed");
+      setLoginStatus(false);
+      return 
+    } finally {
+      setLoading(false);
+    } 
+      const roleRes = await fetch(`${BACKEND_URL}/users/me/role`, {
       credentials: "include",
       });
       if (!roleRes.ok) throw new Error("Could not fetch role");
@@ -78,17 +89,6 @@ const fetchUsers = async () => {
       if (role === "ADMIN") {
         setAdmin(true);
       }
-            
-
-      if (!res.ok) throw new Error(`Login failed (${res.status})`);
-      await fetch(`${BACKEND_URL}/auth/csrf`, { credentials: "include" });
-      setLoginStatus(true);
-    } catch (e: any) {
-      setErr(e.message ?? "Login failed");
-      setLoginStatus(false);
-    } finally {
-      setLoading(false);
-    }
   };
 
   const fetchMyPolls = async () => {
