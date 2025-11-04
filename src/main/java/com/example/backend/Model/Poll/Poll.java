@@ -94,8 +94,9 @@ public class Poll {
         Map<String, String> counts = new HashMap<>();
 
         for (Vote vote : votes) {
-            counts.put(vote.getVotesOn().getPresentationOrder().toString(),
-                    counts.getOrDefault(vote.getVotesOn().getPresentationOrder().toString(), "0") + 1);
+            String key = vote.getVotesOn().getPresentationOrder().toString();
+            int current = Integer.parseInt(counts.getOrDefault(key, "0"));
+            counts.put(key, Integer.toString(current + 1));
         }
 
         return counts;

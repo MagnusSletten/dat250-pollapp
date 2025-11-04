@@ -61,7 +61,7 @@ export default function VotePoll({ userName }: { userName: string }) {
        if(userName){
             vote.userName = userName; 
         }
-              const getCookieRaw = (name: string) =>
+        const getCookieRaw = (name: string) =>
         document.cookie.split('; ')
             .find(c => c.startsWith(name + '='))?.split('=')[1] ?? '';
         const xsrf = getCookieRaw('XSRF-TOKEN');
@@ -109,7 +109,7 @@ export default function VotePoll({ userName }: { userName: string }) {
               <div className="voteOption" key={option.optionId}>
                 <span className="caption">{option.getCaption()}</span>
                 <button onClick={() => vote(option.presentationOrder)}>vote</button>
-                <span className="voteCount">{votes[option.presentationOrder] ?? 0}</span>
+                <span className="voteCount">{votes?.[option.presentationOrder] ?? 0}</span>
               </div>
             ))}
           </div>

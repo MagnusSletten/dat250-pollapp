@@ -3,22 +3,43 @@ import CreatePollComponent from './Components/CreatePollComponent'
 import VotePollComponent from "./Components/VoteComponent";
 import LogInComponent from "./Components/LogInComponent";
 import CreateUserComponent from "./Components/CreateUserComponent";
+import { BACKEND_URL } from './Components/Constants/constants.js';
+
 
 export default function App() {
     const [pageState, setPageState] = useState(0);
     const [loginStatus, setLoginStatus] = useState(false);
     const [userName, setUsername] = useState("");
+    const logout = async () =>{
+     if (loginStatus) {
+      await fetch(`${BACKEND_URL}/users/auth/logout`, {
+        method: "POST",
+        credentials: "include"
+      });
+      setLoginStatus(false);
+      setUsername("");
+      setPageState(0);
+      await fetch(`${BACKEND_URL}/auth/csrf`, { credentials: "include" }); 
+    } else {
+      setPageState(0); 
+    }
+  }
 
     return (
         <>
             <div className="top-utility-bar">
                 <div className="auth-actions">
+                    {!loginStatus ? (
                     <button
                         className="btn-utility"
                         onClick={() => setPageState(0)}
                     >
                         { loginStatus ? "User profile" : "Log in"}
                     </button>
+                    )
+                    : <button  className="btn-utility"
+                        onClick={() => logout()}>Logout</button>
+                    }
 
                     <button
                         className="btn-utility"
@@ -59,4 +80,9 @@ export default function App() {
             </div>
         </>
     );
+
+    
+    
 }
+
+

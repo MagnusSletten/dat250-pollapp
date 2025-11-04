@@ -1,6 +1,6 @@
 import { use, useEffect, useState } from "react";
 import { BACKEND_URL } from './Constants/constants.js';
-import {getCookieRaw} from './CreatePollComponent.js'
+import { getCookieRaw } from './CreatePollComponent.js'
 
 type LogInProps = {
   userName: string;
@@ -10,7 +10,7 @@ type LogInProps = {
 };
 
 
-export default function LogInComponent({ 
+export default function LogInComponent({
   userName,
   setUsername,
   setLoginStatus,
@@ -22,40 +22,40 @@ export default function LogInComponent({
   const [err, setErr] = useState<string | null>(null);
   const [polls, setPolls] = useState<any[]>([]);
   const [showPolls, setShowPolls] = useState(false);
-  const [users, setUsers] = useState<Array<{ id:number; username:string; roles?:string[] }>>([]);
+  const [users, setUsers] = useState<Array<{ id: number; username: string; roles?: string[] }>>([]);
 
   const [showUsers, setShowUsers] = useState(false);
 
-const fetchUsers = async () => {
-  setErr(null);
-  try {
-    const xsrf = getCookieRaw('XSRF-TOKEN');
+  const fetchUsers = async () => {
+    setErr(null);
+    try {
+      const xsrf = getCookieRaw('XSRF-TOKEN');
 
-    const res = await fetch(`${BACKEND_URL}/users`, {
-      credentials: "include", 
-      headers: {
-         'X-XSRF-TOKEN': xsrf,   
-      }     
-    });
+      const res = await fetch(`${BACKEND_URL}/users`, {
+        credentials: "include",
+        headers: {
+          'X-XSRF-TOKEN': xsrf,
+        }
+      });
 
-    if (res.status === 401) throw new Error("Not logged in");
-    if (res.status === 403) throw new Error("Admin only");
-    if (!res.ok)  throw new Error(`Failed to load users (${res.status})`);
+      if (res.status === 401) throw new Error("Not logged in");
+      if (res.status === 403) throw new Error("Admin only");
+      if (!res.ok) throw new Error(`Failed to load users (${res.status})`);
 
-    const data = await res.json();
-    setUsers(data);
-    setShowUsers(true);
-  } catch (e: any) {
-    setErr(e.message ?? "Could not load users");
-    setShowUsers(false);
-  }
-};
+      const data = await res.json();
+      setUsers(data);
+      setShowUsers(true);
+    } catch (e: any) {
+      setErr(e.message ?? "Could not load users");
+      setShowUsers(false);
+    }
+  };
 
   const login = async () => {
     setErr(null);
     setLoading(true);
     try {
-      
+
       const body = new URLSearchParams({
         username: userName,
         password: password,
@@ -71,25 +71,39 @@ const fetchUsers = async () => {
       });
 
       if (!res.ok) throw new Error(`Login failed (${res.status})`);
+
       await fetch(`${BACKEND_URL}/auth/csrf`, { credentials: "include" });
-      setLoginStatus(true);
+
     } catch (e: any) {
       setErr(e.message ?? "Login failed");
       setLoginStatus(false);
-      return 
-    } finally {
-      setLoading(false);
-    } 
-      const roleRes = await fetch(`${BACKEND_URL}/users/me/role`, {
-      credentials: "include",
-      });
-      if (!roleRes.ok) throw new Error("Could not fetch role");
-
-      const role = await roleRes.json();
-      if (role === "ADMIN") {
-        setAdmin(true);
+      return
+    }
+    setLoginStatus(true);
+    try {
+      if (loginStatus) {
+        setAdminStatus()
       }
+    }
+    catch (e: any) {
+    }
+    finally {
+      setLoading(false)
+    }
+
   };
+
+  const setAdminStatus = async () => {
+    const roleRes = await fetch(`${BACKEND_URL}/users/me/role`, {
+      credentials: "include",
+    });
+    if (!roleRes.ok) throw new Error("Could not fetch role");
+
+    const role = await roleRes.json();
+    if (role === "ADMIN") {
+      setAdmin(true);
+    }
+  }
 
   const fetchMyPolls = async () => {
     try {
@@ -105,16 +119,16 @@ const fetchUsers = async () => {
     }
   };
 
-    const deletePoll = async (id:number) => {
+  const deletePoll = async (id: number) => {
     try {
       const xsrf = getCookieRaw('XSRF-TOKEN');
-      const res = await fetch(`${BACKEND_URL}/polls/`+id, {
+      const res = await fetch(`${BACKEND_URL}/polls/` + id, {
         method: "DELETE",
         credentials: "include",
         headers: {
-         'X-XSRF-TOKEN': xsrf,
-        
-      }
+          'X-XSRF-TOKEN': xsrf,
+
+        }
       });
       if (!res.ok) throw new Error(`Failed to delete polls (${res.status})`);
     } catch (e: any) {
@@ -122,79 +136,79 @@ const fetchUsers = async () => {
     }
     fetchMyPolls()
   };
-return (
-  <div>
-    {/* login form (only if not logged in) */}
-    {!loginStatus && (
-      <div className="login-section">
-        <input
-          className="loginField"
-          onChange={(e) => setUsername(e.target.value)}
-          value={userName}
-          placeholder="Username"
-          autoComplete="username"
-        />
-        <input
-          className="loginField"
-          type="password"
-          onChange={(e) => setPassword(e.target.value)}
-          value={password}
-          placeholder="Password"
-          autoComplete="current-password"
-        />
-        <button className="loginButton" onClick={login} disabled={loading}>
-          {loading ? "Logging in..." : "Log in"}
-        </button>
-      </div>
-    )}
-    {err && <div className="error">{err}</div>}
-    {loginStatus && (
-    <>
-    <div style={{ marginTop: "1rem" }}>
-    
-      <button className="pollButton" onClick={fetchMyPolls}>
-        Show My Polls
-      </button>
-      {showPolls && (
-        <ul className="poll-list">
-          {polls.map((poll) => (
-            <li key={poll.id} className="poll-item">
-              <span className="poll-title">{poll.title}</span>
-              <button
-                className="delete-button"
-                onClick={() => deletePoll(poll.id)}
-              >
-                X
-              </button>
-            </li>
-          ))}
-        </ul>
+  return (
+    <div>
+      {/* login form (only if not logged in) */}
+      {!loginStatus && (
+        <div className="login-section">
+          <input
+            className="loginField"
+            onChange={(e) => setUsername(e.target.value)}
+            value={userName}
+            placeholder="Username"
+            autoComplete="username"
+          />
+          <input
+            className="loginField"
+            type="password"
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
+            placeholder="Password"
+            autoComplete="current-password"
+          />
+          <button className="loginButton" onClick={login} disabled={loading}>
+            {loading ? "Logging in..." : "Log in"}
+          </button>
+        </div>
       )}
+      {err && <div className="error">{err}</div>}
+      {loginStatus && (
+        <>
+          <div style={{ marginTop: "1rem" }}>
+
+            <button className="pollButton" onClick={fetchMyPolls}>
+              Show My Polls
+            </button>
+            {showPolls && (
+              <ul className="poll-list">
+                {polls.map((poll) => (
+                  <li key={poll.id} className="poll-item">
+                    <span className="poll-title">{poll.title}</span>
+                    <button
+                      className="delete-button"
+                      onClick={() => deletePoll(poll.id)}
+                    >
+                      X
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+          <div style={{ marginTop: "1rem" }}>
+            {admin && (
+              <button className="pollButton" onClick={fetchUsers}>
+                Show Users (admin)
+              </button>
+            )}
+            {showUsers && (
+              <ul className="poll-list" style={{ marginTop: "0.5rem" }}>
+                {users.map(u => (
+                  <li key={u.id} className="poll-item">
+                    <span className="poll-title">{u.username}</span>
+                    {u.roles?.length ? <small> — {u.roles.join(", ")}</small> : null}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </>
+
+      )
+
+
+      }
+
     </div>
-    <div style={{ marginTop: "1rem" }}>
-  {admin &&(
-  <button className="pollButton" onClick={fetchUsers}>
-    Show Users (admin)
-  </button>
-  )}
-  {showUsers && (
-    <ul className="poll-list" style={{ marginTop: "0.5rem" }}>
-      {users.map(u => (
-        <li key={u.id} className="poll-item">
-          <span className="poll-title">{u.username}</span>
-          {u.roles?.length ? <small> — {u.roles.join(", ")}</small> : null}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
-</>
-    
-  )
-
-    
-    }
-
-  </div>
-);
+  );
 }

@@ -3,6 +3,8 @@ package com.example.backend.Cache;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import com.example.backend.Model.Poll.Poll;
@@ -22,6 +24,11 @@ public class RedisVoteCache implements VoteCache {
         }
         jedis.hset(poll.getId().toString(), votes);
         jedis.expire(poll.getId().toString(), 20 * 60);
+    }
+    @EventListener(ApplicationReadyEvent.class)
+    public void onStartup() {
+        jedis.flushDB();
+        System.out.println("Redis cleared on startup.");
     }
 
     public RedisVoteCache() {
