@@ -27,6 +27,7 @@ export default function PollCreateView({ poll }: { poll: Poll }) {
             placeholder="Set title for the poll"
             onChange={(e) => updateTitle(e.target.value)}
             value={title}>
+            required
         </input>
         <div>
           <input 
@@ -36,6 +37,7 @@ export default function PollCreateView({ poll }: { poll: Poll }) {
             onChange={(e) => ( changeQuestion(e.target.value)
 
             )}
+            required
             >
           </input>
         </div>

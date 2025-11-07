@@ -31,15 +31,19 @@ export default function CreateUserComponent (){
         <input
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Set username"
+        required
+
         ></input>
         <input
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Set email"
+        required
 
         ></input>
         <input
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Set password"
+        required
 
         ></input>
         <button

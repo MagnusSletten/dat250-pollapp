@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CreatePollComponent from './Components/CreatePollComponent'
 import VotePollComponent from "./Components/VoteComponent";
 import LogInComponent from "./Components/LogInComponent";
@@ -10,6 +10,17 @@ export default function App() {
     const [pageState, setPageState] = useState(0);
     const [loginStatus, setLoginStatus] = useState(false);
     const [userName, setUsername] = useState("");
+    useEffect(() => {
+        if (pageState === 0) {
+            document.title = "Log In - Polling App";
+        } else if (pageState === 1) {
+            document.title = "Create Poll - Polling App";
+        } else if (pageState === 2) {
+            document.title = "Vote - Polling App";
+        } else if (pageState === 3) {
+            document.title = "Create User - Polling App";
+        }
+    }, [pageState]);
     const logout = async () =>{
      if (loginStatus) {
       await fetch(`${BACKEND_URL}/users/auth/logout`, {
