@@ -28,27 +28,25 @@ export default function CreateUserComponent (){
 
     return(
         <div className="create-user-box">
-        <input
+         <form onSubmit={sendUser}>
+      <input
         onChange={(e) => setUsername(e.target.value)}
         placeholder="Set username"
         required
-
-        ></input>
-        <input
+      />
+      <input
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Set email"
         required
-
-        ></input>
-        <input
+      />
+      <input
+        type="password"
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Set password"
         required
-
-        ></input>
-        <button
-        onClick={sendUser}
-        >Send User</button>
+      />
+      <button type="submit">Send User</button>
+    </form>
         <h3>{message}</h3>
         </div>
 
