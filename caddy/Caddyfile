@@ -1,0 +1,23 @@
+:80 {
+
+    # /polling -> /polling/
+    @polling_exact {
+        path /polling
+    }
+    redir @polling_exact /polling/ 302
+
+    handle /polling/backend/* {
+        reverse_proxy pollservice:8080 {
+            header_up Host {host}
+            header_up X-Real-IP {remote_host}
+        }
+    }
+
+    # Frontend SPA under /polling/*
+    handle_path /polling/* {
+        root * /var/www/polling
+        try_files {path} /index.html
+        file_server
+    }
+}
+

@@ -34,13 +34,12 @@ services:
       RABBITMQ_HOST: rabbitmq
       RABBITMQ_PORT: "5672"
 
-  nginx:
+  caddy:
     depends_on:
-     - pollservice
-    build: 
+      - pollservice
+    build:
       context: .
-      dockerfile: docker/nginx.dockerfile
+      dockerfile: docker/caddy.dockerfile
     ports:
       - "8081:80"
-    container_name: polling-nginx
-      
+    container_name: polling-caddy
