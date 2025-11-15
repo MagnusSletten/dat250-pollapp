@@ -7,7 +7,8 @@ export default function CreateUserComponent (){
     const [email, setEmail] = useState("");
     const [message,setMessage] = useState("");
 
-    const sendUser = async () =>{ 
+    const sendUser = async (e) =>{ 
+      e.preventDefault(); 
       const res = await fetch(BACKEND_URL+"/users", {
       method: 'POST',
       headers: {
