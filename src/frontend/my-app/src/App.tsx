@@ -10,6 +10,11 @@ export default function App() {
     const [pageState, setPageState] = useState(0);
     const [loginStatus, setLoginStatus] = useState(false);
     const [userName, setUsername] = useState("");
+
+    useEffect(() => {
+    fetch_csrf_token();
+    }, []);
+    
     useEffect(() => {
         if (pageState === 0) {
             document.title = "Log In - Polling App";
