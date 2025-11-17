@@ -42,5 +42,6 @@ services:
       context: .
       dockerfile: docker/caddy.dockerfile
     ports:
-      - "8081:80"
+      - "80:80"
+      - "443:443"
     container_name: polling-caddy
