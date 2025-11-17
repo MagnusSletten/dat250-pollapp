@@ -21,6 +21,14 @@ export default function App() {
             document.title = "Create User - Polling App";
         }
     }, [pageState]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        const pollParam = params.get("poll");
+        if (pollParam) {
+            setPageState(2); 
+        }
+    }, []);
     const logout = async () =>{
      if (loginStatus) {
       await fetch(`${BACKEND_URL}/users/auth/logout`, {

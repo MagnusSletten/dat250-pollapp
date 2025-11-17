@@ -29,7 +29,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @Data
 @NoArgsConstructor
-@ToString(exclude = { "polls", "votes", "password" }) // ✅ exclude lazy + sensitive fields
+@ToString(exclude = { "polls", "votes", "password" }) 
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 @Entity
 @Table(name = "users")

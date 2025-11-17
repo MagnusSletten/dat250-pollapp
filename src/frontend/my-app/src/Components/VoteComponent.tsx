@@ -29,6 +29,16 @@ export default function VotePoll({ userName }: { userName: string }) {
         })();
     }, []);
 
+    useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const pollParam = params.get("poll");
+    if (!pollParam) return;
+
+    const id = Number(pollParam);
+    if (Number.isNaN(id)) return;
+
+    getPollById(id);
+}, []); 
     const getVotes = async (pollId: number) => {
         const res = await fetch(BACKEND_URL + "/polls/" + pollId + "/votes/" + "results");
         const data = await res.json();
