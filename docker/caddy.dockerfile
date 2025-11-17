@@ -2,8 +2,11 @@ FROM caddy:alpine
 
 WORKDIR /app
 
+#copy front-end build
 COPY src/frontend/my-app/dist /var/www/polling/
 
-COPY caddy/Caddyfile /etc/caddy/Caddyfile
+#Argument for production caddyfile
+ARG CADDY_CONFIG=Caddyfile
+COPY caddy/${CADDY_CONFIG} /etc/caddy/Caddyfile
 
 EXPOSE 80

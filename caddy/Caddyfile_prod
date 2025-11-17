@@ -1,0 +1,13 @@
+magnus-demo-project.com {
+
+    # Backend API
+    handle /polling/backend/* {
+        reverse_proxy pollservice:8080
+    }
+
+    # Frontend SPA (no client-side routing, just static + index)
+    handle_path /polling* {
+        root * /var/www/polling
+        file_server
+    }
+}
