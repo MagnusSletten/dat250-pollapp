@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Vote, VoteOption, VoteOptions } from "./Model/Poll";
 import { BACKEND_URL } from "./Constants/constants.js";
+import { fetch_csrf_token } from "../App.tsx"
 
 type PollListItem = { id: number; title: string; creatorName: string };
 
@@ -19,6 +20,7 @@ export default function VotePoll({ userName }: { userName: string }) {
     useEffect(() => {
         (async () => {
             try {
+                fetch_csrf_token();
                 const r = await fetch(`${BACKEND_URL}/polls/info`, { credentials: "include" });
                 if (r.status === 204) return;
                 if (!r.ok) throw new Error("list fetch failed");

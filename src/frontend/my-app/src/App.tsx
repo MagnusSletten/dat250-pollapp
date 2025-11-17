@@ -105,3 +105,6 @@ export default function App() {
 }
 
 
+export async function fetch_csrf_token(){
+    await fetch(`${BACKEND_URL}/auth/csrf`, { credentials: "include" });
+}
