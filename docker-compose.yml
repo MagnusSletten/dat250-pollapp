@@ -37,6 +37,7 @@ services:
   caddy:
     depends_on:
       - pollservice
+    image: polling-caddy
     build:
       context: .
       dockerfile: docker/caddy.dockerfile
