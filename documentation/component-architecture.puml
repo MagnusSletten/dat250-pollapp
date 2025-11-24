@@ -3,15 +3,15 @@
 node "External\nClients" as mu
 interface HTTPS
 node "PollService" {
-component "Nginx" as nginx
+component "Caddy" as caddy
 component "Web UI\n(React)" as ui
 interface HTTP
 component "REST API\n(Spring Web MVC)" as api
 
-nginx -right-HTTPS
-nginx -down- ui
+caddy -right-HTTPS
+caddy -down- ui
 api -up- HTTP
-HTTP -right- nginx
+HTTP -right- caddy
 component "Business Logic(Poll Manager)" as dom
 component "Persistence\n(JPA H2)" as per
 database H2
@@ -28,6 +28,6 @@ api -left-> redis : vote-cache
 
 actor "End Users"  as ru
 HTTPS <.> ru  
-mu <.down.> nginx
+mu <.down.> caddy
 mu .> msg
 @enduml
