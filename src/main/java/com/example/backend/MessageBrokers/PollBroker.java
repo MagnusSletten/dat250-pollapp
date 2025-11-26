@@ -1,8 +1,13 @@
 package com.example.backend.MessageBrokers;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeoutException;
+
 import org.springframework.stereotype.Component;
 
 import com.example.backend.Model.Vote.VoteDTO;
+import com.rabbitmq.client.BuiltinExchangeType;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
@@ -11,25 +16,36 @@ import com.rabbitmq.client.DeliverCallback;
 @Component
 public class PollBroker implements PollMessageBroker {
 
-    private static final String EXCHANGE_NAME = "poll";
+   private final ConnectionFactory factory;
+   private static final String EXCHANGE_NAME = "polls";
 
-    public void sendVote(Integer pollId, VoteDTO vote) throws Exception {
-        ConnectionFactory factory = new ConnectionFactory();
-        var host = System.getenv().getOrDefault("RABBITMQ_HOST", "rabbitmq");
-        var port = Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "5672"));
+    public PollBroker() {
+        String host = System.getenv().getOrDefault("RABBITMQ_HOST", "rabbitmq");
+        int port = Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "5672"));
 
-        factory.setHost(System.getenv().getOrDefault("RABBITMQ_HOST", "rabbitmq"));
-        factory.setPort(Integer.parseInt(System.getenv().getOrDefault("RABBITMQ_PORT", "5672")));
-        try (Connection connection = factory.newConnection(); Channel channel = connection.createChannel()) {
+        factory = new ConnectionFactory();
+        factory.setHost(host);
+        factory.setPort(port);
 
-            channel.exchangeDeclare(EXCHANGE_NAME, "topic");
-            System.out.println("[PollBroker] connecting to " + host + ":" + port);
-            String routingKey = "poll." + pollId.toString() + ".vote.cast";
-            String message = vote.toJson();
+        System.out.println("[PollBroker] configured for " + host + ":" + port);
+    }
 
-            channel.basicPublish(EXCHANGE_NAME, routingKey, null, message.getBytes("UTF-8"));
-            System.out.println(" [x] Sent '" + routingKey + "':'" + message + "'");
+    public void sendVote(Integer pollId, VoteDTO vote) throws IOException, TimeoutException {
+        try (Connection connection = factory.newConnection();
+             Channel channel = connection.createChannel()) {
 
+            channel.exchangeDeclare(EXCHANGE_NAME, BuiltinExchangeType.TOPIC, true);
+
+            String routingKey = "poll." + pollId + ".vote.cast";
+            String message    = vote.toJson();
+            channel.basicPublish(
+                    EXCHANGE_NAME,
+                    routingKey,
+                    null,
+                    message.getBytes(StandardCharsets.UTF_8)
+            );
+
+            System.out.println("[PollBroker] sent '" + routingKey + "':'" + message + "'");
         }
     }
 

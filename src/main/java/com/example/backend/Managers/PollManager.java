@@ -49,7 +49,7 @@ public class PollManager implements Listener {
             pollRepo.save(poll);
             return poll;
         }
-        throw (new NoSuchElementException("creator not found"));
+        throw (new NoSuchElementException("Creator not found"));
 
     }
 
@@ -184,6 +184,11 @@ public class PollManager implements Listener {
         }
         Vote vote = request.toVoteAnonymous(poll);
         poll.addVote(vote);
+         try {
+            broker.sendVote(request.getPollId(), request);
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         return vote;
     }
 
@@ -230,7 +235,6 @@ public class PollManager implements Listener {
     }
 
     public void login(User user) {
-
         loginCache.logIn(user);
     }
 
