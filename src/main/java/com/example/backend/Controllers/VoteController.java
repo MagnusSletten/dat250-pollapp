@@ -30,8 +30,8 @@ public class VoteController {
 
     @PostMapping("/{pollID}/votes")
     public ResponseEntity<VoteDTO> addVote(@RequestBody VoteDTO voteRequest) throws Exception {
-        pollManager.addVote(voteRequest);
         try {
+            pollManager.addVote(voteRequest);
             return ResponseEntity.ok(voteRequest);
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();

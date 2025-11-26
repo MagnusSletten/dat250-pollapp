@@ -190,14 +190,10 @@ public class PollManager implements Listener {
     @Transactional
     public Vote addVote(VoteDTO request) {
         if (request.hasUsername()) {
-            addVoteWithUser(request);
+            return addVoteWithUser(request);
         } else {
-            addVoteAnonymous(request);
+            return addVoteAnonymous(request);
         }
-        if (request.hasUsername()) {
-            return request.toVote(getUser(request.getUserName()).get(), getPoll(request.getPollId()).get());
-        } else
-            return request.toVoteAnonymous(getPoll(request.getPollId()).get());
     }
 
     @Transactional
